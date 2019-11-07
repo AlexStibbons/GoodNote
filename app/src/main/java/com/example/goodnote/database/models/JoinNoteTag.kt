@@ -20,6 +20,6 @@ import androidx.room.ForeignKey
     ]
 )
 data class JoinNoteTag(
-    private val tagId: Int,
-    private val noteId: Int
+    val tagId: Int,
+    val noteId: Int
 )

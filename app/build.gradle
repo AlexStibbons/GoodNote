@@ -24,11 +24,12 @@ android {
 }
 
 dependencies {
-    def room_version = "2.2.0-rc01"
+    def room_version = "2.2.1"
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0'
+
     apply plugin: 'kotlin-android'
     apply plugin: 'kotlin-kapt'
 
@@ -40,8 +41,10 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // room
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
     // optional - RxJava support for Room
     implementation "androidx.room:room-rxjava2:$room_version"
@@ -49,6 +52,7 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
     // Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+
 
     // recycler view dependency
     implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'

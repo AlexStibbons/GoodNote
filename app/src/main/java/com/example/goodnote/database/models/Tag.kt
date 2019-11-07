@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class Tag(
 
     @PrimaryKey(autoGenerate = true)
-    private var id: Int?,
-    private var name: String // or val since tags can only be created or deleted, not changed
+    var id: Int?,
+    var name: String // or val since tags can only be created or deleted, not changed
 )
