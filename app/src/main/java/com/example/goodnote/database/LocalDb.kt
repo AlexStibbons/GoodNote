@@ -19,17 +19,21 @@ abstract class LocalDb : RoomDatabase() {
     abstract fun tagDao(): TagDao
     abstract fun joinNoteTagDao(): JoinNoteTagDao
 
-    // decalre instance
-    @Volatile
-    private var instance: LocalDb? = null
+    // companion object!!
+    companion object {
+        // decalre instance
+        @Volatile
+        private var instance: LocalDb? = null
 
-    fun getInstance(context: Context): LocalDb {
-        return instance ?: synchronized(this) { // more info on this here
-            instance ?: buildDb(context).also { instance = it }
+        fun getInstance(context: Context): LocalDb {
+            return instance ?: synchronized(this) { // more info on this here
+                instance ?: buildDb(context).also { instance = it }
+            }
+        }
+
+        private fun buildDb(context: Context): LocalDb {
+            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).build()
         }
     }
 
-    private fun buildDb(context: Context): LocalDb {
-        return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).build()
-    }
 }
