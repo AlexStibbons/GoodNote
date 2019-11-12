@@ -10,7 +10,7 @@ import com.example.goodnote.utils.DB_NAME
 
 @Database(
     entities = [Note::class, Tag::class, JoinNoteTag::class],
-    version = 1
+    version = 2
 )
 abstract class LocalDb : RoomDatabase() {
 
@@ -21,7 +21,7 @@ abstract class LocalDb : RoomDatabase() {
 
     // companion object!!
     companion object {
-        // decalre instance
+        // declare instance
         @Volatile
         private var instance: LocalDb? = null
 

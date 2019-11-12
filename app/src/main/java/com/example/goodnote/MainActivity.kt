@@ -33,33 +33,30 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dummyNote(localDb: LocalDb) {
+
         val noteRepo = NoteRepoImpl(localDb)
+
         CoroutineScope(Dispatchers.IO).launch {
-            noteRepo.saveNote(Note("title", "body"))
+            noteRepo.saveNote(Note("title again", "body again\nchecking update; strategy replace")
+                .apply { id = 1 })
             val list2 = noteRepo.getAllNotes()
-            Log.e("in scope", "list is ${list2.size}")
+            Log.e("in scope", "list is ${list2?.size}")
 
             withContext(Dispatchers.Main) {
-                list.clear()
-                list.addAll(list2)
+                list2?.let {
+                    list.clear()
+                    list.addAll(it)
+                    showNote(list)
+                }
                 Log.e("in scope/main", "list is ${list.size}")
-                showNote(list) // ??????
+
             }
-
-
         }
     }
 
     fun showNote(list: MutableList<Note>) {
-        val note1 = list?.let {
-            val idn = it[0].id
-            Note(it[0].title, it[0].text).apply {
-                id = idn
-            }
-        }
-
-        val str = "id is ${note1?.id}\n title is ${note1?.title}\n text is ${note1?.text}"
-        Log.e("main, NOTE", str)
-        testy.text = str
+        val str1 = "size is ${list.size}\nid is ${list[0].id}\ntitle is ${list[0].title}\nbody is ${list[0].text} "
+        Log.e("main, NOTE", str1)
+        testy.text = str1
     }
 }
