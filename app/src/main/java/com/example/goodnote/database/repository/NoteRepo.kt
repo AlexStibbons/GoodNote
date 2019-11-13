@@ -3,7 +3,7 @@ package com.example.goodnote.database.repository
 import androidx.lifecycle.LiveData
 import com.example.goodnote.database.models.*
 
-interface INoteRepo {
+interface NoteRepo {
 
     val allNotes: LiveData<List<Note>>
 

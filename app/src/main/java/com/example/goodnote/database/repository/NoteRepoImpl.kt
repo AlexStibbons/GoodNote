@@ -3,11 +3,8 @@ package com.example.goodnote.database.repository
 import androidx.lifecycle.LiveData
 import com.example.goodnote.database.daos.NoteDao
 import com.example.goodnote.database.models.Note
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class NoteRepo2 private constructor(private val noteDao: NoteDao) : INoteRepo {
+class NoteRepoImpl private constructor(private val noteDao: NoteDao) : NoteRepo {
 
     /*If the repository is a singleton or otherwise scoped to the application, the repository will
     not be destroyed until the process is killed. This will only happen when the system needs
@@ -15,11 +12,11 @@ class NoteRepo2 private constructor(private val noteDao: NoteDao) : INoteRepo {
     callback in the ViewModel, the ViewModel will be temporarily leaked*/
     companion object{
         @Volatile
-        private var instance: NoteRepo2? = null
+        private var instance: NoteRepoImpl? = null
 
         fun getInstance(noteDao: NoteDao) = // `operator fun`
             instance ?: synchronized(this) {
-                instance ?: NoteRepo2(noteDao).also { instance = it }
+                instance ?: NoteRepoImpl(noteDao).also { instance = it }
             }
     }
 
