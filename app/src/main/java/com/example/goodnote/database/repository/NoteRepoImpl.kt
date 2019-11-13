@@ -20,9 +20,6 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao) : NoteRepo 
             }
     }
 
-    override val allNotes: LiveData<List<Note>>
-        get() = noteDao.liveData()
-
     override suspend fun getAllNotes(): List<Note> {
         TODO("not implemented")
     }

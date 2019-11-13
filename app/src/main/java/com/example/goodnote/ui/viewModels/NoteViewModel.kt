@@ -2,6 +2,7 @@ package com.example.goodnote.ui.viewModels
 
 import android.content.Context
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.repository.NoteRepo
@@ -15,7 +16,11 @@ class NoteViewModel(private val context: Context) : ViewModel() {
     // inject repository here via viewmodelfactory, so the views are completely decoupled from repos
 
     private val repository: NoteRepo = Injectors.getNoteRepository(context)
-    val notes: LiveData<List<Note>> = repository.allNotes
+
+    // dummy lists
+   private lateinit var _dummyNotes: MutableLiveData<List<Note>>
+    val dummyNotes: LiveData<List<Note>>
+        get() = _dummyNotes
 
     // all repo functions here
     fun saveNote(note: Note) = viewModelScope.launch {
