@@ -5,6 +5,8 @@ import com.example.goodnote.database.models.*
 
 interface INoteRepo {
 
+    val allNotes: LiveData<List<Note>>
+
     suspend fun getAllNotes(): List<Note>
 
     suspend fun deleteNote(id: Int)

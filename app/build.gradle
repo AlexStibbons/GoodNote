@@ -82,10 +82,10 @@ dependencies {
     // ViewModel and LiveData
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     // alternatively - just ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    //implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
     // viewmodel scope
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0-beta01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
     // lifecycle scope
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-alpha01'
     // live data

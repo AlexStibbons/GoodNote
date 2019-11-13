@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import com.example.goodnote.database.LocalDb
 import com.example.goodnote.database.models.*
-import com.example.goodnote.database.repository.NoteRepoImpl
+import com.example.goodnote.graveyard.NoteRepoNotSnglt
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun dummyNote(localDb: LocalDb) {
 
-        val noteRepo = NoteRepoImpl(localDb)
+        val noteRepo = NoteRepoNotSnglt(localDb)
 
         CoroutineScope(Dispatchers.IO).launch {
             noteRepo.saveNote(Note("title again", "body again\nchecking update; strategy replace")
@@ -49,7 +49,6 @@ class MainActivity : AppCompatActivity() {
                     showNote(list)
                 }
                 Log.e("in scope/main", "list is ${list.size}")
-
             }
         }
     }

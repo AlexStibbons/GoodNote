@@ -13,7 +13,7 @@ interface NoteDao {
     @Query("SELECT * FROM note")
     suspend fun getAllNotes(): List<Note>
 
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note ORDER BY note.title ASC")
     /*suspend*/ fun liveData(): LiveData<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -1,4 +1,4 @@
-package com.example.goodnote
+package com.example.goodnote.graveyard
 
 import androidx.lifecycle.ViewModel
 

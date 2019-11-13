@@ -1,16 +1,14 @@
-package com.example.goodnote.database.repository
+package com.example.goodnote.graveyard
 
-import androidx.lifecycle.LiveData
 import com.example.goodnote.database.LocalDb
-import com.example.goodnote.database.daos.NoteDao
 import com.example.goodnote.database.models.Note
+import com.example.goodnote.database.repository.INoteRepo
 
-class NoteRepoImpl(
+class NoteRepoNotSnglt(
     private val localDb: LocalDb
     //private val noteDao: NoteDao
 ) : INoteRepo {
 
-   // val allNotes: LiveData<List<Note>> = noteDao.getAllNotes()
 
     override suspend fun getAllNotes(): List<Note> {
         return localDb.noteDao().getAllNotes()
