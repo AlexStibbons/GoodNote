@@ -1,12 +1,11 @@
 package com.example.goodnote.ui.viewModels
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.database.models.Note
+import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.dummyNotes
 import kotlinx.coroutines.launch
 
@@ -14,13 +13,11 @@ import kotlinx.coroutines.launch
 // when do you need application context? repo/network only
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
-    private val _notes: MutableLiveData<List<Note>> by lazy {
-        MutableLiveData<List<Note>>(dummyNotes)
-    }
+    private val _notes: MutableLiveData<List<Note>> = MutableLiveData(dummyNotes)
     val notes: LiveData<List<Note>>
         get() = _notes
 
-    fun getNotes2(): LiveData<List<Note>>  = _notes
+    fun getNotes2(): LiveData<List<Note>> = _notes
 
     // all repo functions here
     // scopes can be in job or not since viewModelScope is automatic
@@ -40,7 +37,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun filterNote(title: String) {
-        val filtered =  dummyNotes.asSequence().filter {
+        val filtered = dummyNotes.filter {
             it.title.contains(title, true)
         }.toList()
 

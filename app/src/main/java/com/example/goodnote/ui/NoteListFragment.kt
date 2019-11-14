@@ -1,19 +1,15 @@
 package com.example.goodnote.ui
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.ui.viewModels.NoteViewModel
@@ -27,24 +23,24 @@ class NoteListFragment : Fragment() {
 
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: NoteListRecyclerViewAdapter
+    private lateinit var notesAdapter: NoteListRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        activity?.let{
-            noteViewModel = Injectors.getNoteViewModel1(it)
-            adapter = NoteListRecyclerViewAdapter(it)
-        }
+        val parent = requireActivity()
+        noteViewModel = Injectors.getNoteViewModel1(parent)
+        notesAdapter = NoteListRecyclerViewAdapter()
 
         noteViewModel.notes.observe(this, Observer { notes ->
-            notes?.let {
-                adapter.setNotes(it)
-            }
+            notes ?: return@Observer
+
+            notesAdapter.setNotes(notes)
+
         })
 
         /*noteViewModel.getNotes2().observe(this, Observer { notes ->
-            adapter.setNotes(notes)
+            notesAdapter.setNotes(notes)
         })*/
     }
 
@@ -56,9 +52,9 @@ class NoteListFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.notes_list_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.notes_list_recycler_view)
-        recyclerView.let{
-            it.adapter = adapter
-            it.layoutManager = LinearLayoutManager(activity)
+        recyclerView.apply {
+            this.adapter = notesAdapter
+            layoutManager = LinearLayoutManager(requireActivity())
         }
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)

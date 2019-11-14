@@ -1,23 +1,21 @@
 package com.example.goodnote.ui
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
 import kotlinx.android.synthetic.main.note_item.view.*
 
-class NoteListRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
+class NoteListRecyclerViewAdapter : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
-    private var notes = emptyList<Note>()
+    private val notes : MutableList<Note> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val itemView = LayoutInflater.from(context).inflate(
+        val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.note_item,
             parent,false)
 
@@ -45,13 +43,14 @@ class NoteListRecyclerViewAdapter(val context: Context) : RecyclerView.Adapter<N
 
             noteItem.setOnClickListener( View.OnClickListener {
                 // openNoteDetails(notes[position].id)
-                Toast.makeText(context, "Clicked ${notes[position].title}", Toast.LENGTH_LONG).show()
+                Toast.makeText(itemView.context, "Clicked ${notes[position].title}", Toast.LENGTH_LONG).show()
             })
         }
     }
 
     internal fun setNotes(newNotes: List<Note>) {
-        this.notes = newNotes
+        this.notes.clear()
+        this.notes.addAll(newNotes)
         notifyDataSetChanged()
     }
 }
