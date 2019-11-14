@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.goodnote.R
+import com.example.goodnote.database.models.Note
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.Injectors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -53,6 +54,7 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             Toast.makeText(context, "Open add note!", Toast.LENGTH_LONG).show()
+            noteViewModel.addNote(Note("hello", "hey"))
         }
 
         // fragment observes the notes view model and the notes within it
