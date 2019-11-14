@@ -3,18 +3,21 @@ package com.example.goodnote.ui
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.ui.viewModels.NoteViewModel
+import com.example.goodnote.utils.DUMMY_TEXT
 import com.example.goodnote.utils.Injectors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -29,6 +32,17 @@ class NoteListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        activity?.let{
+            noteViewModel = Injectors.getNoteViewModel1(it)
+            adapter = NoteListRecyclerViewAdapter(it)
+        }
+
+        noteViewModel.notes.observe(this, Observer { notes ->
+            notes?.let {
+                adapter.setNotes(it)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -37,11 +51,11 @@ class NoteListFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        noteViewModel = Injectors.getNoteViewModel1(this.activity!!)
+//        noteViewModel = Injectors.getNoteViewModel1(this.activity!!)
 
         val rootView = inflater.inflate(R.layout.notes_list_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.notes_list_recycler_view)
-        adapter = NoteListRecyclerViewAdapter(this.activity!!)
+        //adapter = NoteListRecyclerViewAdapter(this.activity!!)
 
         recyclerView.let{
             it.adapter = adapter
@@ -51,16 +65,16 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             Toast.makeText(context, "Open add note!", Toast.LENGTH_LONG).show()
-            noteViewModel.addNote(Note("hello", "hey"))
+            noteViewModel.addNote(Note("epistolary?", DUMMY_TEXT))
         }
 
         // fragment observes the notes view model and the notes within it
         // should this be in onCreate?
-        noteViewModel.notes.observe(this, Observer { notes ->
+        /*noteViewModel.notes.observe(this, Observer { notes ->
             notes?.let {
                 adapter.setNotes(it)
             }
-        })
+        })*/
 
         return rootView
     }

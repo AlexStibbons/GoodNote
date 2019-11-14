@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.database.models.Note
+import com.example.goodnote.utils.DUMMY_TEXT
+import com.example.goodnote.utils.DUMMY_TITLE
 import com.example.goodnote.utils.Injectors
 import kotlinx.coroutines.launch
 
@@ -14,16 +16,18 @@ import kotlinx.coroutines.launch
 // when do you need application context? repo/network only
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
+
+
     // dummy notes
     private var dummyNotes: MutableList<Note> = mutableListOf(
-        Note("Title One", "text").apply { id = 1 },
+        Note(DUMMY_TITLE, DUMMY_TEXT).apply { id = 1 },
         Note("Title Two", "text").apply { id = 2 },
-        Note("Title Three", "text").apply { id = 3 },
-        Note("Title Four", "text").apply { id = 4 },
+        Note("Title Three", DUMMY_TEXT).apply { id = 3 },
+        Note("Title Four", DUMMY_TEXT).apply { id = 4 },
         Note("Title Five", "text").apply { id = 5 },
         Note("Title Six", "text").apply { id = 6 },
         Note("Title Seven", "text").apply { id = 7 },
-        Note("Title Eight", "text").apply { id = 8 },
+        Note("Title Eight", DUMMY_TEXT).apply { id = 8 },
         Note("Title Nine", "text").apply { id = 9 },
         Note("Title Ten", "text").apply { id = 10 }
     )
@@ -44,7 +48,8 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     fun addNote(note: Note) {
         dummyNotes.add(note)
-        _notes.value = dummyNotes
+        //_notes.value = dummyNotes
+        _notes.postValue(dummyNotes)
     }
 
     fun removeNote(id: Int) {
