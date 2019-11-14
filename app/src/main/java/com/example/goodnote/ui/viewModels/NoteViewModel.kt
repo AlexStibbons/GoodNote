@@ -18,13 +18,20 @@ class NoteViewModel(private val context: Context) : ViewModel() {
     private val repository: NoteRepo = Injectors.getNoteRepository(context)
 
     // dummy lists
-   private lateinit var _dummyNotes: MutableLiveData<List<Note>>
-    val dummyNotes: LiveData<List<Note>>
-        get() = _dummyNotes
+   private var _notes: MutableLiveData<List<Note>> by lazy {
+        MutableLiveData<List<Note>>().also{
+            it.postValue(dummyNotes)
+        }
+    }
+    val notes: LiveData<List<Note>>
+        get() = _notes
 
     // all repo functions here
     fun saveNote(note: Note) = viewModelScope.launch {
         repository.saveNote(note)
     }
 
+    private val dummyNotes: List<Note> = listOf(
+        Note("title", "text")
+    )
 }
