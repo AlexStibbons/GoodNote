@@ -11,12 +11,8 @@ import com.example.goodnote.utils.Injectors
 import kotlinx.coroutines.launch
 
 // AndroidViewModel(application) - use this one when you need application context
-// when do you need application context? repo/network only? or?
-class NoteViewModel(private val context: Context) : ViewModel() {
-
-    // inject repository here via viewmodelfactory, so the views are completely decoupled from repos
-
-    private val repository: NoteRepo = Injectors.getNoteRepository(context)
+// when do you need application context? repo/network only
+class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     // dummy notes
     private var dummyNotes: MutableList<Note> = mutableListOf(
@@ -41,7 +37,7 @@ class NoteViewModel(private val context: Context) : ViewModel() {
         get() = _notes
 
     // all repo functions here
-    // scopes can be in job
+    // scopes can be in job or not since viewModelScope is automatic
     fun saveNote(note: Note) = viewModelScope.launch {
         repository.saveNote(note)
     }

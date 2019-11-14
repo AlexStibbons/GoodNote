@@ -7,13 +7,29 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.goodnote.R
+import com.example.goodnote.ui.viewModels.NoteViewModel
+import com.example.goodnote.utils.Injectors
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteListFragment : Fragment() {
 
+    private val TAG = NoteListFragment::class.java.simpleName
+
+    // remove `!!`
+    private lateinit var noteViewModel: NoteViewModel
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: NoteListRecyclerViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -21,19 +37,33 @@ class NoteListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.notes_list_fragment, container, false)
-    }
+        super.onCreateView(inflater, container, savedInstanceState)
 
+        noteViewModel = Injectors.getNoteViewModel1(this.activity!!)
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
+        val rootView = inflater.inflate(R.layout.notes_list_fragment, container, false)
+        recyclerView = rootView.findViewById(R.id.notes_list_recycler_view)
+        adapter = NoteListRecyclerViewAdapter(this.activity!!)
 
-    }
+        recyclerView.let{
+            it.adapter = adapter
+            it.layoutManager = LinearLayoutManager(activity)
+        }
 
-    override fun onDetach() {
-        super.onDetach()
+        val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
+        fab.setOnClickListener {
+            Toast.makeText(context, "Open add note!", Toast.LENGTH_LONG).show()
+        }
 
+        // fragment observes the notes view model and the notes within it
+        // should this be in onCreate?
+        noteViewModel.notes.observe(this, Observer { notes ->
+            notes?.let {
+                adapter.setNotes(it)
+            }
+        })
+
+        return rootView
     }
 
     /**
