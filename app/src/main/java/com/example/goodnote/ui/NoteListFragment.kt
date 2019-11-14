@@ -24,14 +24,11 @@ class NoteListFragment : Fragment() {
 
     // remove `!!`
     private lateinit var noteViewModel: NoteViewModel
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NoteListRecyclerViewAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
