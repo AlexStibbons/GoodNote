@@ -25,7 +25,6 @@ class NoteListFragment : Fragment() {
 
     private val TAG = NoteListFragment::class.java.simpleName
 
-    // remove `!!`
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NoteListRecyclerViewAdapter
@@ -43,6 +42,10 @@ class NoteListFragment : Fragment() {
                 adapter.setNotes(it)
             }
         })
+
+        /*noteViewModel.getNotes2().observe(this, Observer { notes ->
+            adapter.setNotes(notes)
+        })*/
     }
 
     override fun onCreateView(
@@ -51,12 +54,8 @@ class NoteListFragment : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-//        noteViewModel = Injectors.getNoteViewModel1(this.activity!!)
-
         val rootView = inflater.inflate(R.layout.notes_list_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.notes_list_recycler_view)
-        //adapter = NoteListRecyclerViewAdapter(this.activity!!)
-
         recyclerView.let{
             it.adapter = adapter
             it.layoutManager = LinearLayoutManager(activity)
@@ -67,14 +66,6 @@ class NoteListFragment : Fragment() {
             Toast.makeText(context, "Open add note!", Toast.LENGTH_LONG).show()
             noteViewModel.addNote(Note("epistolary?", DUMMY_TEXT))
         }
-
-        // fragment observes the notes view model and the notes within it
-        // should this be in onCreate?
-        /*noteViewModel.notes.observe(this, Observer { notes ->
-            notes?.let {
-                adapter.setNotes(it)
-            }
-        })*/
 
         return rootView
     }
