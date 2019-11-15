@@ -34,9 +34,9 @@ class NoteListFragment : Fragment() {
         noteViewModel = Injectors.getNoteViewModel(parent)
         notesAdapter = NoteListRecyclerViewAdapter(clickedNote)
 
-        noteViewModel.notes.observe(this, Observer { notes ->
+        noteViewModel.repoNotes.observe(this, Observer { notes ->
             notes ?: return@Observer
-
+            Log.e("FRGM OBSERVER", "Notes are ${notes.size}")
             notesAdapter.setNotes(notes)
 
         })
@@ -66,7 +66,8 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             //Toast.makeText(context, "Open add note!", Toast.LENGTH_SHORT).show()
-            noteViewModel.addNote(Note("epistolary?", DUMMY_TEXT))
+            Log.e("FRAGMENT", "SAVING NOTE?")
+            noteViewModel.saveNote(Note("epistolary?", DUMMY_TEXT))
 
             startActivity(Intent(activity, NoteDetails::class.java)) // start editable screen w/o id
         }

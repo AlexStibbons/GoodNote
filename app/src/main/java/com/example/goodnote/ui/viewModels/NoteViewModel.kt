@@ -1,5 +1,6 @@
 package com.example.goodnote.ui.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.dummyNotes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // AndroidViewModel(application) - use this one when you need application context
 // when do you need application context? repo/network only
@@ -18,16 +20,27 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     val notes: LiveData<List<Note>>
         get() = _notes
 
-    fun getNotes2(): LiveData<List<Note>> = _notes
+
+    private var _repoNotes: MutableLiveData<List<Note>> = MutableLiveData()
+        get() = _repoNotes
 
     // all repo functions here
 
-    fun getAllNotes() = viewModelScope.launch(Dispatchers.IO) {
-        repository.getAllNotes()
+    fun getAllNotes(): Unit {
+         viewModelScope.launch(Dispatchers.IO) {
+            val listIO = repository.getAllNotes()
+            withContext(Dispatchers.Main) {
+                 _repoNotes.postValue(listIO)
+            }
+        }
     }
 
     fun saveNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
+
+        // if title.isEmpty || title == null --> title = DEFAULT_TITLE
+
         repository.saveNote(note)
+        getAllNotes()
     }
 
     fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO) {
