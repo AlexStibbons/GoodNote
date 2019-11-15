@@ -22,7 +22,12 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
 
     private var _repoNotes: MutableLiveData<List<Note>> = MutableLiveData()
+    val repoNotes: LiveData<List<Note>>
         get() = _repoNotes
+
+    init {
+        getAllNotes()
+    }
 
     // all repo functions here
 

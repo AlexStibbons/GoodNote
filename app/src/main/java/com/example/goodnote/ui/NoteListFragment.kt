@@ -34,6 +34,7 @@ class NoteListFragment : Fragment() {
         noteViewModel = Injectors.getNoteViewModel(parent)
         notesAdapter = NoteListRecyclerViewAdapter(clickedNote)
 
+
         noteViewModel.repoNotes.observe(this, Observer { notes ->
             notes ?: return@Observer
             Log.e("FRGM OBSERVER", "Notes are ${notes.size}")
