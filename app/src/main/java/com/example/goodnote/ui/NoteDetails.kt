@@ -1,17 +1,15 @@
 package com.example.goodnote.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
 import android.util.Log
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.goodnote.R
-import com.google.android.material.snackbar.Snackbar
+import com.example.goodnote.utils.Injectors
+import com.example.goodnote.database.models.*
 
-class NoteDetails: AppCompatActivity() {
+class NoteDetails : AppCompatActivity() {
 
     // declare all stuffs
     lateinit var title: EditText
@@ -24,15 +22,24 @@ class NoteDetails: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notes_details_activity)
         Log.e("DETAILS", "on create")
+        // val notesViewModel = Injectors.getNoteViewModel(this)
 
         // bind all stuffs
         title = findViewById(R.id.notes_details_title)
         tags = findViewById(R.id.notes_details_tags)
         text = findViewById(R.id.notes_details_text)
 
+        // if id is > -1, this is an existing note and
+        // should be viewed and/or edited [add to repo with id]
+
+        // if id is -1, this activity is used for creating
+        // a new note [add to repo w/o id]
+
         val noteId = intent.getIntExtra("noteId", -1)
         Log.e("DETAILS", "on create: $noteId")
         Toast.makeText(this, "Note ID is $noteId", Toast.LENGTH_SHORT).show()
-        //tags.text = "Note Id is $noteId" as Editable
+
     }
+
+
 }

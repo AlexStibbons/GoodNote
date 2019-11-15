@@ -46,8 +46,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             noteItem.setOnClickListener( View.OnClickListener {
                 onNoteClicked.onNoteClick(notes[position].id)
                 Log.e("REC VIEW", "note click")
-                Toast.makeText(itemView.context, "Clicked ${notes[position].title}", Toast.LENGTH_LONG).show()
-
             })
         }
     }

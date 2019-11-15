@@ -65,8 +65,10 @@ class NoteListFragment : Fragment() {
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
-            Toast.makeText(context, "Open add note!", Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, "Open add note!", Toast.LENGTH_SHORT).show()
             noteViewModel.addNote(Note("epistolary?", DUMMY_TEXT))
+
+            startActivity(Intent(activity, NoteDetails::class.java)) // start editable screen w/o id
         }
 
         return rootView
@@ -90,6 +92,8 @@ class NoteListFragment : Fragment() {
     val clickedNote = object: onNoteClick {
         override fun onNoteClick(id: Int) {
             Log.e("FRAGMENT", "on note click called")
+            // intent did not work when requireActivity() - opened blank screen?
+            // idk
             val intent = Intent(activity, NoteDetails::class.java).also {
                 it.putExtra("noteId", id)
             }
