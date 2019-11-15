@@ -47,6 +47,12 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 onNoteClicked.onNoteClick(notes[position].id)
                 Log.e("REC VIEW", "note click")
             })
+
+            // works, but no indication to user
+            noteItem.setOnLongClickListener(View.OnLongClickListener {
+                onNoteClicked.onNoteLongPress(notes[position].id)
+                true
+            })
         }
     }
 

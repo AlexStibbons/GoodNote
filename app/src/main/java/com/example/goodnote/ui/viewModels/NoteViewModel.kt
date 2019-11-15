@@ -9,6 +9,7 @@ import com.example.goodnote.database.models.Note
 import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.dummyNotes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -31,7 +32,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     // all repo functions here
 
-    fun getAllNotes(): Unit {
+    fun getAllNotes() {
          viewModelScope.launch(Dispatchers.IO) {
             val listIO = repository.getAllNotes()
             withContext(Dispatchers.Main) {
@@ -50,14 +51,20 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteNote(id)
+        getAllNotes()
     }
 
     fun findNoteById(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        repository.findNoteById(id)
+        val foundNote: Note = repository.findNoteById(id)
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch(Dispatchers.IO) {
-        repository.findNoteByTitle(title)
+        val foundNotes: List<Note> = repository.findNoteByTitle(title)
+        _repoNotes.postValue(foundNotes)
+    }
+
+    fun clearSearch() {
+        getAllNotes()
     }
 
     // for dummy list

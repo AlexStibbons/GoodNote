@@ -103,7 +103,7 @@ class NoteListFragment : Fragment() {
         }
 
         override fun onNoteLongPress(id: Int) {
-            // delete from DB, update list
+            noteViewModel.deleteNote(id)
         }
     }
 
