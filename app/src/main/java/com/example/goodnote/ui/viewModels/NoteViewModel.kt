@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.dummyNotes
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // AndroidViewModel(application) - use this one when you need application context
@@ -20,11 +21,28 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     fun getNotes2(): LiveData<List<Note>> = _notes
 
     // all repo functions here
-    // scopes can be in job or not since viewModelScope is automatic
-    fun saveNote(note: Note) = viewModelScope.launch {
+
+    fun getAllNotes() = viewModelScope.launch(Dispatchers.IO) {
+        repository.getAllNotes()
+    }
+
+    fun saveNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
         repository.saveNote(note)
     }
 
+    fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteNote(id)
+    }
+
+    fun findNoteById(id: Int) = viewModelScope.launch(Dispatchers.IO) {
+        repository.findNoteById(id)
+    }
+
+    fun findNotesByTitle(title: String) = viewModelScope.launch(Dispatchers.IO) {
+        repository.findNoteByTitle(title)
+    }
+
+    // for dummy list
     fun addNote(note: Note) {
         dummyNotes.add(note)
         _notes.postValue(dummyNotes)

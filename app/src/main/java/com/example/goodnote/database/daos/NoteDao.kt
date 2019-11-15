@@ -22,4 +22,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM note WHERE note.title LIKE '%' || :title || '%'")
     suspend fun findNotesByTitle(title: String): List<Note>
+
+    @Query("SELECT * FROM note WHERE note.id = :id")
+    suspend fun findNoteById(id: Int): Note
 }

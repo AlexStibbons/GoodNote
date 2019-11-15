@@ -1,5 +1,8 @@
 package com.example.goodnote.ui
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +12,11 @@ import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
 import kotlinx.android.synthetic.main.note_item.view.*
 
-class NoteListRecyclerViewAdapter : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
+class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
     private val notes : MutableList<Note> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.note_item,
             parent,false)
@@ -42,8 +44,10 @@ class NoteListRecyclerViewAdapter : RecyclerView.Adapter<NoteListRecyclerViewAda
             text.text = notes[position].text
 
             noteItem.setOnClickListener( View.OnClickListener {
-                // openNoteDetails(notes[position].id)
+                onNoteClicked.onNoteClick(notes[position].id)
+                Log.e("REC VIEW", "note click")
                 Toast.makeText(itemView.context, "Clicked ${notes[position].title}", Toast.LENGTH_LONG).show()
+
             })
         }
     }
@@ -53,4 +57,5 @@ class NoteListRecyclerViewAdapter : RecyclerView.Adapter<NoteListRecyclerViewAda
         this.notes.addAll(newNotes)
         notifyDataSetChanged()
     }
+
 }

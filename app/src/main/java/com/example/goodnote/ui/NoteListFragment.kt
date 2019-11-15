@@ -1,7 +1,9 @@
 package com.example.goodnote.ui
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +31,8 @@ class NoteListFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         val parent = requireActivity()
-        noteViewModel = Injectors.getNoteViewModel1(parent)
-        notesAdapter = NoteListRecyclerViewAdapter()
+        noteViewModel = Injectors.getNoteViewModel(parent)
+        notesAdapter = NoteListRecyclerViewAdapter(clickedNote)
 
         noteViewModel.notes.observe(this, Observer { notes ->
             notes ?: return@Observer
@@ -38,10 +40,14 @@ class NoteListFragment : Fragment() {
             notesAdapter.setNotes(notes)
 
         })
+    }
 
-        /*noteViewModel.getNotes2().observe(this, Observer { notes ->
-            notesAdapter.setNotes(notes)
-        })*/
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        // should observer be here with
+        // getLifecycleOwner() as owner?
+
     }
 
     override fun onCreateView(
@@ -66,22 +72,6 @@ class NoteListFragment : Fragment() {
         return rootView
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     companion object {
         fun getInstance() =
             NoteListFragment().apply {
@@ -91,4 +81,24 @@ class NoteListFragment : Fragment() {
                 }
             }
     }
+
+    interface onNoteClick {
+        fun onNoteClick(id: Int)
+        fun onNoteLongPress(id: Int)
+    }
+
+    val clickedNote = object: onNoteClick {
+        override fun onNoteClick(id: Int) {
+            Log.e("FRAGMENT", "on note click called")
+            val intent = Intent(activity, NoteDetails::class.java).also {
+                it.putExtra("noteId", id)
+            }
+            startActivity(intent)
+        }
+
+        override fun onNoteLongPress(id: Int) {
+            // delete from DB, update list
+        }
+    }
+
 }

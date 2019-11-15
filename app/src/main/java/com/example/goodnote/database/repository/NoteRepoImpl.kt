@@ -20,23 +20,20 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao) : NoteRepo 
             }
     }
 
-    override suspend fun getAllNotes(): List<Note> {
-        TODO("not implemented")
-    }
+    override suspend fun getAllNotes(): List<Note> = noteDao.getAllNotes()
 
-    override suspend fun deleteNote(id: Int) {
-        TODO("not implemented")
-    }
+    override suspend fun deleteNote(id: Int) = noteDao.deleteNote(id)
 
-    override suspend fun saveNote(note: Note) {
-        noteDao.addNote(note)
-    }
+    override suspend fun saveNote(note: Note) = noteDao.addNote(note)
 
-    override suspend fun findNoteById(id: Int): Note {
-        TODO("not implemented")
-    }
+    override suspend fun findNoteById(id: Int): Note = noteDao.findNoteById(id)
+    // this would have to return a list of tags related to the note
+    // so note repo must use JoinDao too
 
-    override suspend fun findNoteByTitle(title: String): List<Note> {
-        TODO("not implemented")
-    }
+    override suspend fun findNoteByTitle(title: String): List<Note> = noteDao.findNotesByTitle(title)
+    // for a list of notes to be shown on screen, each one needs to have a
+    // list of its related tags
+
+    // so, noteRepo and tagRepo must have a joinDao
+    // while joinRepo is useless and not needed
 }

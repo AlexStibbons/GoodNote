@@ -25,12 +25,7 @@ object Injectors {
          return
      }*/
 
-    fun getNoteViewModel(context: Context): NoteViewModelFactory {
-        val repo = getNoteRepository(context)
-        return NoteViewModelFactory(repo)
-    }
-
-    fun getNoteViewModel1(parent: FragmentActivity): NoteViewModel {
+    fun getNoteViewModel(parent: FragmentActivity): NoteViewModel {
         val viewModelFactory = NoteViewModelFactory(getNoteRepository(parent))
         return ViewModelProviders.of(parent, viewModelFactory).get(NoteViewModel::class.java)
     }
