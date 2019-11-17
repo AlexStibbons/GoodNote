@@ -11,6 +11,7 @@ import com.example.goodnote.utils.DB_NAME
 import com.example.goodnote.utils.DUMMY_TEXT
 import com.example.goodnote.utils.DUMMY_TITLE
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 @Database(
@@ -36,21 +37,25 @@ abstract class LocalDb : RoomDatabase() {
         }
 
         private fun buildDb(context: Context): LocalDb {
-            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).build()
+            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).addCallback(LocalDbCallback()).build()
         }
     }
 
-    // local db would need scope every time it's initialized, so...
-    private class LocalDbCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
+    private class LocalDbCallback : RoomDatabase.Callback() {
         override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
             instance?.let { database ->
-                scope.launch {
+                GlobalScope.launch {
                     var noteDao = database.noteDao()
+                    var tagDao = database.tagDao()
 
                     noteDao.addNote(Note(DUMMY_TITLE, DUMMY_TEXT))
                     noteDao.addNote(Note("epistolary?", DUMMY_TEXT))
                     noteDao.addNote(Note("smth", "lighthouse keepers? village? small island?"))
+
+                    tagDao.addTag(Tag("people"))
+                    tagDao.addTag(Tag("world"))
+                    tagDao.addTag(Tag("minutiae"))
 
                 }
             }

@@ -5,7 +5,7 @@ import com.example.goodnote.database.models.*
 
 interface NoteRepo {
 
-     suspend fun getAllNotes(): List<Note>
+    suspend fun getAllNotes(): List<Note>
 
     suspend fun deleteNote(id: Int)
 

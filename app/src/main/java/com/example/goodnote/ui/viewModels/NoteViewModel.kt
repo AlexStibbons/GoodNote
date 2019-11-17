@@ -8,20 +8,23 @@ import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.dummyNotes
+import com.example.goodnote.utils.setId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-// AndroidViewModel(application) - use this one when you need application context
-// when do you need application context? repo/network only
+/*it is better to do thread switching only once by switching to IO thread when it is needed.
+This way we are saving processor time, since there won't be 2 context switches
+where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
+    // for dummies -- can be removed
     private val _notes: MutableLiveData<List<Note>> = MutableLiveData(dummyNotes)
     val notes: LiveData<List<Note>>
         get() = _notes
 
-
+    // for DB notes
     private var _repoNotes: MutableLiveData<List<Note>> = MutableLiveData()
     val repoNotes: LiveData<List<Note>>
         get() = _repoNotes
@@ -32,42 +35,46 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     // all repo functions here
 
-    fun getAllNotes() {
-         viewModelScope.launch(Dispatchers.IO) {
-            val listIO = repository.getAllNotes()
-            withContext(Dispatchers.Main) {
-                 _repoNotes.postValue(listIO)
-            }
+    fun getAllNotes() = viewModelScope.launch {
+        val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
+        _repoNotes.value = notes
+    }
+
+    fun saveNote(note: Note) = viewModelScope.launch {
+        // if title.isEmpty || title == null --> title = DEFAULT_TITLE
+        note.setId()
+        // add this note to _repoNotes --> getAllNotes won't be needed
+        // can't add because it's not a mutable list in mutable live data
+        withContext(Dispatchers.IO) {
+            repository.saveNote(note)
+            getAllNotes()
         }
     }
 
-    fun saveNote(note: Note) = viewModelScope.launch(Dispatchers.IO) {
-
-        // if title.isEmpty || title == null --> title = DEFAULT_TITLE
-
-        repository.saveNote(note)
-        getAllNotes()
+    fun deleteNote(id: Int) = viewModelScope.launch {
+        // remove from list
+        _repoNotes.value = _repoNotes.value?.filter { it.id != id }
+        // remove from DB
+        withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
-    fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteNote(id)
-        getAllNotes()
+    fun findNoteById(id: Int) = viewModelScope.launch {
+        val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
+
+        // should a single note by a LiveData<Note>?
+        /* _note.value = foundNote */
     }
 
-    fun findNoteById(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        val foundNote: Note = repository.findNoteById(id)
-    }
-
-    fun findNotesByTitle(title: String) = viewModelScope.launch(Dispatchers.IO) {
-        val foundNotes: List<Note> = repository.findNoteByTitle(title)
-        _repoNotes.postValue(foundNotes)
+    fun findNotesByTitle(title: String) = viewModelScope.launch {
+        val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
+        _repoNotes.value = foundNotes
     }
 
     fun clearSearch() {
         getAllNotes()
     }
 
-    // for dummy list
+    // for dummy list -- can be removed
     fun addNote(note: Note) {
         dummyNotes.add(note)
         _notes.postValue(dummyNotes)

@@ -49,10 +49,10 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             })
 
             // works, but no indication to user
-            noteItem.setOnLongClickListener(View.OnLongClickListener {
+            noteItem.setOnLongClickListener {
                 onNoteClicked.onNoteLongPress(notes[position].id)
                 true
-            })
+            }
         }
     }
 
