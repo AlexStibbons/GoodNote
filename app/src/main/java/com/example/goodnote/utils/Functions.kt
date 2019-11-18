@@ -1,5 +1,6 @@
 package com.example.goodnote.utils
 
+import androidx.lifecycle.MutableLiveData
 import com.example.goodnote.database.models.*
 import java.util.*
 
@@ -15,14 +16,17 @@ internal fun List<Tag>.toTagsString(): String {
 
 }
 
-internal fun Note.setId() {
-    val uiid = UUID.randomUUID().toString()
-
-    //this.apply { _id = uiid }
+internal fun <T> MutableLiveData<List<T>>.addOne(item: T) {
+    val value = this.value ?: emptyList()
+    this.value = value + listOf(item)
 }
 
-internal fun Tag.setId() {
-    val uuid = UUID.randomUUID().toString()
+internal fun Note.setId(): Note = this.apply {
+    val uiid = UUID.randomUUID().toString()
+    //_id = uiid
+}
 
-    //this.apply { _id = uuid }
+internal fun Tag.setId(): Tag = this.apply {
+    val uuid = UUID.randomUUID().toString()
+    //_id = uiid
 }

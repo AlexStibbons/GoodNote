@@ -4,6 +4,8 @@ import com.example.goodnote.database.models.Note
 
 const val DB_NAME = "GoodNoteDB"
 
+const val DEFAULT_TITLE = "Untitled"
+
 const val DUMMY_TITLE = "The Flannan Lighthouse disappearances"
 const val DUMMY_TEXT = "What the Hesperus crew did find at the lighthouse was a set of perplexing clues. The " +
         "replacement keeper, Joseph Moore, was the first to investigate, and reported an all-encompassing " +

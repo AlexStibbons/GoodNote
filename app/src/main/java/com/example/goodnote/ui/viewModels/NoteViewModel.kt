@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.database.repository.NoteRepo
+import com.example.goodnote.utils.DEFAULT_TITLE
+import com.example.goodnote.utils.addOne
 import com.example.goodnote.utils.dummyNotes
 import com.example.goodnote.utils.setId
 import kotlinx.coroutines.Dispatchers
@@ -41,13 +43,28 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun saveNote(note: Note) = viewModelScope.launch {
-        // if title.isEmpty || title == null --> title = DEFAULT_TITLE
-        note.setId()
-        // add this note to _repoNotes --> getAllNotes won't be needed
-        // can't add because it's not a mutable list in mutable live data
+
+        if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
+
+        val newNote = note.setId()
+
+        // doesn't add?
+        /*_repoNotes.value  = _repoNotes.value?.run { // might not add if list is 0, which it can be
+            toMutableList().add(newNote)
+            Log.e("NOTE VM mutable list", "size is ${this.size}")
+            toList()
+        }*/
+
+        // why does this work and above does not? a fully new list is added to
+        // _repoNotes in both cases
+       //val value: List<Note> = _repoNotes.value ?: emptyList()
+        //_repoNotes.value = value + listOf(newNote)
+
+        _repoNotes.addOne(newNote)
+
         withContext(Dispatchers.IO) {
-            repository.saveNote(note)
-            getAllNotes()
+            repository.saveNote(newNote)
+            //getAllNotes()
         }
     }
 

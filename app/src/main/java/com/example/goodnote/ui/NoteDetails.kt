@@ -22,7 +22,7 @@ class NoteDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notes_details_activity)
         Log.e("DETAILS", "on create")
-        // val notesViewModel = Injectors.getNoteViewModel(this)
+        // notesViewModel = Injectors.getNoteViewModel(this)
 
         // bind all stuffs
         title = findViewById(R.id.notes_details_title)
