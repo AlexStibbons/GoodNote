@@ -13,4 +13,5 @@ interface NoteRepo {
     suspend fun findNoteById(id: String): Note
 
     suspend fun findNoteByTitle(title: String): List<Note>
+
 }

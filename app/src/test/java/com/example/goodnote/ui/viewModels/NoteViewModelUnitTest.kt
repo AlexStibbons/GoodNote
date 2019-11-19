@@ -13,13 +13,16 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.goodnote.database.models.Note
 import org.junit.Rule
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
+
 
 
 @RunWith(JUnit4::class)
 class NoteViewModelUnitTest {
 
-    @Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
+    @get:Rule
+    var rule = InstantTaskExecutorRule()
 
     @Mock
     private lateinit var repository: NoteRepo
@@ -36,14 +39,18 @@ class NoteViewModelUnitTest {
         viewModel.repoNotes.observeForever(observer)
     }
 
-    @Test
-    fun testGetRepoNotes() {
-    }
 
     @Test
     fun testGetAllNotes() {
-    }
 
+        val notes = listOf(Note("test", "test"))
+
+        //`when`(repository.getAllNotes()).thenReturn(notes)
+
+        viewModel.getAllNotes()
+        verify(observer).onChanged(notes)
+    }
+/*
     @Test
     fun testSaveNote() {
     }
@@ -62,7 +69,7 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testClearSearch() {
-    }
+    }*/
 
     @After
     fun tearDown() {
