@@ -8,7 +8,6 @@ import com.example.goodnote.database.models.Note
 import com.example.goodnote.database.repository.NoteRepo
 import com.example.goodnote.utils.DEFAULT_TITLE
 import com.example.goodnote.utils.addOne
-import com.example.goodnote.utils.setId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,28 +34,21 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
         if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
 
-        val newNote = note.setId()
-
-        val newNoteKotlinish = note.run {
-            if (title.isNullOrEmpty()) title = DEFAULT_TITLE
-            setId()
-        }
-
-        _repoNotes.addOne(newNote) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(note) // --> do not make a new list, but just add a new note (DiffUtil)
 
         withContext(Dispatchers.IO) {
-            repository.saveNote(newNote)
+            repository.saveNote(note)
         }
     }
 
-    fun deleteNote(id: Int) = viewModelScope.launch {
+    fun deleteNote(id: String) = viewModelScope.launch {
         // remove from list
-        _repoNotes.value = _repoNotes.value?.filter { it.id != id }
+        _repoNotes.value = _repoNotes.value?.filter { it.noteId != id }
         // remove from DB
         withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
-    fun findNoteById(id: Int) = viewModelScope.launch {
+    fun findNoteById(id: String) = viewModelScope.launch {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
 
         // should a single note by a LiveData<Note>?

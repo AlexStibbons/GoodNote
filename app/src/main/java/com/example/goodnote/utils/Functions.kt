@@ -16,13 +16,3 @@ internal fun <T> MutableLiveData<List<T>>.addOne(item: T) {
     val value = this.value ?: emptyList()
     this.value = value + listOf(item)
 }
-
-internal fun Note.setId(): Note = this.apply {
-    val uiid = UUID.randomUUID().toString()
-    //_id = uiid
-}
-
-internal fun Tag.setId(): Tag = this.apply {
-    val uuid = UUID.randomUUID().toString()
-    //_id = uiid
-}

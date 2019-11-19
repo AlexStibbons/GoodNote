@@ -14,6 +14,8 @@ import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.DUMMY_TEXT
+import com.example.goodnote.utils.EMPTY_NONTE_ID
+import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -67,7 +69,7 @@ class NoteListFragment : Fragment() {
             Log.e("FRAGMENT", "SAVING NOTE?")
             noteViewModel.saveNote(Note("epistolary?", DUMMY_TEXT))
 
-            startActivity(Intent(activity, NoteDetails::class.java)) // start editable screen w/o id
+            startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) }) // start editable screen w/o id
         }
 
         return rootView
@@ -84,22 +86,22 @@ class NoteListFragment : Fragment() {
     }
 
     interface onNoteClick {
-        fun onNoteClick(id: Int)
-        fun onNoteLongPress(id: Int)
+        fun onNoteClick(id: String)
+        fun onNoteLongPress(id: String)
     }
 
     val clickedNote = object: onNoteClick {
-        override fun onNoteClick(id: Int) {
+        override fun onNoteClick(id: String) {
             Log.e("FRAGMENT", "on note click called")
             // intent did not work when requireActivity() - opened blank screen?
             // idk
-            val intent = Intent(activity, NoteDetails::class.java).also {
-                it.putExtra("noteId", id)
+            val intent = Intent(activity, NoteDetails::class.java).apply {
+                putExtra(EXTRA_NOTE_ID, id)
             }
             startActivity(intent)
         }
 
-        override fun onNoteLongPress(id: Int) {
+        override fun onNoteLongPress(id: String) {
             noteViewModel.deleteNote(id)
         }
     }

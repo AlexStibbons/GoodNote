@@ -44,13 +44,13 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             text.text = notes[position].text
 
             noteItem.setOnClickListener( View.OnClickListener {
-                onNoteClicked.onNoteClick(notes[position].id)
+                onNoteClicked.onNoteClick(notes[position].noteId)
                 Log.e("REC VIEW", "note click")
             })
 
             // works, but no indication to user
             noteItem.setOnLongClickListener {
-                onNoteClicked.onNoteLongPress(notes[position].id)
+                onNoteClicked.onNoteLongPress(notes[position].noteId)
                 true
             }
         }

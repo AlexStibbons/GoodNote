@@ -17,12 +17,12 @@ interface NoteDao {
     suspend fun addNote(note: Note)
 
     // remove from join table first!
-    @Query("DELETE FROM note where note.id = :id")
-    suspend fun deleteNote(id: Int)
+    @Query("DELETE FROM note where note.noteId = :id")
+    suspend fun deleteNote(id: String)
 
     @Query("SELECT * FROM note WHERE note.title LIKE '%' || :title || '%'")
     suspend fun findNotesByTitle(title: String): List<Note>
 
-    @Query("SELECT * FROM note WHERE note.id = :id")
-    suspend fun findNoteById(id: Int): Note
+    @Query("SELECT * FROM note WHERE note.noteId = :id")
+    suspend fun findNoteById(id: String): Note
 }

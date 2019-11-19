@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.repository.TagRepo
 import com.example.goodnote.database.models.Tag
 import com.example.goodnote.utils.addOne
-import com.example.goodnote.utils.setId
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,7 +18,7 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
         get() = _tags
 
     init {
-        getAllTags() // maybe
+        getAllTags()
     }
 
     fun getAllTags() = viewModelScope.launch {
@@ -28,9 +27,8 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
     }
 
     fun addTag(tag: Tag) = viewModelScope.launch {
-        val newTag = tag.setId()
-        _tags.addOne(newTag)
-        withContext(Dispatchers.IO) {repository.addTag(newTag)}
+        _tags.addOne(tag)
+        withContext(Dispatchers.IO) {repository.addTag(tag)}
     }
 
     fun deleteTag(id: Int) = viewModelScope.launch {
