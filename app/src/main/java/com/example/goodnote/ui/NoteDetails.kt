@@ -6,8 +6,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.goodnote.R
-import com.example.goodnote.utils.Injectors
-import com.example.goodnote.database.models.*
 
 class NoteDetails : AppCompatActivity() {
 
@@ -24,7 +22,6 @@ class NoteDetails : AppCompatActivity() {
         Log.e("DETAILS", "on create")
         // notesViewModel = Injectors.getNoteViewModel(this)
 
-        // bind all stuffs
         title = findViewById(R.id.notes_details_title)
         tags = findViewById(R.id.notes_details_tags)
         text = findViewById(R.id.notes_details_text)

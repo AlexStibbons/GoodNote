@@ -8,7 +8,7 @@ interface TagRepo {
 
     suspend fun addTag(tag: Tag)
 
-    suspend fun deleteTagBId(id: Int)
+    suspend fun deleteTagById(id: Int)
 
     suspend fun findTagById(id: Int): Tag
 

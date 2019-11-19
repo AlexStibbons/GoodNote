@@ -36,7 +36,7 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
     fun deleteTag(id: Int) = viewModelScope.launch {
         _tags.value = _tags.value?.filter { it.id != id }
 
-        withContext(Dispatchers.IO) { repository.deleteTagBId(id)}
+        withContext(Dispatchers.IO) { repository.deleteTagById(id)}
     }
 
     fun findTagById(id: Int) = viewModelScope.launch {

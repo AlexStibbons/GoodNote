@@ -20,7 +20,7 @@ class TagRepoImpl(private val tagDao: TagDao): TagRepo {
 
     override suspend fun addTag(tag: Tag) = tagDao.addTag(tag)
 
-    override suspend fun deleteTagBId(id: Int) = tagDao.deleteTagById(id)
+    override suspend fun deleteTagById(id: Int) = tagDao.deleteTagById(id)
 
     override suspend fun findTagById(id: Int): Tag = tagDao.findTagById(id)
 

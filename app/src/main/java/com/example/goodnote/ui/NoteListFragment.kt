@@ -1,13 +1,11 @@
 package com.example.goodnote.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +64,6 @@ class NoteListFragment : Fragment() {
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
-            //Toast.makeText(context, "Open add note!", Toast.LENGTH_SHORT).show()
             Log.e("FRAGMENT", "SAVING NOTE?")
             noteViewModel.saveNote(Note("epistolary?", DUMMY_TEXT))
 
