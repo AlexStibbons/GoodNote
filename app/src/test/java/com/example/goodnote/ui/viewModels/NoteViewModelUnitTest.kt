@@ -75,7 +75,6 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testSaveNote() {
-
         testDispatcher.runBlockingTest {
             // given
             val noteToAdd = Note("", "add")
@@ -88,7 +87,6 @@ class NoteViewModelUnitTest {
             assertEquals(1, viewModel.repoNotes.value?.size)
             assertEquals(DEFAULT_TITLE, viewModel.repoNotes.value?.get(0)?.title)
         }
-
     }
 
     @Test
@@ -96,25 +94,51 @@ class NoteViewModelUnitTest {
 
         testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
+            viewModel.saveNote(Note("a", "a", "a"))
+            viewModel.saveNote(Note("b", "b", "b"))
+            viewModel.saveNote(Note("c", "c", "c"))
 
             // when viewModel deletes note
-
+            viewModel.deleteNote("a")
             // then there are 2 notes left
+            assertEquals(2, viewModel.repoNotes?.value?.size)
         }
 
     }
-/*
+
     @Test
     fun testFindNoteById() {
+        testDispatcher.runBlockingTest{
+            // given there are 3 notes in repoNotes
+            viewModel.saveNote(Note("a", "a", "a"))
+            viewModel.saveNote(Note("b", "b", "b"))
+            viewModel.saveNote(Note("c", "c", "c"))
+
+            // when viewModel finds one
+            viewModel.findNoteById("b")
+
+            // then nothing happens because nothing happened in viewModel anyway
+
+        }
+
     }
 
     @Test
     fun testFindNotesByTitle() {
-    }
+        testDispatcher.runBlockingTest {
+            // given there are 3 notes in repoNotes
+            viewModel.saveNote(Note("ab", "a", "a"))
+            viewModel.saveNote(Note("b", "b", "b"))
+            viewModel.saveNote(Note("c", "c", "c"))
 
-    @Test
-    fun testClearSearch() {
-    }*/
+            // when viewModel searches
+            //viewModel.findNotesByTitle("b")
+
+            // then repoNotes is not 0 and contains 2 notes
+            assertNotNull(viewModel.repoNotes.value)
+            assertEquals(3, viewModel.repoNotes?.value?.size)
+        }
+    }
 
     @After
     fun tearDown() {
