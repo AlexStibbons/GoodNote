@@ -57,7 +57,8 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {
         val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
-        _repoNotes.value = foundNotes
+       // _repoNotes.value = foundNotes
+        _repoNotes.value = _repoNotes.value?.filter { it.title.contains(title, true) }
     }
 
     fun clearSearch() {

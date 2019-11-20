@@ -127,16 +127,23 @@ class NoteViewModelUnitTest {
     fun testFindNotesByTitle() {
         testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
-            viewModel.saveNote(Note("ab", "a", "a"))
-            viewModel.saveNote(Note("b", "b", "b"))
-            viewModel.saveNote(Note("c", "c", "c"))
+            var title = "b"
+            val noteOne = Note("ab", "a", "a")
+            val noteTwo = Note("b", "b", "b")
+            val noteThree = Note("c", "c", "c")
+            viewModel.saveNote(noteOne)
+            viewModel.saveNote(noteTwo)
+            viewModel.saveNote(noteThree)
+
+            val notes = listOf(noteOne, noteTwo)
+
+          `when`(repository.findNoteByTitle(title)).thenReturn(notes)
 
             // when viewModel searches
-            //viewModel.findNotesByTitle("b")
+            viewModel.findNotesByTitle(title)
 
-            // then repoNotes is not 0 and contains 2 notes
-            assertNotNull(viewModel.repoNotes.value)
-            assertEquals(3, viewModel.repoNotes?.value?.size)
+            // then repoNotes are changed to notes
+            verify(observer).onChanged(notes)
         }
     }
 
