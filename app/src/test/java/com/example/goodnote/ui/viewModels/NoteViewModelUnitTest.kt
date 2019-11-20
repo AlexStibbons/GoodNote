@@ -13,6 +13,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.goodnote.database.models.Note
+import com.example.goodnote.utils.DEFAULT_TITLE
+import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -55,41 +57,53 @@ class NoteViewModelUnitTest {
         viewModel.repoNotes.observeForever(observer)
     }
 
-    // everything breaks because of coroutines
-   /* @Test
-    fun testGetRepoNotes() {
-        // passes when init(read: 2 context changes) is commented in NotesViewModel
-
-        // WHEN
-        val returns: LiveData<List<Note>> = viewModel.repoNotes
-        // THEN
-        assertNotNull(returns)
-    }*/
-
     @Test
     fun testGetAllNotes() {
-
         testDispatcher.runBlockingTest{
-            // given
+            // given the repository returns this list of notes
             val notes = listOf(Note("test", "test"))
             `when`(repository.getAllNotes()).thenReturn(notes)
-            // when
+
+            // when view model calls function
             viewModel.getAllNotes()
 
-            // then
+            // then repoNotes will equal val notes
             verify(observer).onChanged(notes)
         }
 
     }
-/*
+
     @Test
     fun testSaveNote() {
+
+        testDispatcher.runBlockingTest {
+            // given
+            val noteToAdd = Note("", "add")
+
+            //when
+            viewModel.saveNote(noteToAdd)
+
+            // then
+            assertNotNull(viewModel.repoNotes.value)
+            assertEquals(1, viewModel.repoNotes.value?.size)
+            assertEquals(DEFAULT_TITLE, viewModel.repoNotes.value?.get(0)?.title)
+        }
+
     }
 
     @Test
     fun testDeleteNote() {
-    }
 
+        testDispatcher.runBlockingTest {
+            // given there are 3 notes in repoNotes
+
+            // when viewModel deletes note
+
+            // then there are 2 notes left
+        }
+
+    }
+/*
     @Test
     fun testFindNoteById() {
     }
