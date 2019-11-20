@@ -20,11 +20,14 @@ import com.example.goodnote.ui.viewModels.TagViewModelFactory
 
 object Injectors {
 
-    // noteDao by lazy
-    // does Injectors need to get context as parameter?
+    private var noteDao: NoteDao? = null
+
+    private fun getNoteDao(context: Context): NoteDao {
+        return noteDao ?: LocalDb.getInstance(context.applicationContext).noteDao().also { noteDao = it }
+    }
 
     private fun getNoteRepository(context: Context): NoteRepo {
-        return NoteRepoImpl.getInstance(LocalDb.getInstance(context.applicationContext).noteDao())
+        return NoteRepoImpl.getInstance(getNoteDao(context))
     }
 
      private fun getTagRepository(context: Context): TagRepo {
@@ -44,4 +47,5 @@ object Injectors {
         val tagViewModelFactory = TagViewModelFactory(getTagRepository(parent))
         return ViewModelProviders.of(parent, tagViewModelFactory).get(TagViewModel::class.java)
     }
+
 }

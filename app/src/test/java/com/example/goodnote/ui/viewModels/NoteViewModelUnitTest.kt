@@ -59,7 +59,7 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testGetAllNotes() {
-        testDispatcher.runBlockingTest{
+        testDispatcher.runBlockingTest {
             // given the repository returns this list of notes
             val notes = listOf(Note("test", "test"))
             `when`(repository.getAllNotes()).thenReturn(notes)
@@ -108,7 +108,7 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testFindNoteById() {
-        testDispatcher.runBlockingTest{
+        testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
             viewModel.saveNote(Note("a", "a", "a"))
             viewModel.saveNote(Note("b", "b", "b"))
@@ -120,7 +120,6 @@ class NoteViewModelUnitTest {
             // then nothing happens because nothing happened in viewModel anyway
 
         }
-
     }
 
     @Test
@@ -137,7 +136,7 @@ class NoteViewModelUnitTest {
 
             val notes = listOf(noteOne, noteTwo)
 
-          `when`(repository.findNoteByTitle(title)).thenReturn(notes)
+            `when`(repository.findNoteByTitle(title)).thenReturn(notes)
 
             // when viewModel searches
             viewModel.findNotesByTitle(title)
