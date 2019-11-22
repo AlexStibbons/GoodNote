@@ -32,7 +32,7 @@ class TagListFragment : Fragment() {
 
         tagViewModel.tags.observe(this, Observer { tags ->
             tags ?: return@Observer
-
+            Log.e("FRGM OBSERVER", "Tags are ${tags.size}")
             tagsAdapter.setTags(tags)
         })
 
@@ -81,13 +81,13 @@ class TagListFragment : Fragment() {
     val clickedTag = object: onTagClicked {
         override fun onTagClick(id: String) {
             Log.e("FRGM:", "Tag id is $id")
-            Toast.makeText(requireActivity(), "Tag is clicked", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "Tag $id is clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun onTagLongPress(id: String) {
             Log.e("FRGM: before", "Tag id is $id")
             tagViewModel.deleteTag(id)
-            Toast.makeText(requireActivity(), "long click", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), "long click on $id", Toast.LENGTH_SHORT).show()
             Log.e("FRGM: after", "Tag id is $id")
         }
 

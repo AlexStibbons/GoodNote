@@ -22,6 +22,7 @@ object Injectors {
 
     private var noteDao: NoteDao? = null
     private var tagDao: TagDao? = null
+    private var joinDao: JoinNoteTagDao? = null
 
     private fun getNoteDao(context: Context): NoteDao {
         return noteDao ?: LocalDb.getInstance(context.applicationContext).noteDao().also { noteDao = it }
@@ -31,6 +32,10 @@ object Injectors {
         return tagDao ?: LocalDb.getInstance(context.applicationContext).tagDao().also { tagDao = it }
     }
 
+    private fun getJoinDao(context: Context): JoinNoteTagDao {
+        return joinDao ?: LocalDb.getInstance(context.applicationContext).joinNoteTagDao().also { joinDao = it }
+    }
+
     private fun getNoteRepository(context: Context): NoteRepo {
         return NoteRepoImpl.getInstance(getNoteDao(context))
     }
@@ -38,10 +43,6 @@ object Injectors {
      private fun getTagRepository(context: Context): TagRepo {
          return TagRepoImpl.getInstance(getTagDao(context))
      }
-
-     /*private fun getJoinRepository(context: Context): JoinRepo {
-         return
-     }*/
 
     fun getNoteViewModel(parent: FragmentActivity): NoteViewModel {
         val viewModelFactory = NoteViewModelFactory(getNoteRepository(parent))
