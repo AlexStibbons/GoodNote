@@ -20,6 +20,10 @@ import kotlinx.coroutines.test.setMain
 import org.junit.Rule
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertNotNull
+
+// refactor to use JUnit5 and MockK
 
 @ExperimentalCoroutinesApi
 class TagViewModelUnitTest {
@@ -52,7 +56,16 @@ class TagViewModelUnitTest {
     }
 
     @Test
-    fun getAllTags() {
+    fun getAllTags() = testDispatcher.runBlockingTest {
+        val tags = listOf(Tag("name one", "fakeId"))
+        `when`(repo.getAllTags()).thenReturn(tags)
+
+        tagViewModel.getAllTags()
+
+        // verify(repo).getAllTags() --> ERROR: wanted 1 time, but was 2 times
+        // calls once on init and then calls method?
+        verify(observer).onChanged(tags)
+        assertEquals(1, tagViewModel.tags?.value?.size)
     }
 
     @Test

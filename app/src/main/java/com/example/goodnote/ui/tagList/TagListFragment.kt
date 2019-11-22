@@ -73,6 +73,7 @@ class TagListFragment : Fragment() {
             }
     }
 
+    // this interface, along with onNoteClicked can be 1 interface in the utils package
     interface onTagClicked {
         fun onTagClick(id: String)
         fun onTagLongPress(id: String)

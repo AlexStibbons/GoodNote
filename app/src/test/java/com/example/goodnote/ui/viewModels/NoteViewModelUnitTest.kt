@@ -18,6 +18,7 @@ import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -68,6 +69,8 @@ class NoteViewModelUnitTest {
             viewModel.getAllNotes()
 
             // then repoNotes will equal val notes
+            // verify(repository).getAllNotes() --> ERROR: wanted 1 time, was 2 times
+            // verify repo passes on others ?
             verify(observer).onChanged(notes)
         }
 
@@ -83,6 +86,7 @@ class NoteViewModelUnitTest {
             viewModel.saveNote(noteToAdd)
 
             // then
+            verify(repository).saveNote(noteToAdd)
             assertNotNull(viewModel.repoNotes.value)
             assertEquals(1, viewModel.repoNotes.value?.size)
             assertEquals(DEFAULT_TITLE, viewModel.repoNotes.value?.get(0)?.title)
@@ -101,6 +105,7 @@ class NoteViewModelUnitTest {
             // when viewModel deletes note
             viewModel.deleteNote("a")
             // then there are 2 notes left
+            verify(repository).deleteNote("a")
             assertEquals(2, viewModel.repoNotes?.value?.size)
         }
 
@@ -142,6 +147,7 @@ class NoteViewModelUnitTest {
             viewModel.findNotesByTitle(title)
 
             // then repoNotes are changed to notes
+            //verify(repository).findNoteByTitle(title) --> same invocation error
             verify(observer).onChanged(notes)
         }
     }
