@@ -7,7 +7,6 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.goodnote.database.models.Tag
 import com.example.goodnote.database.repository.TagRepo
@@ -21,7 +20,6 @@ import org.junit.Rule
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertNotNull
 
 // refactor to use JUnit5 and MockK
 
@@ -60,9 +58,9 @@ class TagViewModelUnitTest {
         val tags = listOf(Tag("name one", "fakeId"))
         `when`(repo.getAllTags()).thenReturn(tags)
 
-        tagViewModel.getAllTags()
+        tagViewModel.getTags()
 
-        // verify(repo).getAllTags() --> ERROR: wanted 1 time, but was 2 times
+        verify(repo).getAllTags() //--> ERROR: wanted 1 time, but was 2 times
         // calls once on init and then calls method?
         verify(observer).onChanged(tags)
         assertEquals(1, tagViewModel.tags?.value?.size)

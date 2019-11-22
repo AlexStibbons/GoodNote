@@ -13,15 +13,25 @@ import kotlinx.coroutines.withContext
 
 class TagViewModel(private val repository: TagRepo): ViewModel() {
 
-    private val _tags: MutableLiveData<List<Tag>> = MutableLiveData()
+    // is this here [by lazy] a better option?
+    // because of init, it seems like there's no difference
+    private val tags2: MutableLiveData<List<Tag>> by lazy {
+        MutableLiveData<List<Tag>>().also {
+            getTags()
+        }
+    }
+
+    private val _tags: MutableLiveData<List<Tag>> = tags2
     val tags: LiveData<List<Tag>>
         get() = _tags
 
-    init {
-        getAllTags()
+    // inspect need for init:
+    // since ViewModel is singleton, init is called only once, isn't it?
+     init {
+        getTags()
     }
 
-    fun getAllTags() = viewModelScope.launch {
+    fun getTags() = viewModelScope.launch {
         val tags = withContext(Dispatchers.IO) {repository.getAllTags()}
         _tags.value = tags
     }
@@ -51,6 +61,6 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
     }
 
     fun clearSearch() {
-        getAllTags()
+        getTags()
     }
 }
