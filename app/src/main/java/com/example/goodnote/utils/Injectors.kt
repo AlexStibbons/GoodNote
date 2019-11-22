@@ -21,9 +21,14 @@ import com.example.goodnote.ui.viewModels.TagViewModelFactory
 object Injectors {
 
     private var noteDao: NoteDao? = null
+    private var tagDao: TagDao? = null
 
     private fun getNoteDao(context: Context): NoteDao {
         return noteDao ?: LocalDb.getInstance(context.applicationContext).noteDao().also { noteDao = it }
+    }
+
+    private fun getTagDao(context: Context): TagDao {
+        return tagDao ?: LocalDb.getInstance(context.applicationContext).tagDao().also { tagDao = it }
     }
 
     private fun getNoteRepository(context: Context): NoteRepo {
@@ -31,7 +36,7 @@ object Injectors {
     }
 
      private fun getTagRepository(context: Context): TagRepo {
-         return TagRepoImpl.getInstance(LocalDb.getInstance(context.applicationContext).tagDao())
+         return TagRepoImpl.getInstance(getTagDao(context))
      }
 
      /*private fun getJoinRepository(context: Context): JoinRepo {
