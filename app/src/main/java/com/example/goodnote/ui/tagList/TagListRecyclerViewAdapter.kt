@@ -1,5 +1,6 @@
 package com.example.goodnote.ui.tagList
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,11 +38,14 @@ class TagListRecyclerViewAdapter(private val clickedTag: TagListFragment.onTagCl
 
             tagItem.setOnClickListener {
                 clickedTag.onTagClick(tags[position].tagId)
+
+                Log.e("RV: onClick", "Tag id is ${tags[position].tagId}")
             }
 
             // has no indication it worked
             tagItem.setOnLongClickListener {
                 clickedTag.onTagLongPress(tags[position].tagId)
+                Log.e("RV: onLongCl", "Tag id is ${tags[position].tagId}")
                 true
             }
         }

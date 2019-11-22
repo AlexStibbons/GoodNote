@@ -1,6 +1,7 @@
 package com.example.goodnote.ui.tagList
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,11 +80,15 @@ class TagListFragment : Fragment() {
 
     val clickedTag = object: onTagClicked {
         override fun onTagClick(id: String) {
-            Toast.makeText(activity, "Tag is clicked", Toast.LENGTH_SHORT).show()
+            Log.e("FRGM:", "Tag id is $id")
+            Toast.makeText(requireActivity(), "Tag is clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun onTagLongPress(id: String) {
+            Log.e("FRGM: before", "Tag id is $id")
             tagViewModel.deleteTag(id)
+            Toast.makeText(requireActivity(), "long click", Toast.LENGTH_SHORT).show()
+            Log.e("FRGM: after", "Tag id is $id")
         }
 
     }
