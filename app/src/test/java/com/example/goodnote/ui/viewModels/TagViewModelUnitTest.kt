@@ -69,22 +69,63 @@ class TagViewModelUnitTest {
     }
 
     @Test
-    fun addTag() {
+    fun addTag() = testDispatcher.runBlockingTest {
+        val tagOne = Tag("first", "fakeID1")
+        val tagTwo = Tag("second", "fakeId2")
+
+        tagViewModel.addTag(tagOne)
+        tagViewModel.addTag(tagTwo)
+
+        verify(repo).addTag(tagOne)
+        verify(repo).addTag(tagTwo)
+        assertEquals(2, tagViewModel.tags?.value?.size)
+        assertEquals("first", tagViewModel.tags?.value?.get(0)?.name)
     }
 
     @Test
-    fun deleteTag() {
+    fun deleteTag() = testDispatcher.runBlockingTest {
+        val tagOne = Tag("first", "fakeID1")
+        val tagTwo = Tag("second", "fakeId2")
+        tagViewModel.addTag(tagOne)
+        tagViewModel.addTag(tagTwo)
+        val returned: List<Tag> = listOf(tagTwo)
+
+        tagViewModel.deleteTag("fakeID1")
+
+        verify(repo).deleteTagById("fakeID1")
+        verify(observer).onChanged(returned)
     }
 
     @Test
-    fun findTagById() {
+    fun findTagById() = testDispatcher.runBlockingTest {
+        val tagOne = Tag("first", "fakeID1")
+        val tagTwo = Tag("second", "fakeId2")
+        tagViewModel.addTag(tagOne)
+        tagViewModel.addTag(tagTwo)
+        `when`(repo.findTagById("fakeID1")).thenReturn(tagOne)
+
+        tagViewModel.findTagById("fakeID1")
+
+        verify(repo).findTagById("fakeID1")
+
+        // no LiveData<Tag> to retun in tag view model
+
     }
 
     @Test
-    fun findTagsByName() {
-    }
+    fun findTagsByName() = testDispatcher.runBlockingTest {
+        val tagOne = Tag("first", "fakeID1")
+        val tagTwo = Tag("second", "fakeId2")
+        val tagThree = Tag("irs", "fakeId3")
+        tagViewModel.addTag(tagOne)
+        tagViewModel.addTag(tagTwo)
+        tagViewModel.addTag(tagThree)
+        val returned = listOf(tagOne, tagThree)
+        `when`(repo.findTagsByName("irs")).thenReturn(returned)
 
-    @Test
-    fun clearSearch() {
+        tagViewModel.findTagsByName("irs")
+
+        verify(repo).findTagsByName("irs")
+        verify(observer).onChanged(returned)
     }
 }
