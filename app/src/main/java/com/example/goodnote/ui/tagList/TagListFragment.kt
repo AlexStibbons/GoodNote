@@ -79,11 +79,11 @@ class TagListFragment : Fragment() {
 
     val clickedTag = object: onTagClicked {
         override fun onTagClick(id: String) {
-
+            Toast.makeText(activity, "Tag is clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun onTagLongPress(id: String) {
-
+            tagViewModel.deleteTag(id)
         }
 
     }

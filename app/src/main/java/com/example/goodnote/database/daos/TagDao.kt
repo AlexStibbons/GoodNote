@@ -16,13 +16,13 @@ interface TagDao {
     suspend fun addTag(tag: Tag)
 
     // remove from join first!
-    @Query("DELETE FROM tag WHERE tag.id = :id")
-    suspend fun deleteTagById(id: Int)
+    @Query("DELETE FROM tag WHERE tag.tagId = :id")
+    suspend fun deleteTagById(id: String)
 
     @Query("SELECT * FROM tag WHERE tag.name LIKE '%' || :name || '%'")
     suspend fun findTagsByName(name: String): List<Tag>
 
-    @Query("SELECT * FROM tag WHERE tag.id = :id")
-    suspend fun findTagById(id: Int): Tag
+    @Query("SELECT * FROM tag WHERE tag.tagId = :id")
+    suspend fun findTagById(id: String): Tag
 }
 

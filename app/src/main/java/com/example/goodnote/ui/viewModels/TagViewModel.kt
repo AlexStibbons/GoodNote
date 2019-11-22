@@ -31,13 +31,13 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
         withContext(Dispatchers.IO) {repository.addTag(tag)}
     }
 
-    fun deleteTag(id: Int) = viewModelScope.launch {
-        _tags.value = _tags.value?.filter { it.id != id }
+    fun deleteTag(id: String) = viewModelScope.launch {
+        _tags.value = _tags.value?.filter { it.tagId != id }
 
         withContext(Dispatchers.IO) { repository.deleteTagById(id)}
     }
 
-    fun findTagById(id: Int) = viewModelScope.launch {
+    fun findTagById(id: String) = viewModelScope.launch {
         val foundTag: Tag = withContext(Dispatchers.IO) { repository.findTagById(id)}
         // tag to LiveData<Tag> ?
     }
