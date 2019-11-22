@@ -1,12 +1,9 @@
-package com.example.goodnote.ui
+package com.example.goodnote.ui.noteList
 
-import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.database.models.Note

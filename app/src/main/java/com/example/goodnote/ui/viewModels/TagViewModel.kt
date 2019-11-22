@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 class TagViewModel(private val repository: TagRepo): ViewModel() {
 
     private val _tags: MutableLiveData<List<Tag>> = MutableLiveData()
-    private val tags: LiveData<List<Tag>>
+    val tags: LiveData<List<Tag>>
         get() = _tags
 
     init {
@@ -38,13 +38,16 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
     }
 
     fun findTagById(id: Int) = viewModelScope.launch {
-        val foundNote = withContext(Dispatchers.IO) { repository.findTagById(id)}
+        val foundTag: Tag = withContext(Dispatchers.IO) { repository.findTagById(id)}
         // tag to LiveData<Tag> ?
     }
 
     fun findTagsByName(name: String) = viewModelScope.launch {
+
+        _tags.value = _tags.value?.filter { it.name.contains(name, true) }
+
+        // is fetching any kind of filtered list needed at all?
         val foundTags = withContext(Dispatchers.IO) { repository.findTagsByName(name)}
-        _tags.value = foundTags
     }
 
     fun clearSearch() {

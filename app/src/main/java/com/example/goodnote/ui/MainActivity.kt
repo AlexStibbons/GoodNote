@@ -3,6 +3,7 @@ package com.example.goodnote.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.goodnote.R
+import com.example.goodnote.ui.noteList.NoteListFragment
 
 
 class MainActivity : AppCompatActivity() {

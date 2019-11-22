@@ -1,4 +1,4 @@
-package com.example.goodnote.ui
+package com.example.goodnote.ui.noteList
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.database.models.Note
+import com.example.goodnote.ui.noteDetails.NoteDetails
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.DUMMY_TEXT
 import com.example.goodnote.utils.EMPTY_NONTE_ID
@@ -85,6 +86,7 @@ class NoteListFragment : Fragment() {
             }
     }
 
+    // can be onItemClicked and extracted as an internal interface
     interface onNoteClick {
         fun onNoteClick(id: String)
         fun onNoteLongPress(id: String)

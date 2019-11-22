@@ -48,11 +48,9 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
+    // should not have implementation because this is details job
     fun findNoteById(id: String) = viewModelScope.launch {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
-
-        // should a single note by a LiveData<Note>?
-        /* _note.value = foundNote */
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {

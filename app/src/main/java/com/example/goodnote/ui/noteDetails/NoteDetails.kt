@@ -1,4 +1,4 @@
-package com.example.goodnote.ui
+package com.example.goodnote.ui.noteDetails
 
 import android.os.Bundle
 import android.util.Log
