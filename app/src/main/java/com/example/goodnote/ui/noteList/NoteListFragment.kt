@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
-import com.example.goodnote.database.models.Note
+import com.example.goodnote.database.entityModels.NoteEntity
 import com.example.goodnote.ui.noteDetails.NoteDetails
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.DUMMY_TEXT
@@ -30,6 +30,10 @@ class NoteListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // IF it receives TAG ID, THEN show notes that contain that tag
+
+        // IF it received default/empty tag id, THEN show all notes
 
         val parent = requireActivity()
         noteViewModel = Injectors.getNoteViewModel(parent)
@@ -68,7 +72,7 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             Log.e("FRAGMENT", "SAVING NOTE?")
-            noteViewModel.saveNote(Note("epistolary?", DUMMY_TEXT))
+            noteViewModel.saveNote(NoteEntity("epistolary?", DUMMY_TEXT))
 
             startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) }) // start editable screen w/o id
         }

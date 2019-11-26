@@ -1,11 +1,12 @@
-package com.example.goodnote.database.models
+package com.example.goodnote.database.entityModels
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity
-data class Note(
+@Entity(indices=[Index(value = ["noteId"], unique = true)])
+data class NoteEntity(
     var title: String,
     var text: String,
     val noteId: String = UUID.randomUUID().toString() // should this then be the primary key?

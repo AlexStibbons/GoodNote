@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
-import com.example.goodnote.database.models.Tag
+import com.example.goodnote.database.entityModels.TagEntity
 import kotlinx.android.synthetic.main.tag_item.view.*
 
 class TagListRecyclerViewAdapter(private val clickedTag: TagListFragment.onTagClicked) : RecyclerView.Adapter<TagListRecyclerViewAdapter.ViewHolder>() {
 
     private val TAG = TagListRecyclerViewAdapter::class.java.simpleName
-    private val tags: MutableList<Tag> = ArrayList()
+    private val tags: MutableList<TagEntity> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -39,19 +39,19 @@ class TagListRecyclerViewAdapter(private val clickedTag: TagListFragment.onTagCl
             tagItem.setOnClickListener {
                 clickedTag.onTagClick(tags[position].tagId)
 
-                Log.e("RV: onClick", "Tag id is ${tags[position].tagId}")
+                Log.e("RV: onClick", "TagEntity id is ${tags[position].tagId}")
             }
 
             // has no indication it worked
             tagItem.setOnLongClickListener {
                 clickedTag.onTagLongPress(tags[position].tagId)
-                Log.e("RV: onLongCl", "Tag id is ${tags[position].tagId}")
+                Log.e("RV: onLongCl", "TagEntity id is ${tags[position].tagId}")
                 true
             }
         }
     }
 
-    internal fun setTags(newTags: List<Tag>) {
+    internal fun setTags(newTags: List<TagEntity>) {
         this.tags.clear()
         this.tags.addAll(newTags)
         notifyDataSetChanged()

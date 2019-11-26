@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.models.Note
-import com.example.goodnote.database.repository.NoteRepo
+import com.example.goodnote.database.entityModels.NoteEntity
+import com.example.goodnote.repository.NoteRepo
 import com.example.goodnote.utils.DEFAULT_TITLE
 import com.example.goodnote.utils.addOne
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +17,8 @@ This way we are saving processor time, since there won't be 2 context switches
 where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
-    private var _repoNotes: MutableLiveData<List<Note>> = MutableLiveData()
-    val repoNotes: LiveData<List<Note>>
+    private var _repoNotes: MutableLiveData<List<NoteEntity>> = MutableLiveData()
+    val repoNotes: LiveData<List<NoteEntity>>
         get() = _repoNotes
 
     init {
@@ -30,7 +30,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         _repoNotes.value = notes
     }
 
-    fun saveNote(note: Note) = viewModelScope.launch {
+    fun saveNote(note: NoteEntity) = viewModelScope.launch {
 
         if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
 

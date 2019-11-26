@@ -81,15 +81,15 @@ class TagListFragment : Fragment() {
 
     val clickedTag = object: onTagClicked {
         override fun onTagClick(id: String) {
-            Log.e("FRGM:", "Tag id is $id")
-            Toast.makeText(requireActivity(), "Tag $id is clicked", Toast.LENGTH_SHORT).show()
+            Log.e("FRGM:", "TagEntity id is $id")
+            Toast.makeText(requireActivity(), "TagEntity $id is clicked", Toast.LENGTH_SHORT).show()
         }
 
         override fun onTagLongPress(id: String) {
-            Log.e("FRGM: before", "Tag id is $id")
+            Log.e("FRGM: before", "TagEntity id is $id")
             tagViewModel.deleteTag(id)
             Toast.makeText(requireActivity(), "long click on $id", Toast.LENGTH_SHORT).show()
-            Log.e("FRGM: after", "Tag id is $id")
+            Log.e("FRGM: after", "TagEntity id is $id")
         }
 
     }

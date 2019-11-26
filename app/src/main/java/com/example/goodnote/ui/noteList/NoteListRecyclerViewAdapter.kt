@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
-import com.example.goodnote.database.models.Note
+import com.example.goodnote.database.entityModels.NoteEntity
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
-    private val notes : MutableList<Note> = ArrayList()
+    private val notes : MutableList<NoteEntity> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -53,7 +53,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         }
     }
 
-    internal fun setNotes(newNotes: List<Note>) {
+    internal fun setNotes(newNotes: List<NoteEntity>) {
         this.notes.clear()
         this.notes.addAll(newNotes)
         notifyDataSetChanged()

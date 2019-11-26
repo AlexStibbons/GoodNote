@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.repository.TagRepo
-import com.example.goodnote.database.models.Tag
+import com.example.goodnote.repository.TagRepo
+import com.example.goodnote.database.entityModels.TagEntity
 import com.example.goodnote.utils.addOne
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -15,18 +15,16 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
 
     // is this here [by lazy] a better option?
     // because of init, it seems like there's no difference
-    private val tags2: MutableLiveData<List<Tag>> by lazy {
-        MutableLiveData<List<Tag>>().also {
+    private val tags2: MutableLiveData<List<TagEntity>> by lazy {
+        MutableLiveData<List<TagEntity>>().also {
             getTags()
         }
     }
 
-    private val _tags: MutableLiveData<List<Tag>> = tags2
-    val tags: LiveData<List<Tag>>
+    private val _tags: MutableLiveData<List<TagEntity>> = tags2
+    val tags: LiveData<List<TagEntity>>
         get() = _tags
 
-    // inspect need for init:
-    // since ViewModel is singleton, init is called only once, isn't it?
      init {
         getTags()
     }
@@ -36,7 +34,7 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
         _tags.value = tags
     }
 
-    fun addTag(tag: Tag) = viewModelScope.launch {
+    fun addTag(tag: TagEntity) = viewModelScope.launch {
         _tags.addOne(tag)
         withContext(Dispatchers.IO) {repository.addTag(tag)}
     }
@@ -48,8 +46,8 @@ class TagViewModel(private val repository: TagRepo): ViewModel() {
     }
 
     fun findTagById(id: String) = viewModelScope.launch {
-        val foundTag: Tag = withContext(Dispatchers.IO) { repository.findTagById(id)}
-        // tag to LiveData<Tag> ?
+        val foundTag: TagEntity = withContext(Dispatchers.IO) { repository.findTagById(id)}
+        // tag to LiveData<TagEntity> ?
     }
 
     fun findTagsByName(name: String) = viewModelScope.launch {

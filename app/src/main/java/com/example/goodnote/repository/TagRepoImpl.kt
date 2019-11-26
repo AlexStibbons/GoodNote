@@ -1,7 +1,7 @@
-package com.example.goodnote.database.repository
+package com.example.goodnote.repository
 
 import com.example.goodnote.database.daos.TagDao
-import com.example.goodnote.database.models.Tag
+import com.example.goodnote.database.entityModels.TagEntity
 
 class TagRepoImpl(private val tagDao: TagDao): TagRepo {
 
@@ -16,13 +16,13 @@ class TagRepoImpl(private val tagDao: TagDao): TagRepo {
 
     }
 
-    override suspend fun getAllTags(): List<Tag> = tagDao.getAllTags()
+    override suspend fun getAllTags(): List<TagEntity> = tagDao.getAllTags()
 
-    override suspend fun addTag(tag: Tag) = tagDao.addTag(tag)
+    override suspend fun addTag(tag: TagEntity) = tagDao.addTag(tag)
 
     override suspend fun deleteTagById(id: String) = tagDao.deleteTagById(id)
 
-    override suspend fun findTagById(id: String): Tag = tagDao.findTagById(id)
+    override suspend fun findTagById(id: String): TagEntity = tagDao.findTagById(id)
 
-    override suspend fun findTagsByName(name: String): List<Tag> = tagDao.findTagsByName(name)
+    override suspend fun findTagsByName(name: String): List<TagEntity> = tagDao.findTagsByName(name)
 }

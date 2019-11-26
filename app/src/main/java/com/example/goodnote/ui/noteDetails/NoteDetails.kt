@@ -35,7 +35,7 @@ class NoteDetails : AppCompatActivity() {
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID)
         Log.e("DETAILS", "on create: $noteId")
-        Toast.makeText(this, "Note ID is $noteId", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "NoteEntity ID is $noteId", Toast.LENGTH_SHORT).show()
     }
 
 
