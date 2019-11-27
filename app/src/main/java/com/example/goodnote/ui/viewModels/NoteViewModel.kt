@@ -1,16 +1,13 @@
 package com.example.goodnote.ui.viewModels
 
-import android.database.DefaultDatabaseErrorHandler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.entityModels.NoteEntity
 import com.example.goodnote.repository.NoteRepo
 import com.example.goodnote.ui.models.NoteDetailsModel
-import com.example.goodnote.ui.models.NoteListModel
+import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.*
-import com.example.goodnote.utils.toListNoteListModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,8 +17,8 @@ This way we are saving processor time, since there won't be 2 context switches
 where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
-    private var _repoNotes: MutableLiveData<List<NoteListModel>> = MutableLiveData()
-    val repoNotes: LiveData<List<NoteListModel>>
+    private var _repoNotes: MutableLiveData<List<NoteModel>> = MutableLiveData()
+    val repoNotes: LiveData<List<NoteModel>>
         get() = _repoNotes
 
     init {
@@ -29,16 +26,18 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun getAllNotes() = viewModelScope.launch {
+
         val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
 
-        _repoNotes.value = notes.toListNoteListModel()
+        _repoNotes.value = notes.map { it.toNoteModel() }
+
     }
 
     fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
         val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
 
-        _repoNotes.addOne(noteSave.toNoteListModel()) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(noteSave.toNoteModel()) // --> do not make a new list, but just add a new note (DiffUtil)
 
         withContext(Dispatchers.IO) {
             repository.saveNote(noteSave.toNoteDomainModel())

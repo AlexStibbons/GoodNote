@@ -5,7 +5,7 @@ import com.example.goodnote.database.entityModels.*
 import com.example.goodnote.repository.domainModels.NoteDomanModel
 import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.ui.models.NoteDetailsModel
-import com.example.goodnote.ui.models.NoteListModel
+import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.ui.models.TagModel
 import java.util.*
 
@@ -69,11 +69,11 @@ internal fun NoteEntity.toNoteDomainModel(tags: List<TagDomainModel>): NoteDoman
     )
 }
 
-internal fun NoteDomanModel.toNoteListModel(): NoteListModel{
+internal fun NoteDomanModel.toNoteModel(): NoteModel{
 
     val tagsString = if (this.tags.isEmpty()) "no tags yet" else this.tags.toTagsString()
 
-    return NoteListModel(
+    return NoteModel(
         this.noteId,
         this.title,
         this.text,
@@ -90,20 +90,11 @@ internal fun NoteDomanModel.toNoteDetailsModel(): NoteDetailsModel {
     )
 }
 
-internal fun List<NoteDomanModel>.toListNoteListModel(): List<NoteListModel> {
-    val list = mutableListOf<NoteListModel>()
-    this.forEach {
-        list.add(it.toNoteListModel())
-    }
-
-    return list
-}
-
-internal fun NoteDetailsModel.toNoteListModel(): NoteListModel {
+internal fun NoteDetailsModel.toNoteModel(): NoteModel {
 
     val tagsString = if (this.tags.isEmpty()) "no tags yet" else this.tags.toTagsString()
 
-    return NoteListModel(
+    return NoteModel(
         this.noteId,
         this.title,
         this.text,
