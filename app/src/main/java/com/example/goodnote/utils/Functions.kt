@@ -40,8 +40,24 @@ internal fun List<TagDomainModel>.toListTagModel(): List<TagModel> {
 
     return list
 }
+@JvmName("toListTagDomainModelFromModel")
+internal fun List<TagModel>.toListTagDomainModel(): List<TagDomainModel> {
+    val list = mutableListOf<TagDomainModel>()
+    this.forEach{
+        list.add(
+            TagDomainModel(
+                it.tagId,
+                it.name
+            )
+        )
+    }
+
+    return list
+}
 
 internal fun List<TagDomainModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }
+@JvmName("toTagsStringOnModel")
+internal fun List<TagModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }
 
 internal fun NoteEntity.toNoteDomainModel(tags: List<TagDomainModel>): NoteDomanModel {
     return NoteDomanModel(
@@ -77,4 +93,29 @@ internal fun List<NoteDomanModel>.toListNoteListModel(): List<NoteListModel> {
     }
 
     return list
+}
+
+internal fun NoteDetailsModel.toNoteListModel(): NoteListModel {
+    return NoteListModel(
+        this.noteId,
+        this.title,
+        this.text,
+        this.tags.toTagsString()
+    )
+}
+
+internal fun NoteDetailsModel.toNoteDomainModel(): NoteDomanModel {
+    return NoteDomanModel(
+        this.noteId,
+        this.title,
+        this.text,
+        this.tags.toListTagDomainModel()
+    )
+}
+
+internal fun NoteDomanModel.toNoteEntity(): NoteEntity {
+    return NoteEntity(
+        this.title,
+        this.text
+    )
 }

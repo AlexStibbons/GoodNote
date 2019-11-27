@@ -9,10 +9,10 @@ interface NoteRepo {
 
     suspend fun deleteNote(id: String)
 
-    suspend fun saveNote(note: NoteEntity): Long
+    suspend fun saveNote(note: NoteDomanModel): Long
 
-    suspend fun findNoteById(id: String): NoteEntity
+    suspend fun findNoteById(id: String): NoteDomanModel
 
-    suspend fun findNoteByTitle(title: String): List<NoteEntity>
+    suspend fun findNoteByTitle(title: String): List<NoteDomanModel>
 
 }

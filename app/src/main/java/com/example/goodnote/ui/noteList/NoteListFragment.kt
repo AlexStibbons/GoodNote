@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.database.entityModels.NoteEntity
+import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.noteDetails.NoteDetails
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.DUMMY_TEXT
@@ -72,7 +73,11 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             Log.e("FRAGMENT", "SAVING NOTE?")
-            //noteViewModel.saveNote(NoteEntity("epistolary?", DUMMY_TEXT))
+            noteViewModel.saveNote(NoteDetailsModel(
+                "",
+                "",
+                "TEST TXT"
+            ))
 
             startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) }) // start editable screen w/o id
         }
@@ -99,8 +104,6 @@ class NoteListFragment : Fragment() {
     val clickedNote = object: onNoteClick {
         override fun onNoteClick(id: String) {
             Log.e("FRAGMENT", "on note click called")
-            // intent did not work when requireActivity() - opened blank screen?
-            // idk
             val intent = Intent(activity, NoteDetails::class.java).apply {
                 putExtra(EXTRA_NOTE_ID, id)
             }

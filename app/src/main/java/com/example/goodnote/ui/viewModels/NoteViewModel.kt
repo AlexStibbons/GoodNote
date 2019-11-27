@@ -1,16 +1,16 @@
 package com.example.goodnote.ui.viewModels
 
+import android.database.DefaultDatabaseErrorHandler
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.entityModels.NoteEntity
 import com.example.goodnote.repository.NoteRepo
+import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteListModel
-import com.example.goodnote.utils.DEFAULT_TITLE
-import com.example.goodnote.utils.addOne
+import com.example.goodnote.utils.*
 import com.example.goodnote.utils.toListNoteListModel
-import com.example.goodnote.utils.toNoteDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,32 +34,30 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         _repoNotes.value = notes.toListNoteListModel()
     }
 
- /*   fun saveNote(note: NoteEntity) = viewModelScope.launch {
+    fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
         if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
 
-        _repoNotes.addOne(note) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(note.toNoteListModel()) // --> do not make a new list, but just add a new note (DiffUtil)
 
         withContext(Dispatchers.IO) {
-            repository.saveNote(note)
+            repository.saveNote(note.toNoteDomainModel())
         }
-    }*/
+    }
 
     fun deleteNote(id: String) = viewModelScope.launch {
-        // remove from list
         _repoNotes.value = _repoNotes.value?.filter { it.noteId != id }
-        // remove from DB
         withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
-    // should not have implementation because this is details job
     fun findNoteById(id: String) = viewModelScope.launch {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
+        val noteDetails = foundNote.toNoteDetailsModel()
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {
-        val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
-       // _repoNotes.value = foundNotes
+        // is the trip to databse warranted? no need to get notes from db, right?
+       // val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
         _repoNotes.value = _repoNotes.value?.filter { it.title.contains(title, true) }
     }
 
