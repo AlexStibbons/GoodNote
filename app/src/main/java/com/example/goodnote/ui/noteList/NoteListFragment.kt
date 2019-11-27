@@ -74,12 +74,11 @@ class NoteListFragment : Fragment() {
         fab.setOnClickListener {
             Log.e("FRAGMENT", "SAVING NOTE?")
             noteViewModel.saveNote(NoteDetailsModel(
-                "",
-                "",
-                "TEST TXT"
+                title = "",
+                text = "TEST TXT"
             ))
 
-            startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) }) // start editable screen w/o id
+            startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) })
         }
 
         return rootView

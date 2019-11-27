@@ -7,6 +7,7 @@ import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteListModel
 import com.example.goodnote.ui.models.TagModel
+import java.util.*
 
 internal fun <T> MutableLiveData<List<T>>.addOne(item: T) {
     val value = this.value ?: emptyList()
@@ -120,8 +121,12 @@ internal fun NoteDetailsModel.toNoteDomainModel(): NoteDomanModel {
 }
 
 internal fun NoteDomanModel.toNoteEntity(): NoteEntity {
+
+    val uuid = if (this.noteId.isNullOrEmpty()) UUID.randomUUID().toString() else this.noteId
+
     return NoteEntity(
         this.title,
-        this.text
+        this.text,
+        uuid
     )
 }

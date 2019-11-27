@@ -29,19 +29,19 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun getAllNotes() = viewModelScope.launch {
-        val notes = withContext(Dispatchers.IO) { repository.getAllNotes() } // returns a list of note domain models
+        val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
 
         _repoNotes.value = notes.toListNoteListModel()
     }
 
     fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
-        if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
+        val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
 
-        _repoNotes.addOne(note.toNoteListModel()) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(noteSave.toNoteListModel()) // --> do not make a new list, but just add a new note (DiffUtil)
 
         withContext(Dispatchers.IO) {
-            repository.saveNote(note.toNoteDomainModel())
+            repository.saveNote(noteSave.toNoteDomainModel())
         }
     }
 
