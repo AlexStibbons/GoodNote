@@ -70,8 +70,4 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
 
         return notesWithTags
     }
-    // for a list of notes to be shown on screen, each one needs to have a
-    // list of its related tags (.toTagsString() extension)
-
-    // so, noteRepo and tagRepo must also have a joinDao
 }
