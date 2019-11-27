@@ -72,7 +72,7 @@ class NoteListFragment : Fragment() {
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
             Log.e("FRAGMENT", "SAVING NOTE?")
-            noteViewModel.saveNote(NoteEntity("epistolary?", DUMMY_TEXT))
+            //noteViewModel.saveNote(NoteEntity("epistolary?", DUMMY_TEXT))
 
             startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) }) // start editable screen w/o id
         }

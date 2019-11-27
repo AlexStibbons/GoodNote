@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.database.entityModels.NoteEntity
 import com.example.goodnote.repository.NoteRepo
+import com.example.goodnote.ui.models.NoteListModel
 import com.example.goodnote.utils.DEFAULT_TITLE
 import com.example.goodnote.utils.addOne
+import com.example.goodnote.utils.toListNoteListModel
+import com.example.goodnote.utils.toNoteDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,8 +20,8 @@ This way we are saving processor time, since there won't be 2 context switches
 where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
-    private var _repoNotes: MutableLiveData<List<NoteEntity>> = MutableLiveData()
-    val repoNotes: LiveData<List<NoteEntity>>
+    private var _repoNotes: MutableLiveData<List<NoteListModel>> = MutableLiveData()
+    val repoNotes: LiveData<List<NoteListModel>>
         get() = _repoNotes
 
     init {
@@ -26,11 +29,12 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun getAllNotes() = viewModelScope.launch {
-        val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
-        _repoNotes.value = notes
+        val notes = withContext(Dispatchers.IO) { repository.getAllNotes() } // returns a list of note domain models
+
+        _repoNotes.value = notes.toListNoteListModel()
     }
 
-    fun saveNote(note: NoteEntity) = viewModelScope.launch {
+ /*   fun saveNote(note: NoteEntity) = viewModelScope.launch {
 
         if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
 
@@ -39,7 +43,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         withContext(Dispatchers.IO) {
             repository.saveNote(note)
         }
-    }
+    }*/
 
     fun deleteNote(id: String) = viewModelScope.launch {
         // remove from list

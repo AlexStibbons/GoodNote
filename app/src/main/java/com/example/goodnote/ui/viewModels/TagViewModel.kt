@@ -13,15 +13,7 @@ import kotlinx.coroutines.withContext
 
 class TagViewModel(private val repository: TagRepo): ViewModel() {
 
-    // is this here [by lazy] a better option?
-    // because of init, it seems like there's no difference
-    private val tags2: MutableLiveData<List<TagEntity>> by lazy {
-        MutableLiveData<List<TagEntity>>().also {
-            getTags()
-        }
-    }
-
-    private val _tags: MutableLiveData<List<TagEntity>> = tags2
+    private val _tags: MutableLiveData<List<TagEntity>> = MutableLiveData()
     val tags: LiveData<List<TagEntity>>
         get() = _tags
 

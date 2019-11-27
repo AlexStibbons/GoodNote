@@ -69,3 +69,12 @@ internal fun NoteDomanModel.toNoteDetailsModel(): NoteDetailsModel {
         this.tags.toListTagModel()
     )
 }
+
+internal fun List<NoteDomanModel>.toListNoteListModel(): List<NoteListModel> {
+    val list = mutableListOf<NoteListModel>()
+    this.forEach {
+        list.add(it.toNoteListModel())
+    }
+
+    return list
+}

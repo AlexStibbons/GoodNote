@@ -35,7 +35,7 @@ object Injectors {
     }
 
     private fun getNoteRepository(context: Context): NoteRepo {
-        return NoteRepoImpl.getInstance(getNoteDao(context))
+        return NoteRepoImpl.getInstance(getNoteDao(context), getJoinDao(context))
     }
 
      private fun getTagRepository(context: Context): TagRepo {

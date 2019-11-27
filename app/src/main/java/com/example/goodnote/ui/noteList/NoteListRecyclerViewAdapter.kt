@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.database.entityModels.NoteEntity
+import com.example.goodnote.ui.models.NoteListModel
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
-    private val notes : MutableList<NoteEntity> = ArrayList()
+    private val notes : MutableList<NoteListModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -37,7 +38,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
         fun bind(position: Int) {
             title.text = notes[position].title
-            tags.text = "from join table somehow"
+            tags.text = notes[position].tags
             text.text = notes[position].text
 
             noteItem.setOnClickListener( View.OnClickListener {
@@ -53,7 +54,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         }
     }
 
-    internal fun setNotes(newNotes: List<NoteEntity>) {
+    internal fun setNotes(newNotes: List<NoteListModel>) {
         this.notes.clear()
         this.notes.addAll(newNotes)
         notifyDataSetChanged()

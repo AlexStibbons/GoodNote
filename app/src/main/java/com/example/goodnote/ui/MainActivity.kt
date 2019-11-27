@@ -18,14 +18,14 @@ class MainActivity : AppCompatActivity() {
 
         db = LocalDb.getInstance(this) // to get default notes/tags
 
-        /* REAL START: see a list of notes
+        // REAL START: see a list of notes
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.main_fragments, NoteListFragment.getInstance())
-        ft.commit()*/
+        ft.commit()
 
-        //TEST START: see a list of tags
+        /*TEST START: see a list of tags
         val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.main_fragments, TagListFragment.getInstance())
-        ft.commit()
+        ft.commit()*/
     }
 }

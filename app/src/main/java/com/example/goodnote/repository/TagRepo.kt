@@ -6,7 +6,7 @@ interface TagRepo {
 
     suspend fun getAllTags(): List<TagEntity>
 
-    suspend fun addTag(tag: TagEntity)
+    suspend fun addTag(tag: TagEntity): Long
 
     suspend fun deleteTagById(id: String)
 

@@ -1,9 +1,14 @@
 package com.example.goodnote.repository
 
+import android.util.Log
+import com.example.goodnote.database.daos.JoinNoteTagDao
 import com.example.goodnote.database.daos.NoteDao
 import com.example.goodnote.database.entityModels.NoteEntity
+import com.example.goodnote.repository.domainModels.NoteDomanModel
+import com.example.goodnote.utils.toListTagDomainModel
+import com.example.goodnote.utils.toNoteDomainModel
 
-class NoteRepoImpl private constructor(private val noteDao: NoteDao) : NoteRepo {
+class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val joinDao: JoinNoteTagDao) : NoteRepo {
 
     /*If the repository is a singleton or otherwise scoped to the application, the repository will
     not be destroyed until the process is killed. This will only happen when the system needs
@@ -13,13 +18,22 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao) : NoteRepo 
         @Volatile
         private var instance: NoteRepoImpl? = null
 
-        fun getInstance(noteDao: NoteDao) = // `operator fun`
+        fun getInstance(noteDao: NoteDao, joinDao: JoinNoteTagDao) = // `operator fun`
             instance ?: synchronized(this) {
-                instance ?: NoteRepoImpl(noteDao).also { instance = it }
+                instance ?: NoteRepoImpl(noteDao, joinDao).also { instance = it }
             }
     }
 
-    override suspend fun getAllNotes(): List<NoteEntity> = noteDao.getAllNotes()
+    override suspend fun getAllNotes(): List<NoteDomanModel> {
+        val noteEntities: List<NoteEntity> = noteDao.getAllNotes()
+
+        val noteDomainModels = mutableListOf<NoteDomanModel>()
+        noteEntities.forEach{
+            val tags = joinDao.getTagsForNote(it.noteId)
+            noteDomainModels.add(it.toNoteDomainModel(tags.toListTagDomainModel()))
+        }
+        return noteDomainModels
+    }
 
     override suspend fun deleteNote(id: String) = noteDao.deleteNote(id)
     // first, delete all joins that have this note id
