@@ -13,9 +13,8 @@ interface NoteDao {
     suspend fun getAllNotes(): List<NoteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addNote(note: NoteEntity)
+    suspend fun addNote(note: NoteEntity): Long
 
-    // remove from join table first!
     @Query("DELETE FROM noteentity where noteentity.noteId = :id")
     suspend fun deleteNote(id: String)
 

@@ -13,9 +13,8 @@ interface TagDao {
     suspend fun getAllTags(): List<TagEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addTag(tag: TagEntity)
+    suspend fun addTag(tag: TagEntity): Long
 
-    // remove from join first!
     @Query("DELETE FROM tagentity WHERE tagentity.tagId = :id")
     suspend fun deleteTagById(id: String)
 

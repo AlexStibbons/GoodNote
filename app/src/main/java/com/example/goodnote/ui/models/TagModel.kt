@@ -1,4 +1,6 @@
 package com.example.goodnote.ui.models
 
-class TagModel {
-}
+data class TagModel(
+    val tagId: String,
+    val name: String
+)

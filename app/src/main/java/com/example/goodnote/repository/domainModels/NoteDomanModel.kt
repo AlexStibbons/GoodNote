@@ -1,7 +1,6 @@
 package com.example.goodnote.repository.domainModels
 
-class NoteDomanModel(
-    val id: Int,
+data class NoteDomanModel(
     val noteId: String,
     val title: String,
     val text: String,

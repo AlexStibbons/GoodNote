@@ -9,7 +9,7 @@ import java.util.*
 data class NoteEntity(
     var title: String,
     var text: String,
-    val noteId: String = UUID.randomUUID().toString() // should this then be the primary key?
+    val noteId: String = UUID.randomUUID().toString()
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
