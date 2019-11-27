@@ -1,12 +1,8 @@
 package com.example.goodnote.ui.viewModels
 
 import com.example.goodnote.repository.NoteRepo
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -27,6 +23,8 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Rule
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 
@@ -38,7 +36,6 @@ import org.mockito.Mockito.verify
 @ExperimentalCoroutinesApi
 class NoteViewModelUnitTest {
 
-    /*rule allow us to run LiveData synchronously --> why? */
     @get:Rule
     var rule = InstantTaskExecutorRule()
 
@@ -52,12 +49,18 @@ class NoteViewModelUnitTest {
 
     private lateinit var viewModel: NoteViewModel
 
-    @Before
+    @BeforeEach
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         MockitoAnnotations.initMocks(this)
         viewModel = NoteViewModel(repository)
         viewModel.repoNotes.observeForever(observer)
+    }
+
+    @AfterEach
+    fun tearDown() {
+        Dispatchers.resetMain()
+        testDispatcher.cleanupTestCoroutines()
     }
 
     @Test
@@ -161,9 +164,4 @@ class NoteViewModelUnitTest {
         }
     }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
-    }
 }

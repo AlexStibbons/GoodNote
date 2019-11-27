@@ -21,7 +21,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import junit.framework.TestCase.assertEquals
 
-// refactor to use JUnit5 and MockK and kluent
+// JUnit 4
 
 @ExperimentalCoroutinesApi
 class TagViewModelUnitTest {
