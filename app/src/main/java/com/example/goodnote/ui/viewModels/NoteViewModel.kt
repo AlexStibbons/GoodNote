@@ -55,8 +55,6 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {
-        // is the trip to databse warranted? no need to get notes from db, right?
-       // val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
         _repoNotes.value = _repoNotes.value?.filter { it.title.contains(title, true) }
     }
 

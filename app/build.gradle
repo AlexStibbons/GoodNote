@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'de.mannodermaus.android-junit5'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -108,5 +110,22 @@ dependencies {
 
     // optional - Test helpers for LiveData
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+
+    // junit5
+
+    // (Required) Writing and executing Unit Tests on the JUnit Platform
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.4.1")
+
+    // (Optional) If you need "Parameterized Tests"
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.4.1")
+
+    // (Optional) If you also have JUnit 4-based tests
+    testImplementation("junit:junit:4.12")
+    testImplementation("org.junit.vintage:junit-vintage-engine:5.4.1")
+
+    // mockK
+
+    // kluent
 
 }
