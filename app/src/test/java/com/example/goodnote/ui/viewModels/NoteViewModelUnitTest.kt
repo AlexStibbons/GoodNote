@@ -11,8 +11,13 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.goodnote.database.entityModels.NoteEntity
+import com.example.goodnote.repository.domainModels.NoteDomanModel
+import com.example.goodnote.repository.domainModels.TagDomainModel
+import com.example.goodnote.ui.models.NoteDetailsModel
+import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.DEFAULT_TITLE
+import com.example.goodnote.utils.toNoteDomainModel
+import com.example.goodnote.utils.toNoteModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +36,6 @@ import org.mockito.Mockito.verify
 // example: getAllNotes_noNotes_returnsEmptyList
 
 @ExperimentalCoroutinesApi
-@RunWith(JUnit4::class) // or AndroidJUnit4?
 class NoteViewModelUnitTest {
 
     /*rule allow us to run LiveData synchronously --> why? */
@@ -44,7 +48,7 @@ class NoteViewModelUnitTest {
     private lateinit var repository: NoteRepo
 
     @Mock
-    lateinit var observer: Observer<List<NoteEntity>>
+    lateinit var observer: Observer<List<NoteModel>>
 
     private lateinit var viewModel: NoteViewModel
 
@@ -60,7 +64,17 @@ class NoteViewModelUnitTest {
     fun testGetAllNotes() {
         testDispatcher.runBlockingTest {
             // given the repository returns this list of notes
-            val notes = listOf(NoteEntity("test", "test"))
+            val notes = listOf(
+                NoteDomanModel(
+                    "id",
+                    "title",
+                    "text",
+                    listOf(TagDomainModel(
+                        "id",
+                        "name"
+                    ))
+                )
+            )
             `when`(repository.getAllNotes()).thenReturn(notes)
 
             // when view model calls function
@@ -69,7 +83,7 @@ class NoteViewModelUnitTest {
             // then repoNotes will equal val notes
             // verify(repository).getAllNotes() --> ERROR: wanted 1 time, was 2 times
             // verify repo passes on others ?
-            verify(observer).onChanged(notes)
+            verify(observer).onChanged(notes.map { it.toNoteModel() })
         }
 
     }
@@ -78,13 +92,13 @@ class NoteViewModelUnitTest {
     fun testSaveNote() {
         testDispatcher.runBlockingTest {
             // given
-            val noteToAdd = NoteEntity("", "add")
+            val noteToAdd = NoteDetailsModel("fake1", "", "add")
 
             //when
             viewModel.saveNote(noteToAdd)
 
             // then
-            verify(repository).saveNote(noteToAdd)
+            verify(repository).saveNote(noteToAdd.toNoteDomainModel())
             assertNotNull(viewModel.repoNotes.value)
             assertEquals(1, viewModel.repoNotes.value?.size)
             assertEquals(DEFAULT_TITLE, viewModel.repoNotes.value?.get(0)?.title)
@@ -96,9 +110,9 @@ class NoteViewModelUnitTest {
 
         testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
-            viewModel.saveNote(NoteEntity("a", "a", "a"))
-            viewModel.saveNote(NoteEntity("b", "b", "b"))
-            viewModel.saveNote(NoteEntity("c", "c", "c"))
+            viewModel.saveNote(NoteDetailsModel("a", "a", "a"))
+            viewModel.saveNote(NoteDetailsModel("b", "b", "b"))
+            viewModel.saveNote(NoteDetailsModel("c", "c", "c"))
 
             // when viewModel deletes note
             viewModel.deleteNote("a")
@@ -113,9 +127,9 @@ class NoteViewModelUnitTest {
     fun testFindNoteById() {
         testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
-            viewModel.saveNote(NoteEntity("a", "a", "a"))
-            viewModel.saveNote(NoteEntity("b", "b", "b"))
-            viewModel.saveNote(NoteEntity("c", "c", "c"))
+            viewModel.saveNote(NoteDetailsModel("a", "a", "a"))
+            viewModel.saveNote(NoteDetailsModel("b", "b", "b"))
+            viewModel.saveNote(NoteDetailsModel("c", "c", "c"))
 
             // when viewModel finds one
             viewModel.findNoteById("b")
@@ -130,23 +144,20 @@ class NoteViewModelUnitTest {
         testDispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
             var title = "b"
-            val noteOne = NoteEntity("ab", "a", "a")
-            val noteTwo = NoteEntity("b", "b", "b")
-            val noteThree = NoteEntity("c", "c", "c")
+            val noteOne = NoteDetailsModel("ab", "a", "a")
+            val noteTwo = NoteDetailsModel("b", "b", "b")
+            val noteThree = NoteDetailsModel("c", "c", "c")
             viewModel.saveNote(noteOne)
             viewModel.saveNote(noteTwo)
             viewModel.saveNote(noteThree)
 
             val notes = listOf(noteOne, noteTwo)
 
-            `when`(repository.findNoteByTitle(title)).thenReturn(notes)
-
             // when viewModel searches
             viewModel.findNotesByTitle(title)
 
-            // then repoNotes are changed to notes
-            //verify(repository).findNoteByTitle(title) --> same invocation error
-            verify(observer).onChanged(notes)
+            // _repoNotes should be filtered to show list of notes
+            verify(observer).onChanged(notes.map { it.toNoteModel() })
         }
     }
 
