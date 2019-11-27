@@ -54,7 +54,7 @@ internal fun List<TagModel>.toListTagDomainModel(): List<TagDomainModel> {
 
     return list
 }
-
+// maybe add "no tags yet!" if tag list is empty?
 internal fun List<TagDomainModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }
 @JvmName("toTagsStringOnModel")
 internal fun List<TagModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }
@@ -69,11 +69,14 @@ internal fun NoteEntity.toNoteDomainModel(tags: List<TagDomainModel>): NoteDoman
 }
 
 internal fun NoteDomanModel.toNoteListModel(): NoteListModel{
+
+    val tagsString = if (this.tags.isEmpty()) "no tags yet" else this.tags.toTagsString()
+
     return NoteListModel(
         this.noteId,
         this.title,
         this.text,
-        this.tags.toTagsString()
+        tagsString
     )
 }
 
@@ -96,11 +99,14 @@ internal fun List<NoteDomanModel>.toListNoteListModel(): List<NoteListModel> {
 }
 
 internal fun NoteDetailsModel.toNoteListModel(): NoteListModel {
+
+    val tagsString = if (this.tags.isEmpty()) "no tags yet" else this.tags.toTagsString()
+
     return NoteListModel(
         this.noteId,
         this.title,
         this.text,
-        this.tags.toTagsString()
+        tagsString
     )
 }
 
