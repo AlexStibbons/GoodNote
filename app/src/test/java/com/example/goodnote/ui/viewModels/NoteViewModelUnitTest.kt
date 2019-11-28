@@ -12,14 +12,12 @@ import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.jupiter.MockitoExtension
 
@@ -32,7 +30,7 @@ class NoteViewModelUnitTest: CoroutineTest {
     override lateinit var dispatcher: TestCoroutineDispatcher
 
     @Mock
-    private lateinit var repository: NoteRepo
+    lateinit  var repository: NoteRepo
 
     @Mock
     lateinit var observer: Observer<List<NoteModel>>
@@ -41,8 +39,6 @@ class NoteViewModelUnitTest: CoroutineTest {
 
     @BeforeEach
     fun setUp() {
-        dispatcher = TestCoroutineDispatcher()
-        Dispatchers.setMain(dispatcher)
         MockitoAnnotations.initMocks(this)
         viewModel = NoteViewModel(repository)
         viewModel.repoNotes.observeForever(observer)
@@ -50,7 +46,7 @@ class NoteViewModelUnitTest: CoroutineTest {
 
     @AfterEach
     fun tearDown() {
-        Dispatchers.resetMain()
+        //Dispatchers.resetMain()
         dispatcher.cleanupTestCoroutines()
     }
 
@@ -58,41 +54,61 @@ class NoteViewModelUnitTest: CoroutineTest {
     @DisplayName("Given we call get all notes")
     inner class testGetAllNotes {
 
+        // given the repository returns this list of notes
+        val notes = listOf(
+            NoteDomanModel(
+                "id",
+                "title",
+                "text",
+                listOf(TagDomainModel(
+                    "id",
+                    "name"
+                ))
+            )
+        )
+
         @Test
         @DisplayName("When there are existing notes")
         fun whenThereAreNotes() {
             dispatcher.runBlockingTest {
-                // given the repository returns this list of notes
-                val notes = listOf(
-                    NoteDomanModel(
-                        "id",
-                        "title",
-                        "text",
-                        listOf(TagDomainModel(
-                            "id",
-                            "name"
-                        ))
-                    )
-                )
+
                 `when`(repository.getAllNotes()).thenReturn(notes)
 
                 // when view model calls function
                 viewModel.getAllNotes()
 
+                val retVal = notes.map { it.toNoteModel() }
+
                 // then repoNotes will equal val notes
-                // verify(repository).getAllNotes() --> ERROR: wanted 1 time, was 2 times
-                // verify repo passes on others ?
-                verify(observer).onChanged(notes.map { it.toNoteModel() })
+                verify(repository, times(2)).getAllNotes()
+                verify(observer).onChanged(retVal)
+                assertEquals(retVal, viewModel.repoNotes.value)
+            }
+        }
+
+        @Test
+        @DisplayName("When there are no notes")
+        fun whenNoNotes() {
+            dispatcher.runBlockingTest {
+
+                `when`(repository.getAllNotes()).thenReturn(emptyList())
+
+                // when view model calls function
+                viewModel.getAllNotes()
+
+                // then repoNotes will equal val notes
+                verify(repository, times(2)).getAllNotes()
+                verify(observer).onChanged(emptyList())
             }
         }
     }
 
     @Test
-
+    @DisplayName("When saving valid note")
     fun testSaveNote() {
         dispatcher.runBlockingTest {
             // given
-            val noteToAdd = NoteDetailsModel("fake1", "", "add")
+            val noteToAdd = NoteDetailsModel("fake1", "a", "add")
 
             //when
             viewModel.saveNote(noteToAdd)
@@ -102,11 +118,12 @@ class NoteViewModelUnitTest: CoroutineTest {
             verify(repository).saveNote(noteToAdd.toNoteDomainModel())
             assertNotNull(viewModel.repoNotes.value)
             assertEquals(1, viewModel.repoNotes.value?.size)
-            assertEquals(DEFAULT_TITLE, viewModel.repoNotes.value?.get(0)?.title)
+            assertEquals("a", viewModel.repoNotes.value?.get(0)?.title)
         }
     }
 
     @Test
+    @DisplayName("When deleting existing note")
     fun testDeleteNote() {
 
         dispatcher.runBlockingTest {
@@ -125,6 +142,7 @@ class NoteViewModelUnitTest: CoroutineTest {
     }
 
     @Test
+    @DisplayName("When using valid id to find note")
     fun testFindNoteById() {
         dispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
@@ -141,6 +159,7 @@ class NoteViewModelUnitTest: CoroutineTest {
     }
 
     @Test
+    @DisplayName("When search title returns notes")
     fun testFindNotesByTitle() {
         dispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
