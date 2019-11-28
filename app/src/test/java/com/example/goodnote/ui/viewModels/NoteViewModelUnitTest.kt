@@ -1,11 +1,10 @@
 package com.example.goodnote.ui.viewModels
 
 import com.example.goodnote.repository.NoteRepo
-import org.junit.jupiter.api.Test
+
 
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.goodnote.repository.domainModels.NoteDomanModel
 import com.example.goodnote.repository.domainModels.TagDomainModel
@@ -16,30 +15,23 @@ import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.resetMain
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import org.junit.Rule
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
+import kotlinx.coroutines.test.*
+import org.junit.jupiter.api.*
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 
-// naming convention:
-// subjectUnderTest_actionOrInput_resultState
-// example: getAllNotes_manyNotes_returnsManyNotes
-// example: getAllNotes_noNotes_returnsEmptyList
-
+@ExtendWith(InstantTaskExecutorExtension::class)
+@ExtendWith(MockitoExtension::class)
 @ExperimentalCoroutinesApi
-class NoteViewModelUnitTest {
+class NoteViewModelUnitTest: CoroutineTest {
 
-    @get:Rule
-    var rule = InstantTaskExecutorRule()
+    override lateinit var testScope: TestCoroutineScope
 
-    val testDispatcher = TestCoroutineDispatcher()
+    override lateinit var dispatcher: TestCoroutineDispatcher
+
+    //val testDispatcher = TestCoroutineDispatcher()
 
     @Mock
     private lateinit var repository: NoteRepo
@@ -51,7 +43,7 @@ class NoteViewModelUnitTest {
 
     @BeforeEach
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
+        //Dispatchers.setMain(dispatcher)
         MockitoAnnotations.initMocks(this)
         viewModel = NoteViewModel(repository)
         viewModel.repoNotes.observeForever(observer)
@@ -59,41 +51,47 @@ class NoteViewModelUnitTest {
 
     @AfterEach
     fun tearDown() {
-        Dispatchers.resetMain()
-        testDispatcher.cleanupTestCoroutines()
+        //Dispatchers.resetMain()
+        //dispatcher.cleanupTestCoroutines()
     }
 
-    @Test
-    fun testGetAllNotes() {
-        testDispatcher.runBlockingTest {
-            // given the repository returns this list of notes
-            val notes = listOf(
-                NoteDomanModel(
-                    "id",
-                    "title",
-                    "text",
-                    listOf(TagDomainModel(
+    @Nested
+    @DisplayName("Given we call get all notes")
+    inner class testGetAllNotes {
+
+        @Test
+        @DisplayName("When there are existing notes")
+        fun whenThereAreNotes() {
+            dispatcher.runBlockingTest {
+                // given the repository returns this list of notes
+                val notes = listOf(
+                    NoteDomanModel(
                         "id",
-                        "name"
-                    ))
+                        "title",
+                        "text",
+                        listOf(TagDomainModel(
+                            "id",
+                            "name"
+                        ))
+                    )
                 )
-            )
-            `when`(repository.getAllNotes()).thenReturn(notes)
+                `when`(repository.getAllNotes()).thenReturn(notes)
 
-            // when view model calls function
-            viewModel.getAllNotes()
+                // when view model calls function
+                viewModel.getAllNotes()
 
-            // then repoNotes will equal val notes
-            // verify(repository).getAllNotes() --> ERROR: wanted 1 time, was 2 times
-            // verify repo passes on others ?
-            verify(observer).onChanged(notes.map { it.toNoteModel() })
+                // then repoNotes will equal val notes
+                // verify(repository).getAllNotes() --> ERROR: wanted 1 time, was 2 times
+                // verify repo passes on others ?
+                verify(observer).onChanged(notes.map { it.toNoteModel() })
+            }
         }
-
     }
 
     @Test
+
     fun testSaveNote() {
-        testDispatcher.runBlockingTest {
+        dispatcher.runBlockingTest {
             // given
             val noteToAdd = NoteDetailsModel("fake1", "", "add")
 
@@ -101,6 +99,7 @@ class NoteViewModelUnitTest {
             viewModel.saveNote(noteToAdd)
 
             // then
+            verify(repository).getAllNotes()
             verify(repository).saveNote(noteToAdd.toNoteDomainModel())
             assertNotNull(viewModel.repoNotes.value)
             assertEquals(1, viewModel.repoNotes.value?.size)
@@ -111,7 +110,7 @@ class NoteViewModelUnitTest {
     @Test
     fun testDeleteNote() {
 
-        testDispatcher.runBlockingTest {
+        dispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
             viewModel.saveNote(NoteDetailsModel("a", "a", "a"))
             viewModel.saveNote(NoteDetailsModel("b", "b", "b"))
@@ -128,7 +127,7 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testFindNoteById() {
-        testDispatcher.runBlockingTest {
+        dispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
             viewModel.saveNote(NoteDetailsModel("a", "a", "a"))
             viewModel.saveNote(NoteDetailsModel("b", "b", "b"))
@@ -144,7 +143,7 @@ class NoteViewModelUnitTest {
 
     @Test
     fun testFindNotesByTitle() {
-        testDispatcher.runBlockingTest {
+        dispatcher.runBlockingTest {
             // given there are 3 notes in repoNotes
             var title = "b"
             val noteOne = NoteDetailsModel("ab", "a", "a")
