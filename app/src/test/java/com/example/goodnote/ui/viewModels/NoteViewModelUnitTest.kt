@@ -10,6 +10,7 @@ import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.DEFAULT_TITLE
 import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteModel
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -106,7 +107,7 @@ class NoteViewModelUnitTest: CoroutineTest {
     @Test
     @DisplayName("When saving valid note")
     fun testSaveNote() {
-        dispatcher.runBlockingTest {
+        testScope.runBlockingTest {
             // given
             val noteToAdd = NoteDetailsModel("fake1", "a", "add")
 
