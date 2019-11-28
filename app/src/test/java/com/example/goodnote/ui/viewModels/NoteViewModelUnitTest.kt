@@ -2,9 +2,6 @@ package com.example.goodnote.ui.viewModels
 
 import com.example.goodnote.repository.NoteRepo
 
-
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import androidx.lifecycle.Observer
 import com.example.goodnote.repository.domainModels.NoteDomanModel
 import com.example.goodnote.repository.domainModels.TagDomainModel
@@ -15,23 +12,24 @@ import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteModel
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
+import org.mockito.MockitoAnnotations
+import org.mockito.junit.jupiter.MockitoExtension
 
-@ExtendWith(InstantTaskExecutorExtension::class)
-@ExtendWith(MockitoExtension::class)
+@ExtendWith(InstantTaskExecutorExtension::class, MockitoExtension::class)
 @ExperimentalCoroutinesApi
 class NoteViewModelUnitTest: CoroutineTest {
 
     override lateinit var testScope: TestCoroutineScope
 
     override lateinit var dispatcher: TestCoroutineDispatcher
-
-    //val testDispatcher = TestCoroutineDispatcher()
 
     @Mock
     private lateinit var repository: NoteRepo
@@ -43,7 +41,8 @@ class NoteViewModelUnitTest: CoroutineTest {
 
     @BeforeEach
     fun setUp() {
-        //Dispatchers.setMain(dispatcher)
+        dispatcher = TestCoroutineDispatcher()
+        Dispatchers.setMain(dispatcher)
         MockitoAnnotations.initMocks(this)
         viewModel = NoteViewModel(repository)
         viewModel.repoNotes.observeForever(observer)
@@ -51,8 +50,8 @@ class NoteViewModelUnitTest: CoroutineTest {
 
     @AfterEach
     fun tearDown() {
-        //Dispatchers.resetMain()
-        //dispatcher.cleanupTestCoroutines()
+        Dispatchers.resetMain()
+        dispatcher.cleanupTestCoroutines()
     }
 
     @Nested
