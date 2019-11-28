@@ -5,18 +5,14 @@ import com.example.goodnote.repository.NoteRepo
 import androidx.lifecycle.Observer
 import com.example.goodnote.repository.domainModels.NoteDomanModel
 import com.example.goodnote.repository.domainModels.TagDomainModel
-import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteModel
-import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteModel
 import io.mockk.*
 import io.mockk.junit5.MockKExtension
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.`when`
 
 @ExtendWith(InstantTaskExecutorExtension::class, MockKExtension::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,7 +42,7 @@ class NoteVMUnitMockK : CoroutineTest {
     }
 
     @Nested
-    @DisplayName("Given we call get all notes")
+    @DisplayName("All notes")
     inner class testGetAllNotes {
 
         // given the repository returns this list of notes
@@ -73,18 +69,21 @@ class NoteVMUnitMockK : CoroutineTest {
             // then repoNotes will equal val notes
             coVerify(atLeast = 1) { repository.getAllNotes() }
             verify { observer.onChanged(retVal) }
-            assertEquals(retVal, viewModel.repoNotes.value)
+            assert(retVal == viewModel.repoNotes.value)
+            confirmVerified(observer, repository)
+        }
+
+        @Test
+        @DisplayName("When there are no notes")
+        fun whenNoNotes() {
+            coEvery { repository.getAllNotes() } returns emptyList()
+            viewModel.getAllNotes()
+            coVerify(atLeast = 1) { repository.getAllNotes() }
+            verifyAll {
+                observer.onChanged(emptyList())
+            }
+            confirmVerified(observer)
         }
     }
 
-    @Test
-    @DisplayName("When there are no notes")
-    fun whenNoNotes() {
-        coEvery { repository.getAllNotes() } returns emptyList()
-        viewModel.getAllNotes()
-        coVerify(atLeast = 1) { repository.getAllNotes() }
-        verifyAll {
-            observer.onChanged(emptyList())
-        }
-    }
 }
