@@ -61,7 +61,7 @@ class NoteVMUnitMockK : CoroutineTest {
         )
 
         @Test
-        @DisplayName("When there are existing notes")
+        @DisplayName("When there is 1 note, return list of 1 note")
         fun whenThereAreNotes() {
             coEvery { repository.getAllNotes() } returns notes
             viewModel.getAllNotes()
@@ -70,11 +70,12 @@ class NoteVMUnitMockK : CoroutineTest {
             coVerify(atLeast = 1) { repository.getAllNotes() }
             verify { observer.onChanged(retVal) }
             assert(retVal == viewModel.repoNotes.value)
+            assert(viewModel.repoNotes.value?.size == 1)
             confirmVerified(observer, repository)
         }
 
         @Test
-        @DisplayName("When there are no notes")
+        @DisplayName("When there are no notes, return empty list")
         fun whenNoNotes() {
             coEvery { repository.getAllNotes() } returns emptyList()
             viewModel.getAllNotes()
