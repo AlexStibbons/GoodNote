@@ -134,6 +134,10 @@ class NoteListFragment : Fragment() {
                 )
                 setNegativeButton("No", null)
             }
+
+            // should the build be in the beginning somewhere, in onCreate maybe, and only
+            // the builder.create() in the long press?
+            // or just confirmationDialog.show()?
             builder.create()
         }
     }
