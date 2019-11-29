@@ -21,6 +21,9 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     val repoNotes: LiveData<List<NoteModel>>
         get() = _repoNotes
 
+//    private var _addedNote: MutableLiveData<NoteModel> = MutableLiveData()
+//    val addedNote: LiveData<NoteModel> = _addedNote
+
     init {
         getAllNotes()
     }
@@ -36,6 +39,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
         val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
+        //_addedNote.value = noteSave.toNoteModel()
 
         _repoNotes.addOne(noteSave.toNoteModel()) // --> do not make a new list, but just add a new note (DiffUtil)
 

@@ -50,6 +50,11 @@ class NoteListFragment : Fragment() {
             notesAdapter.setNotes(notes)
 
         })
+/*
+        noteViewModel.addedNote.observe(this, Observer { note ->
+            note ?: return@Observer
+
+        })*/
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

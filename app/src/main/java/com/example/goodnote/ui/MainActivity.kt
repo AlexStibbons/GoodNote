@@ -5,8 +5,6 @@ import android.os.Bundle
 import com.example.goodnote.R
 import com.example.goodnote.database.LocalDb
 import com.example.goodnote.ui.noteList.NoteListFragment
-import com.example.goodnote.ui.tagList.TagListFragment
-
 
 class MainActivity : AppCompatActivity() {
 
