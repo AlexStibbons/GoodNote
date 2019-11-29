@@ -21,10 +21,9 @@ internal fun List<TagEntity>.toListTagDomainModel(): List<TagDomainModel> {
             TagDomainModel(
             it.tagId,
             it.name
-        )
+           )
         )
     }
-
     return list
 }
 
@@ -55,7 +54,36 @@ internal fun List<TagModel>.toListTagDomainModel(): List<TagDomainModel> {
 
     return list
 }
-// maybe add "no tags yet!" if tag list is empty?
+
+internal fun TagDomainModel.toTagModel(): TagModel {
+    return TagModel(
+        this.tagId,
+        this.name
+    )
+}
+
+internal fun TagModel.toTagDomainModel(): TagDomainModel {
+    return TagDomainModel(
+        this.tagId,
+        this.name
+    )
+}
+
+internal fun TagDomainModel.toTagEntity(): TagEntity {
+    val uuid = if (this.tagId.isNullOrEmpty()) UUID.randomUUID().toString() else this.tagId
+    return TagEntity(
+        this.name,
+        uuid
+    )
+}
+
+internal fun TagEntity.toTagDomainModel(): TagDomainModel {
+    return TagDomainModel(
+        this.tagId,
+        this.name
+    )
+}
+
 internal fun List<TagDomainModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }
 @JvmName("toTagsStringOnModel")
 internal fun List<TagModel>.toTagsString(): String = joinToString(separator = ", ") { it.name }

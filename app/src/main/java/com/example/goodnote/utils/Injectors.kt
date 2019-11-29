@@ -39,7 +39,7 @@ object Injectors {
     }
 
      private fun getTagRepository(context: Context): TagRepo {
-         return TagRepoImpl.getInstance(getTagDao(context))
+         return TagRepoImpl.getInstance(getTagDao(context), getJoinDao(context))
      }
 
     fun getNoteViewModel(parent: FragmentActivity): NoteViewModel {

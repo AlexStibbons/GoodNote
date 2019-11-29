@@ -14,11 +14,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
-import com.example.goodnote.database.entityModels.NoteEntity
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.noteDetails.NoteDetails
 import com.example.goodnote.ui.viewModels.NoteViewModel
-import com.example.goodnote.utils.DUMMY_TEXT
 import com.example.goodnote.utils.EMPTY_NONTE_ID
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
