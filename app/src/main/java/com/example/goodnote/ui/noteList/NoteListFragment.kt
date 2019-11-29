@@ -1,11 +1,14 @@
 package com.example.goodnote.ui.noteList
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,6 +31,7 @@ class NoteListFragment : Fragment() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var notesAdapter: NoteListRecyclerViewAdapter
+    private var confirmationDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +82,7 @@ class NoteListFragment : Fragment() {
                 text = "TEST TXT"
             ))
 
+            // change to start activity for result
             startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) })
         }
 
@@ -110,8 +115,26 @@ class NoteListFragment : Fragment() {
         }
 
         override fun onNoteLongPress(id: String) {
-            noteViewModel.deleteNote(id)
+            showConfirmationDialog(id)
+            //noteViewModel.deleteNote(id)
         }
     }
 
+    private fun showConfirmationDialog(noteId: String){
+        confirmationDialog = activity?.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setMessage("Are you sure you want to delete this note?")
+                setTitle("Deletion")
+                setPositiveButton("Yes",
+                    DialogInterface.OnClickListener{dialog, id ->
+                        Toast.makeText(it, "clicked to delete", Toast.LENGTH_SHORT).show()
+                        noteViewModel.deleteNote(noteId)
+                    }
+                )
+                setNegativeButton("No", null)
+            }
+            builder.create()
+        }
+    }
 }
