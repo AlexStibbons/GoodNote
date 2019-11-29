@@ -41,6 +41,7 @@ class NoteListFragment : Fragment() {
         // IF it received default/empty tag id, THEN show all notes
 
         val parent = requireActivity()
+
         noteViewModel = Injectors.getNoteViewModel(parent)
         notesAdapter = NoteListRecyclerViewAdapter(clickedNote)
 
@@ -120,10 +121,12 @@ class NoteListFragment : Fragment() {
         }
     }
 
+    // OR should this be DialogFragment, and not alert dialog?
     private fun showConfirmationDialog(noteId: String){
         confirmationDialog = activity?.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
+                setCancelable(true)
                 setMessage("Are you sure you want to delete this note?")
                 setTitle("Deletion")
                 setPositiveButton("Yes",
@@ -132,13 +135,17 @@ class NoteListFragment : Fragment() {
                         noteViewModel.deleteNote(noteId)
                     }
                 )
-                setNegativeButton("No", null)
+                setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+                    dialog.cancel()
+                })
             }
 
             // should the build be in the beginning somewhere, in onCreate maybe, and only
             // the builder.create() in the long press?
             // or just confirmationDialog.show()?
+            // BUT how do you pass note id to positive button?
             builder.create()
         }
+        confirmationDialog?.show()
     }
 }

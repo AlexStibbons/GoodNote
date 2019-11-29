@@ -1,5 +1,5 @@
 package com.example.goodnote.ui.viewModels
-
+/*
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
 import org.junit.jupiter.api.extension.AfterEachCallback
@@ -22,4 +22,4 @@ class InstantTaskExecutorExtension: BeforeEachCallback, AfterEachCallback {
     override fun afterEach(context: ExtensionContext?) {
         ArchTaskExecutor.getInstance().setDelegate(null)
     }
-}
+}*/

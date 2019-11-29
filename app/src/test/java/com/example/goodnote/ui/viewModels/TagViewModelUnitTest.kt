@@ -1,5 +1,5 @@
 package com.example.goodnote.ui.viewModels
-
+/* JUnit 4
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,8 +20,6 @@ import org.junit.Rule
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import junit.framework.TestCase.assertEquals
-
-// JUnit 4
 
 @ExperimentalCoroutinesApi
 class TagViewModelUnitTest {
@@ -126,4 +124,4 @@ class TagViewModelUnitTest {
         verify(repo).findTagsByName("irs")
         verify(observer).onChanged(returned)
     }
-}
+}*/
