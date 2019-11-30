@@ -73,7 +73,6 @@ class NoteListFragment : Fragment() {
                 title = "",
                 text = "TEST TXT"
             ))
-
             // change to start activity for result
             startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) })
         }
@@ -90,7 +89,6 @@ class NoteListFragment : Fragment() {
                 }
             }
     }
-
     // can be onItemClicked and extracted as an internal interface
     interface onNoteClick {
         fun onNoteClick(id: String)
@@ -108,7 +106,6 @@ class NoteListFragment : Fragment() {
 
         override fun onNoteLongPress(id: String) {
             showConfirmationDialog(id)
-            //noteViewModel.deleteNote(id)
         }
     }
 
@@ -124,6 +121,7 @@ class NoteListFragment : Fragment() {
                     DialogInterface.OnClickListener{dialog, id ->
                         Toast.makeText(it, "clicked to delete", Toast.LENGTH_SHORT).show()
                         noteViewModel.deleteNote(noteId)
+                        Log.e("CONF DIA", "id is $noteId")
                     }
                 )
                 setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->

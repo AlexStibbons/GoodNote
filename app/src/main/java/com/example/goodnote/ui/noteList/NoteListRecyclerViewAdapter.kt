@@ -15,8 +15,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
     private val notes : MutableList<NoteModel> = ArrayList()
 
-    //private val notes: MutableList<NoteModel> = AsyncListDiffer<NoteModel>
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.note_item,
@@ -45,12 +43,11 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
             noteItem.setOnClickListener( View.OnClickListener {
                 onNoteClicked.onNoteClick(notes[position].noteId)
-                Log.e("REC VIEW", "note click")
+                Log.e("REC VIEW", "note click: $position & ${notes[position].title}")
             })
 
-            // works, but no indication to user
             noteItem.setOnLongClickListener {
-                Log.e("REC VIEW LONG", "note click on pos: ${position} & ${notes[position].title}")
+                Log.e("REC VIEW LONG", "note click on pos: $position & ${notes[position].title}")
                 onNoteClicked.onNoteLongPress(notes[position].noteId)
                 true
             }
@@ -62,8 +59,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         this.notes.addAll(newNotes)
         notifyDataSetChanged()*/
         val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
+        diffResult.dispatchUpdatesTo(this)
         this.notes.clear()
         this.notes.addAll(newNotes)
-        diffResult.dispatchUpdatesTo(this)
     }
 }
