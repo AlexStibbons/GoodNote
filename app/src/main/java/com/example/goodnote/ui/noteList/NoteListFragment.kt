@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.noteDetails.NoteDetails
@@ -34,15 +35,9 @@ class NoteListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // IF it receives TAG ID, THEN show notes that contain that tag
-
-        // IF it received default/empty tag id, THEN show all notes
-
         val parent = requireActivity()
-
         noteViewModel = Injectors.getNoteViewModel(parent)
         notesAdapter = NoteListRecyclerViewAdapter(clickedNote)
-
 
         noteViewModel.repoNotes.observe(this, Observer { notes ->
             notes ?: return@Observer
@@ -53,16 +48,8 @@ class NoteListFragment : Fragment() {
 /*
         noteViewModel.addedNote.observe(this, Observer { note ->
             note ?: return@Observer
-
+            noteAdapter.insertNote(note)
         })*/
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // should observer be here with
-        // getLifecycleOwner() as owner?
-
     }
 
     override fun onCreateView(
@@ -73,6 +60,7 @@ class NoteListFragment : Fragment() {
 
         val rootView = inflater.inflate(R.layout.notes_list_fragment, container, false)
         recyclerView = rootView.findViewById(R.id.notes_list_recycler_view)
+
         recyclerView.apply {
             this.adapter = notesAdapter
             layoutManager = LinearLayoutManager(requireActivity())

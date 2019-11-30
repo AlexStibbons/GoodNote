@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
@@ -13,6 +14,8 @@ import kotlinx.android.synthetic.main.note_item.view.*
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
     private val notes : MutableList<NoteModel> = ArrayList()
+
+    //private val notes: MutableList<NoteModel> = AsyncListDiffer<NoteModel>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -27,7 +30,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     }
 
     override fun getItemCount(): Int = notes.size
-
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
@@ -48,6 +50,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
             // works, but no indication to user
             noteItem.setOnLongClickListener {
+                Log.e("REC VIEW LONG", "note click on pos: ${position} & ${notes[position].title}")
                 onNoteClicked.onNoteLongPress(notes[position].noteId)
                 true
             }
@@ -55,12 +58,12 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     }
 
     internal fun setNotes(newNotes: List<NoteModel>) {
-        val diffCallback = NoteDiffCallback(this.notes, newNotes)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
-
+        /*this.notes.clear()
+        this.notes.addAll(newNotes)
+        notifyDataSetChanged()*/
+        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
         this.notes.clear()
         this.notes.addAll(newNotes)
         diffResult.dispatchUpdatesTo(this)
     }
-
 }
