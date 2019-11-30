@@ -1,10 +1,8 @@
 package com.example.goodnote.ui.noteList
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
@@ -51,16 +49,17 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 onNoteClicked.onNoteLongPress(notes[position].noteId)
                 true
             }
+
         }
     }
 
     internal fun setNotes(newNotes: List<NoteModel>) {
-        /*this.notes.clear()
-        this.notes.addAll(newNotes)
-        notifyDataSetChanged()*/
-        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
-        diffResult.dispatchUpdatesTo(this)
         this.notes.clear()
         this.notes.addAll(newNotes)
+        notifyDataSetChanged()
+        /*val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
+        diffResult.dispatchUpdatesTo(this)
+        this.notes.clear()
+        this.notes.addAll(newNotes)*/
     }
 }
