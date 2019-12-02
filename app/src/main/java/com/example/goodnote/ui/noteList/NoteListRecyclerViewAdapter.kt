@@ -57,7 +57,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         this.notes.clear()
         this.notes.addAll(newNotes)
         notifyDataSetChanged()
-        /*val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
+/*        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
         diffResult.dispatchUpdatesTo(this)
         this.notes.clear()
         this.notes.addAll(newNotes)*/
