@@ -9,7 +9,7 @@
         android:id="@+id/notes_details_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dummy_title"
+        android:text=""
         android:hint="Title..."
         android:textSize="20sp"
         android:layout_marginLeft="7dp"
@@ -42,9 +42,9 @@
     <!-- should this be scrollable?-->
     <EditText
         android:id="@+id/notes_details_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/dummy_text"
+        android:text=""
         android:hint="text..."
         android:layout_marginLeft="7dp"
         android:layout_marginRight="7dp"
