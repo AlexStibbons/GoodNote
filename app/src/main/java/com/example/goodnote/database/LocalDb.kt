@@ -35,10 +35,11 @@ abstract class LocalDb : RoomDatabase() {
         }
 
         private fun buildDb(context: Context): LocalDb {
-            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).addCallback(LocalDbCallback()).build()
+            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME)
+                .addCallback(LocalDbCallback()).build()
         }
 
-        }
+    }
 
     private class LocalDbCallback : RoomDatabase.Callback() {
 
@@ -59,8 +60,7 @@ abstract class LocalDb : RoomDatabase() {
                     noteDao.addNote(NoteEntity("Our good and proper shoes", DUMMY_TEXT, "fake6"))
                     noteDao.addNote(NoteEntity("Hatchling", DUMMY_TEXT, "fake7"))
                     noteDao.addNote(NoteEntity("Quiet life of Galeb Rekah", DUMMY_TEXT, "fake8"))
-                    noteDao.addNote(NoteEntity("the kinda summer", "that sucks the life out of you", "fake9"))
-
+                    noteDao.addNote(NoteEntity("the kinda summer","that sucks the life out of you","fake9"))
 
                     tagDao.addTag(TagEntity("people", "fake1"))
                     tagDao.addTag(TagEntity("world", "fake2"))
