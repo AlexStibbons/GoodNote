@@ -1,9 +1,11 @@
 package com.example.goodnote.ui.viewModels
 
+import android.provider.ContactsContract
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide.init
 import com.example.goodnote.repository.NoteRepo
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteModel
@@ -23,6 +25,9 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
 //    private var _addedNote: MutableLiveData<NoteModel> = MutableLiveData()
 //    val addedNote: LiveData<NoteModel> = _addedNote
+
+    private var _foundNote: MutableLiveData<NoteDetailsModel> = MutableLiveData()
+    val foundNote: LiveData<NoteDetailsModel> = _foundNote
 
     init {
         getAllNotes()
@@ -56,6 +61,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     fun findNoteById(id: String) = viewModelScope.launch {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
         val noteDetails = foundNote.toNoteDetailsModel()
+        _foundNote.value = noteDetails
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {

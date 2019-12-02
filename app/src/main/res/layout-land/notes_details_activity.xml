@@ -20,9 +20,47 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/notes_details_tags"/>
+        app:layout_constraintBottom_toTopOf="@id/notes_details_tags_scroll"/>
 
-    <EditText
+    <HorizontalScrollView
+        android:id="@+id/notes_details_tags_scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notes_details_title"
+        app:layout_constraintBottom_toTopOf="@id/notes_details_text">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/notes_details_tags_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:singleLine="true">
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST CHIP"
+                app:closeIconEnabled="true"/>
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST CHIP 2"
+                app:closeIconEnabled="true"/>
+
+            <com.google.android.material.chip.Chip
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TEST CHIP 3"
+                app:closeIconEnabled="true"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+    </HorizontalScrollView>
+
+
+    <!--EditText
         android:id="@+id/notes_details_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,7 +75,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/notes_details_title"
         app:layout_constraintBottom_toTopOf="@id/notes_details_text"
-        />
+        /-->
 
     <!-- should this be scrollable?-->
     <EditText
@@ -54,7 +92,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notes_details_tags"/>
-    
+        app:layout_constraintTop_toBottomOf="@id/notes_details_tags_scroll"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
