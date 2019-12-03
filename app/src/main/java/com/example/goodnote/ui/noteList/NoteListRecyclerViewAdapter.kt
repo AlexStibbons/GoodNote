@@ -18,35 +18,35 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             R.layout.note_item,
             parent,false)
 
-        return ViewHolder(itemView)
+        return ViewHolder(itemView, onNoteClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bind(position)
+       holder.bind(notes[position])
     }
 
     override fun getItemCount(): Int = notes.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) : RecyclerView.ViewHolder(view) {
 
-        val title = view.item_note_title
-        val tags = view.item_tags
-        val text = view.item_note_text
-        val noteItem = view.layout_note_item
+        private val title = view.item_note_title
+        private val tags = view.item_tags
+        private val text = view.item_note_text
+        private val noteItem = view.layout_note_item
 
-        fun bind(position: Int) {
-            title.text = notes[position].title
-            tags.text = notes[position].tags
-            text.text = notes[position].text
+        fun bind(note: NoteModel) {
+            title.text = note.title
+            tags.text = note.tags
+            text.text = note.text
 
             noteItem.setOnClickListener( View.OnClickListener {
-                onNoteClicked.onNoteClick(notes[position].noteId)
-                Log.e("REC VIEW", "note click: $position & ${notes[position].title}")
+                click.onNoteClick(note.noteId)
+                Log.e("REC VIEW", "note click: $adapterPosition & ${note.title}")
             })
 
             noteItem.setOnLongClickListener {
-                Log.e("REC VIEW LONG", "note click on pos: $position & ${notes[position].title}")
-                onNoteClicked.onNoteLongPress(notes[position].noteId)
+                Log.e("REC VIEW LONG", "note click on pos: $adapterPosition & ${note.title}")
+                click.onNoteLongPress(note.noteId)
                 true
             }
 
@@ -54,12 +54,9 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     }
 
     internal fun setNotes(newNotes: List<NoteModel>) {
-        this.notes.clear()
-        this.notes.addAll(newNotes)
-        notifyDataSetChanged()
-/*        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
+        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
         diffResult.dispatchUpdatesTo(this)
         this.notes.clear()
-        this.notes.addAll(newNotes)*/
+        this.notes.addAll(newNotes)
     }
 }

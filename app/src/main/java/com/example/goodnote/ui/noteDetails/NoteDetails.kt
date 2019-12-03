@@ -80,7 +80,8 @@ class NoteDetails : AppCompatActivity() {
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteTags.isNotEmpty()) {
             noteViewModel.saveNote(
                 NoteDetailsModel(
-                    noteId = ffound.noteId ?: "",
+                    // if note exists, the existing note id
+                    // if not, default value
                     title = title.text.toString(),
                     text = text.text.toString(),
                     tags = noteTags
