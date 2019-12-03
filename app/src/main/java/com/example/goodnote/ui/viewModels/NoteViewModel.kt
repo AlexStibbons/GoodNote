@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.models.Note
-import com.example.goodnote.database.repository.NoteRepo
-import com.example.goodnote.utils.DEFAULT_TITLE
-import com.example.goodnote.utils.addOne
+import com.example.goodnote.repository.NoteRepo
+import com.example.goodnote.ui.models.NoteDetailsModel
+import com.example.goodnote.ui.models.NoteModel
+import com.example.goodnote.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,47 +17,48 @@ This way we are saving processor time, since there won't be 2 context switches
 where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
-    private var _repoNotes: MutableLiveData<List<Note>> = MutableLiveData()
-    val repoNotes: LiveData<List<Note>>
+    private var _repoNotes: MutableLiveData<List<NoteModel>> = MutableLiveData()
+    val repoNotes: LiveData<List<NoteModel>>
         get() = _repoNotes
+
+//    private var _addedNote: MutableLiveData<NoteModel> = MutableLiveData()
+//    val addedNote: LiveData<NoteModel> = _addedNote
 
     init {
         getAllNotes()
     }
 
     fun getAllNotes() = viewModelScope.launch {
+
         val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
-        _repoNotes.value = notes
+
+        _repoNotes.value = notes.map { it.toNoteModel() }
+
     }
 
-    fun saveNote(note: Note) = viewModelScope.launch {
+    fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
-        if (note.title.isNullOrEmpty()) note.title = DEFAULT_TITLE
+        val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
+        //_addedNote.value = noteSave.toNoteModel()
 
-        _repoNotes.addOne(note) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(noteSave.toNoteModel()) // --> do not make a new list, but just add a new note (DiffUtil)
 
         withContext(Dispatchers.IO) {
-            repository.saveNote(note)
+            repository.saveNote(noteSave.toNoteDomainModel())
         }
     }
 
     fun deleteNote(id: String) = viewModelScope.launch {
-        // remove from list
         _repoNotes.value = _repoNotes.value?.filter { it.noteId != id }
-        // remove from DB
         withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
     fun findNoteById(id: String) = viewModelScope.launch {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
-
-        // should a single note by a LiveData<Note>?
-        /* _note.value = foundNote */
+        val noteDetails = foundNote.toNoteDetailsModel()
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {
-        val foundNotes = withContext(Dispatchers.IO) { repository.findNoteByTitle(title) }
-       // _repoNotes.value = foundNotes
         _repoNotes.value = _repoNotes.value?.filter { it.title.contains(title, true) }
     }
 

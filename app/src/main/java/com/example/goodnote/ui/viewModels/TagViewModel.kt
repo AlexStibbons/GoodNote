@@ -4,50 +4,53 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.goodnote.database.repository.TagRepo
-import com.example.goodnote.database.models.Tag
+import com.example.goodnote.repository.TagRepo
+import com.example.goodnote.database.entityModels.TagEntity
+import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.utils.addOne
+import com.example.goodnote.utils.toListTagModel
+import com.example.goodnote.utils.toTagDomainModel
+import com.example.goodnote.utils.toTagModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TagViewModel(private val repository: TagRepo): ViewModel() {
 
-    private val _tags: MutableLiveData<List<Tag>> = MutableLiveData()
-    private val tags: LiveData<List<Tag>>
+    private val _tags: MutableLiveData<List<TagModel>> = MutableLiveData()
+    val tags: LiveData<List<TagModel>>
         get() = _tags
 
-    init {
-        getAllTags()
+     init {
+        getTags()
     }
 
-    fun getAllTags() = viewModelScope.launch {
+    fun getTags() = viewModelScope.launch {
         val tags = withContext(Dispatchers.IO) {repository.getAllTags()}
-        _tags.value = tags
+        _tags.value = tags.toListTagModel()
     }
 
-    fun addTag(tag: Tag) = viewModelScope.launch {
+    fun addTag(tag: TagModel) = viewModelScope.launch {
         _tags.addOne(tag)
-        withContext(Dispatchers.IO) {repository.addTag(tag)}
+        withContext(Dispatchers.IO) {repository.addTag(tag.toTagDomainModel())}
     }
 
-    fun deleteTag(id: Int) = viewModelScope.launch {
-        _tags.value = _tags.value?.filter { it.id != id }
+    fun deleteTag(id: String) = viewModelScope.launch {
+        _tags.value = _tags.value?.filter { it.tagId != id }
 
         withContext(Dispatchers.IO) { repository.deleteTagById(id)}
     }
 
-    fun findTagById(id: Int) = viewModelScope.launch {
-        val foundNote = withContext(Dispatchers.IO) { repository.findTagById(id)}
-        // tag to LiveData<Tag> ?
+    fun findTagById(id: String) = viewModelScope.launch {
+        val foundTag: TagModel = withContext(Dispatchers.IO) { repository.findTagById(id).toTagModel()}
+        // tag to LiveData<TagEntity> ?
     }
 
-    fun findTagsByName(name: String) = viewModelScope.launch {
-        val foundTags = withContext(Dispatchers.IO) { repository.findTagsByName(name)}
-        _tags.value = foundTags
+    fun findTagsByName(name: String) {
+        _tags.value = _tags.value?.filter { it.name.contains(name, true) }
     }
 
     fun clearSearch() {
-        getAllTags()
+        getTags()
     }
 }

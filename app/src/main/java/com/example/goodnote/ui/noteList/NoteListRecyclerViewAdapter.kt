@@ -1,20 +1,17 @@
-package com.example.goodnote.ui
-
-import android.content.Context
-import android.content.Intent
+package com.example.goodnote.ui.noteList
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
-import com.example.goodnote.database.models.Note
+import com.example.goodnote.ui.models.NoteModel
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
 
-    private val notes : MutableList<Note> = ArrayList()
+    private val notes : MutableList<NoteModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
@@ -30,7 +27,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
     override fun getItemCount(): Int = notes.size
 
-
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         val title = view.item_note_title
@@ -40,26 +36,30 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
         fun bind(position: Int) {
             title.text = notes[position].title
-            tags.text = "from join table somehow"
+            tags.text = notes[position].tags
             text.text = notes[position].text
 
             noteItem.setOnClickListener( View.OnClickListener {
                 onNoteClicked.onNoteClick(notes[position].noteId)
-                Log.e("REC VIEW", "note click")
+                Log.e("REC VIEW", "note click: $position & ${notes[position].title}")
             })
 
-            // works, but no indication to user
             noteItem.setOnLongClickListener {
+                Log.e("REC VIEW LONG", "note click on pos: $position & ${notes[position].title}")
                 onNoteClicked.onNoteLongPress(notes[position].noteId)
                 true
             }
+
         }
     }
 
-    internal fun setNotes(newNotes: List<Note>) {
+    internal fun setNotes(newNotes: List<NoteModel>) {
         this.notes.clear()
         this.notes.addAll(newNotes)
         notifyDataSetChanged()
+/*        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
+        diffResult.dispatchUpdatesTo(this)
+        this.notes.clear()
+        this.notes.addAll(newNotes)*/
     }
-
 }
