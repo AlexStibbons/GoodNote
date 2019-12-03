@@ -70,4 +70,8 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
 
         return notesWithTags
     }
+
+    override suspend fun deleteTagForNote(noteId: String, tagId: String) {
+        joinDao.deleteTagForNote(noteId, tagId)
+    }
 }

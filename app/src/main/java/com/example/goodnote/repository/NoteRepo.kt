@@ -15,4 +15,5 @@ interface NoteRepo {
 
     suspend fun findNoteByTitle(title: String): List<NoteDomanModel>
 
+    suspend fun deleteTagForNote(noteId: String, tagId: String)
 }

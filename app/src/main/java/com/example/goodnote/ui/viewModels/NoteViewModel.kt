@@ -1,16 +1,16 @@
 package com.example.goodnote.ui.viewModels
 
 import android.provider.ContactsContract
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.bumptech.glide.Glide.init
 import com.example.goodnote.repository.NoteRepo
+import com.example.goodnote.repository.domainModels.NoteDomanModel
+import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -62,6 +62,10 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
         val noteDetails = foundNote.toNoteDetailsModel()
         _foundNote.value = noteDetails
+    }
+
+    fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {
+        repository.deleteTagForNote(noteId, tagId)
     }
 
     fun findNotesByTitle(title: String) = viewModelScope.launch {

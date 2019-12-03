@@ -1,6 +1,5 @@
 package com.example.goodnote.ui.noteList
 
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -9,11 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.noteDetails.NoteDetails
