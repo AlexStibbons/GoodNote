@@ -1,18 +1,11 @@
 package com.example.goodnote.ui.viewModels
 
-import android.provider.ContactsContract
 import androidx.lifecycle.*
-import com.bumptech.glide.Glide.init
 import com.example.goodnote.repository.NoteRepo
-import com.example.goodnote.repository.domainModels.NoteDomanModel
-import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 /*it is better to do thread switching only once by switching to IO thread when it is needed.
 This way we are saving processor time, since there won't be 2 context switches
@@ -62,6 +55,11 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
         val noteDetails = foundNote.toNoteDetailsModel()
         _foundNote.value = noteDetails
+    }
+
+    fun findNoteById2(id: String) = viewModelScope.async {
+        val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
+        return@async foundNote
     }
 
     fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {

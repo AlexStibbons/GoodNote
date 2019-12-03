@@ -15,8 +15,10 @@ import com.example.goodnote.ui.viewModels.TagViewModel
 import com.example.goodnote.utils.EMPTY_NONTE_ID
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
+import com.example.goodnote.utils.toNoteDetailsModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.*
 
 class NoteDetails : AppCompatActivity() {
 
@@ -58,7 +60,14 @@ class NoteDetails : AppCompatActivity() {
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
 
-        val testList: List<TagModel> = listOf(TagModel("temp1", "temp"), TagModel("temp2", "temp2"))
+        if (noteId != EMPTY_NONTE_ID) {
+           CoroutineScope(Dispatchers.Main).launch {
+               val ffound = noteViewModel.findNoteById2(noteId).await()
+               getForNote(ffound.toNoteDetailsModel())
+           }
+        }
+
+        /*val testList: List<TagModel> = listOf(TagModel("temp1", "temp"), TagModel("temp2", "temp2"))
         testList.forEach {
             Log.e("for each", "called")
             val chip = Chip(this).apply {
@@ -70,7 +79,7 @@ class NoteDetails : AppCompatActivity() {
             }
             chipGroup.addView(chip)
         }
-
+*/
         Toast.makeText(this, "NoteEntity ID is $noteId", Toast.LENGTH_SHORT).show()
     }
 
@@ -95,15 +104,17 @@ class NoteDetails : AppCompatActivity() {
     }
 
     private fun getForNote(note: NoteDetailsModel) {
+
         title.setText(note.title)
         text.setText(note.text)
-
-        note.tags.forEach {
-            val chip = Chip(this).apply {
-                text = it.name
-                isCloseIconVisible = true
+        if (note.tags.isNotEmpty()) {
+            note.tags.forEach {
+                val chip = Chip(this).apply {
+                    text = it.name
+                    isCloseIconVisible = true
+                }
+                chipGroup.addView(chip)
             }
-            chipGroup.addView(chip)
         }
     }
 }
