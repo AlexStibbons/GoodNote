@@ -33,6 +33,7 @@ class NoteDetails : AppCompatActivity() {
     private var noteTags: MutableList<TagModel> = ArrayList()
 
     lateinit var foundNote: NoteDetailsModel
+    lateinit var ffound: NoteDetailsModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,24 +63,13 @@ class NoteDetails : AppCompatActivity() {
 
         if (noteId != EMPTY_NONTE_ID) {
            CoroutineScope(Dispatchers.Main).launch {
-               val ffound = noteViewModel.findNoteById2(noteId).await()
-               getForNote(ffound.toNoteDetailsModel())
+               ffound = noteViewModel.findNoteById2(noteId).await().toNoteDetailsModel()
+               noteTags.clear()
+               noteTags.addAll(ffound.tags)
+               getForNote(ffound)
            }
         }
 
-        /*val testList: List<TagModel> = listOf(TagModel("temp1", "temp"), TagModel("temp2", "temp2"))
-        testList.forEach {
-            Log.e("for each", "called")
-            val chip = Chip(this).apply {
-                this.text = it.name
-                this.isCloseIconVisible = true
-                this.setOnCloseIconClickListener {
-                    // remove tag from this note
-                }
-            }
-            chipGroup.addView(chip)
-        }
-*/
         Toast.makeText(this, "NoteEntity ID is $noteId", Toast.LENGTH_SHORT).show()
     }
 
@@ -90,6 +80,7 @@ class NoteDetails : AppCompatActivity() {
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteTags.isNotEmpty()) {
             noteViewModel.saveNote(
                 NoteDetailsModel(
+                    noteId = ffound.noteId ?: "",
                     title = title.text.toString(),
                     text = text.text.toString(),
                     tags = noteTags
@@ -104,7 +95,6 @@ class NoteDetails : AppCompatActivity() {
     }
 
     private fun getForNote(note: NoteDetailsModel) {
-
         title.setText(note.title)
         text.setText(note.text)
         if (note.tags.isNotEmpty()) {
