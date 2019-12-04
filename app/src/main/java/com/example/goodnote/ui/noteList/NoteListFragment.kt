@@ -106,7 +106,11 @@ class NoteListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RESULT_NOTE_SAVED && resultCode == Activity.RESULT_OK) noteViewModel.getAllNotes()
+ /*     doesn't update when `resultCode == ...` --> not the right result?
+        if (requestCode == RESULT_NOTE_SAVED && resultCode == Activity.RESULT_OK) {
+            noteViewModel.getAllNotes()
+        }*/
+        if (requestCode == RESULT_NOTE_SAVED) noteViewModel.getAllNotes()
     }
 
     private fun showConfirmationDialog(noteId: String) {

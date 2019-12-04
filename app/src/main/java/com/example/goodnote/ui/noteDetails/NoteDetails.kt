@@ -73,16 +73,14 @@ class NoteDetails : AppCompatActivity() {
         // updating list issue
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteToEdit.tags.isNotEmpty()) {
             noteViewModel.saveNote(noteToEdit)
-/*            noteToEdit = noteToEdit.copy(title = title.text.toString(),
-                                            text = text.text.toString())*/
         }
 
         // should saving be done in list?
         val returnIntent = Intent().also {
-            //it.putExtra("note", noteToEdit)
             setResult(Activity.RESULT_OK, it)
-            finish()
         }
+
+        finish()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
