@@ -44,12 +44,15 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
     }
 
     override suspend fun saveNote(note: NoteDomanModel): Long {
+
+        val roomReturn = noteDao.addNote(note.toNoteEntity())
+
         if (note.tags.isNotEmpty()){
             note.tags.forEach {
                 joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
             }
         }
-        return noteDao.addNote(note.toNoteEntity())
+        return roomReturn
     }
 
     override suspend fun findNoteById(id: String): NoteDomanModel {
