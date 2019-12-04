@@ -25,9 +25,9 @@ class NoteDetails : AppCompatActivity() {
     lateinit var text: EditText
     lateinit var chipGroup: ChipGroup
 
-    private var existingTags: MutableList<TagModel> = ArrayList()// for choosing or adding a new tag
-    private lateinit var tagViewModel: TagViewModel // for getting/removing tag for note
-    private lateinit var noteViewModel: NoteViewModel // for getting/saving/editing/creating note
+    private var existingTags: MutableList<TagModel> = ArrayList()
+    private lateinit var tagViewModel: TagViewModel
+    private lateinit var noteViewModel: NoteViewModel
 
     private var noteToEdit = NoteDetailsModel(title = "", text = "", tags = mutableListOf())
 
@@ -65,7 +65,7 @@ class NoteDetails : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         Log.e("on back", "called")
-        noteToEdit.tags.add(existingTags[3])
+        noteToEdit.tags.add(existingTags[2]) //--> this breaks repo/sql when it's a new note ??!
         noteToEdit = noteToEdit.copy(noteId = noteToEdit.noteId,
             title = title.text.toString(),
             text = text.text.toString(),

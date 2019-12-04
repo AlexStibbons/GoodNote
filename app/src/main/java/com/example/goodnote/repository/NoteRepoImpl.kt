@@ -44,7 +44,6 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
     }
 
     override suspend fun saveNote(note: NoteDomanModel): Long {
-
         if (note.tags.isNotEmpty()){
             note.tags.forEach {
                 joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
