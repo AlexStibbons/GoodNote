@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -24,6 +26,7 @@ class NoteDetails : AppCompatActivity() {
     lateinit var title: EditText
     lateinit var text: EditText
     lateinit var chipGroup: ChipGroup
+    lateinit var autocomplete: AutoCompleteTextView
 
     private var existingTags: MutableList<TagModel> = ArrayList()
     private lateinit var tagViewModel: TagViewModel
@@ -53,12 +56,32 @@ class NoteDetails : AppCompatActivity() {
         title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
+        autocomplete = findViewById(R.id.notes_details_autocomplete)
 
         if (noteId.isNotBlank()) {
            CoroutineScope(Dispatchers.Main).launch {
                noteToEdit = noteViewModel.findNoteById(noteId).await().toNoteDetailsModel()
                getForNote(noteToEdit)
            }
+        }
+
+        // for autocomplete
+
+        // get all tags in adapter
+        val autoAdapter = ArrayAdapter<TagModel>(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            existingTags
+        )
+        // set adapter
+        autocomplete.setAdapter(autoAdapter)
+
+        // select from auto complete
+        autocomplete.setOnItemClickListener {adapterView, _, position, _  ->
+            autocomplete.text = null
+            val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
+            val tagName = tag.name
+            addTag(tag)
         }
     }
 
@@ -69,6 +92,7 @@ class NoteDetails : AppCompatActivity() {
             title = title.text.toString(),
             text = text.text.toString(),
             tags = noteToEdit.tags)
+        Log.e("on back", "tags: ${noteToEdit.tags.size}")
 
         // updating list issue
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteToEdit.tags.isNotEmpty()) {
@@ -93,12 +117,22 @@ class NoteDetails : AppCompatActivity() {
         text.setText(note.text)
         if (note.tags.isNotEmpty()) {
             note.tags.forEach {
+                val tagM = it
                 val chip = Chip(this).apply {
                     text = it.name
                     isCloseIconVisible = true
+                    setOnCloseIconClickListener {
+                        note.tags.remove(tagM)
+                        noteViewModel.deleteTagForNote(note.noteId, tagM.tagId)
+                        chipGroup.removeView(this)
+                    }
                 }
                 chipGroup.addView(chip)
             }
         }
+    }
+
+    private fun addTag(tag: TagModel) {
+
     }
 }
