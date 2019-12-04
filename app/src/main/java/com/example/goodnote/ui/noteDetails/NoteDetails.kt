@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
@@ -30,12 +29,13 @@ class NoteDetails : AppCompatActivity() {
     private lateinit var tagViewModel: TagViewModel // for getting/removing tag for note
     private lateinit var noteViewModel: NoteViewModel // for getting/saving/editing/creating note
 
-    private var ffound = NoteDetailsModel("","", "", mutableListOf<TagModel>())
+    private var noteToEdit = NoteDetailsModel(title = "", text = "", tags = mutableListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notes_details_activity)
         Log.e("DETAILS", "on create")
+        Log.e("onCreate", "created note: ${noteToEdit.noteId}, ${noteToEdit.title}")
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
         Log.e("DETAILS", "on create: $noteId")
@@ -56,26 +56,31 @@ class NoteDetails : AppCompatActivity() {
 
         if (noteId.isNotBlank()) {
            CoroutineScope(Dispatchers.Main).launch {
-               ffound = noteViewModel.findNoteById(noteId).await().toNoteDetailsModel()
-               getForNote(ffound)
+               noteToEdit = noteViewModel.findNoteById(noteId).await().toNoteDetailsModel()
+               getForNote(noteToEdit)
            }
         }
-        Toast.makeText(this, "NoteEntity ID is $noteId", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         Log.e("on back", "called")
-
+        noteToEdit.tags.add(existingTags[3])
+        noteToEdit = noteToEdit.copy(noteId = noteToEdit.noteId,
+            title = title.text.toString(),
+            text = text.text.toString(),
+            tags = noteToEdit.tags)
+        Log.e("copy of note to edit", "id: ${noteToEdit.noteId}, title: ${noteToEdit.title}")
         // updating list issue
-        if (text.text.isNotBlank() || title.text.isNotBlank() || ffound.tags.isNotEmpty()) {
-            noteViewModel.saveNote(ffound.copy(
-                title = title.text.toString(),
-                text = text.text.toString(),
-                tags = ffound.tags))
+        if (text.text.isNotBlank() || title.text.isNotBlank() || noteToEdit.tags.isNotEmpty()) {
+            noteViewModel.saveNote(noteToEdit)
+/*            noteToEdit = noteToEdit.copy(title = title.text.toString(),
+                                            text = text.text.toString())*/
         }
 
+        // should saving be done in list?
         val returnIntent = Intent().also {
+            //it.putExtra("note", noteToEdit)
             setResult(Activity.RESULT_OK, it)
             finish()
         }

@@ -1,4 +1,5 @@
 package com.example.goodnote.ui.noteList
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteModel
+import com.example.goodnote.utils.EXTRA_NOTE_TAGS
+import com.example.goodnote.utils.EXTRA_NOTE_TEXT
+import com.example.goodnote.utils.EXTRA_NOTE_TITLE
 import kotlinx.android.synthetic.main.note_item.view.*
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
@@ -22,8 +26,20 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bind(notes[position])
+        holder.bind(notes[position])
     }
+
+/*    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        super.onBindViewHolder(holder, position, payloads)
+        if (payloads.isEmpty()) onBindViewHolder(holder, position)
+
+        val bun: Bundle = payloads[0] as Bundle
+        bun.keySet().forEach{
+            if (it == EXTRA_NOTE_TITLE) {notes[position] = notes[position].copy(title = bun.getString(EXTRA_NOTE_TITLE)!!)}
+            if (it == EXTRA_NOTE_TEXT) {notes[position] = notes[position].copy(text = bun.getString(EXTRA_NOTE_TEXT)!!)}
+            if (it == EXTRA_NOTE_TAGS) {notes[position] = notes[position].copy(tags = bun.getString(EXTRA_NOTE_TAGS)!!)}
+        }
+    }*/
 
     override fun getItemCount(): Int = notes.size
 
