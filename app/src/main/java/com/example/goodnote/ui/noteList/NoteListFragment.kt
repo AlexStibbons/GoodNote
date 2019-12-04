@@ -20,6 +20,7 @@ import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.EMPTY_NONTE_ID
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
+import com.example.goodnote.utils.RESULT_NOTE_SAVED
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteListFragment : Fragment() {
@@ -29,7 +30,6 @@ class NoteListFragment : Fragment() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var notesAdapter: NoteListRecyclerViewAdapter
-    private var confirmationDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,15 +67,9 @@ class NoteListFragment : Fragment() {
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
-            Log.e("FRAGMENT", "SAVING NOTE?")
-            noteViewModel.saveNote(NoteDetailsModel(
-                title = "",
-                text = "TEST TXT"
-            ))
             // change to start activity for result
-            startActivity(Intent(activity, NoteDetails::class.java).apply { putExtra(EXTRA_NOTE_ID, EMPTY_NONTE_ID) })
+            startActivityForResult(Intent(activity, NoteDetails::class.java), RESULT_NOTE_SAVED)
         }
-
         return rootView
     }
 
@@ -88,6 +82,12 @@ class NoteListFragment : Fragment() {
                 }
             }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_NOTE_SAVED ) noteViewModel.getAllNotes()
+    }
+
     // can be onItemClicked and extracted as an internal interface
     interface onNoteClick {
         fun onNoteClick(id: String)
@@ -100,7 +100,7 @@ class NoteListFragment : Fragment() {
             val intent = Intent(activity, NoteDetails::class.java).apply {
                 putExtra(EXTRA_NOTE_ID, id)
             }
-            startActivity(intent)
+            startActivityForResult(intent, RESULT_NOTE_SAVED)
         }
 
         override fun onNoteLongPress(id: String) {
@@ -108,32 +108,22 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    // OR should this be DialogFragment, and not alert dialog?
-    private fun showConfirmationDialog(noteId: String){
-        confirmationDialog = activity?.let {
-            val builder = AlertDialog.Builder(it)
-            builder.apply {
-                setCancelable(true)
-                setMessage("Are you sure you want to delete this note?")
-                setTitle("Deletion")
-                setPositiveButton("Yes",
-                    DialogInterface.OnClickListener{dialog, id ->
-                        Toast.makeText(it, "clicked to delete", Toast.LENGTH_SHORT).show()
-                        noteViewModel.deleteNote(noteId)
-                        Log.e("CONF DIA", "id is $noteId")
-                    }
-                )
-                setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
-                    dialog.cancel()
-                })
-            }
-
-            // should the build be in the beginning somewhere, in onCreate maybe, and only
-            // the builder.create() in the long press?
-            // or just confirmationDialog.show()?
-            // BUT how do you pass note id to positive button?
-            builder.create()
+    private fun showConfirmationDialog(noteId: String) {
+        val builder = AlertDialog.Builder(requireActivity())
+        builder.apply {
+            setCancelable(true)
+            setMessage(R.string.delete_note_question)
+            setPositiveButton(R.string.yes,
+                DialogInterface.OnClickListener { dialog, id ->
+                    noteViewModel.deleteNote(noteId)
+                    Log.e("CONF DIA", "id is $noteId")
+                }
+            )
+            setNegativeButton(R.string.no, DialogInterface.OnClickListener { dialog, which ->
+                dialog.cancel()
+            })
         }
-        confirmationDialog?.show()
+        builder.create().show()
     }
+
 }

@@ -27,7 +27,7 @@ internal fun List<TagEntity>.toListTagDomainModel(): List<TagDomainModel> {
     return list
 }
 
-internal fun List<TagDomainModel>.toListTagModel(): List<TagModel> {
+internal fun List<TagDomainModel>.toListTagModel(): MutableList<TagModel> {
     val list = mutableListOf<TagModel>()
     this.forEach{
         list.add(

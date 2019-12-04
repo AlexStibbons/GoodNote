@@ -19,27 +19,19 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 //    private var _addedNote: MutableLiveData<NoteModel> = MutableLiveData()
 //    val addedNote: LiveData<NoteModel> = _addedNote
 
-    private var _foundNote: MutableLiveData<NoteDetailsModel> = MutableLiveData()
-    val foundNote: LiveData<NoteDetailsModel> = _foundNote
-
     init {
         getAllNotes()
     }
 
     fun getAllNotes() = viewModelScope.launch {
-
         val notes = withContext(Dispatchers.IO) { repository.getAllNotes() }
-
         _repoNotes.value = notes.map { it.toNoteModel() }
-
     }
 
     fun saveNote(note: NoteDetailsModel) = viewModelScope.launch {
 
         val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
-        //_addedNote.value = noteSave.toNoteModel()
-
-        _repoNotes.addOne(noteSave.toNoteModel()) // --> do not make a new list, but just add a new note (DiffUtil)
+        _repoNotes.addOne(noteSave.toNoteModel())
 
         withContext(Dispatchers.IO) {
             repository.saveNote(noteSave.toNoteDomainModel())
@@ -51,13 +43,7 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         withContext(Dispatchers.IO) { repository.deleteNote(id) }
     }
 
-    fun findNoteById(id: String) = viewModelScope.launch {
-        val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
-        val noteDetails = foundNote.toNoteDetailsModel()
-        _foundNote.value = noteDetails
-    }
-
-    fun findNoteById2(id: String) = viewModelScope.async {
+    fun findNoteById(id: String) = viewModelScope.async {
         val foundNote = withContext(Dispatchers.IO) { repository.findNoteById(id) }
         return@async foundNote
     }

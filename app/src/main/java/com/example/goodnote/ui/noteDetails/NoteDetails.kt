@@ -1,5 +1,7 @@
 package com.example.goodnote.ui.noteDetails
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -12,9 +14,7 @@ import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.ui.viewModels.TagViewModel
-import com.example.goodnote.utils.EMPTY_NONTE_ID
-import com.example.goodnote.utils.EXTRA_NOTE_ID
-import com.example.goodnote.utils.Injectors
+import com.example.goodnote.utils.*
 import com.example.goodnote.utils.toNoteDetailsModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -30,17 +30,14 @@ class NoteDetails : AppCompatActivity() {
     private lateinit var tagViewModel: TagViewModel // for getting/removing tag for note
     private lateinit var noteViewModel: NoteViewModel // for getting/saving/editing/creating note
 
-    private var noteTags: MutableList<TagModel> = ArrayList()
-
-    lateinit var foundNote: NoteDetailsModel
-    lateinit var ffound: NoteDetailsModel
+    private var ffound = NoteDetailsModel("","", "", mutableListOf<TagModel>())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notes_details_activity)
         Log.e("DETAILS", "on create")
 
-        val noteId = intent.getStringExtra(EXTRA_NOTE_ID)
+        val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
         Log.e("DETAILS", "on create: $noteId")
 
         tagViewModel = Injectors.getTagViewModel(this)
@@ -53,40 +50,34 @@ class NoteDetails : AppCompatActivity() {
             Log.e("observer", "tags: ${it.size}, existing: ${existingTags.size}")
         })
 
-        noteViewModel.foundNote.observe(this, Observer { noteFromVM ->
-            foundNote = noteFromVM
-        })
-
         title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
 
-        if (noteId != EMPTY_NONTE_ID) {
+        if (noteId.isNotBlank()) {
            CoroutineScope(Dispatchers.Main).launch {
-               ffound = noteViewModel.findNoteById2(noteId).await().toNoteDetailsModel()
-               noteTags.clear()
-               noteTags.addAll(ffound.tags)
+               ffound = noteViewModel.findNoteById(noteId).await().toNoteDetailsModel()
                getForNote(ffound)
            }
         }
-
         Toast.makeText(this, "NoteEntity ID is $noteId", Toast.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
         Log.e("on back", "called")
-        // list does not update
-        if (text.text.isNotBlank() || title.text.isNotBlank() || noteTags.isNotEmpty()) {
-            noteViewModel.saveNote(
-                NoteDetailsModel(
-                    // if note exists, the existing note id
-                    // if not, default value
-                    title = title.text.toString(),
-                    text = text.text.toString(),
-                    tags = noteTags
-                )
-            )
+
+        // updating list issue
+        if (text.text.isNotBlank() || title.text.isNotBlank() || ffound.tags.isNotEmpty()) {
+            noteViewModel.saveNote(ffound.copy(
+                title = title.text.toString(),
+                text = text.text.toString(),
+                tags = ffound.tags))
+        }
+
+        val returnIntent = Intent().also {
+            setResult(Activity.RESULT_OK, it)
+            finish()
         }
     }
 
