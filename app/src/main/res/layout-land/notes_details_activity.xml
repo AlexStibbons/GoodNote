@@ -37,50 +37,14 @@
             android:layout_height="wrap_content"
             app:singleLine="true">
 
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEST CHIP"
-                app:closeIconEnabled="true"/>
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEST CHIP 2"
-                app:closeIconEnabled="true"/>
-
-            <com.google.android.material.chip.Chip
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEST CHIP 3"
-                app:closeIconEnabled="true"/>
-
         </com.google.android.material.chip.ChipGroup>
 
     </HorizontalScrollView>
 
-
-    <!--EditText
-        android:id="@+id/notes_details_tags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/dummy_tags"
-        android:hint="tags..."
-        android:layout_marginLeft="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginTop="3dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/notes_details_title"
-        app:layout_constraintBottom_toTopOf="@id/notes_details_text"
-        /-->
-
     <!-- should this be scrollable?-->
     <EditText
         android:id="@+id/notes_details_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:text=""
         android:hint="text..."

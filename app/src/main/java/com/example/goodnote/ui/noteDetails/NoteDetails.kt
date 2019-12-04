@@ -65,13 +65,11 @@ class NoteDetails : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         Log.e("on back", "called")
-        noteToEdit.tags.add(existingTags[2])
         noteToEdit = noteToEdit.copy(noteId = noteToEdit.noteId,
             title = title.text.toString(),
             text = text.text.toString(),
             tags = noteToEdit.tags)
-        Log.e("copy of note to edit", "id: ${noteToEdit.noteId}, title: ${noteToEdit.title}," +
-                " tag id : ${noteToEdit.tags[0].tagId} and ${noteToEdit.tags[0].name}")
+
         // updating list issue
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteToEdit.tags.isNotEmpty()) {
             noteViewModel.saveNote(noteToEdit)

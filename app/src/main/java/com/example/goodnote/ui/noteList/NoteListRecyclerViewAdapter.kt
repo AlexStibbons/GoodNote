@@ -29,17 +29,17 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         holder.bind(notes[position])
     }
 
-/*    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         super.onBindViewHolder(holder, position, payloads)
-        if (payloads.isEmpty()) onBindViewHolder(holder, position)
-
-        val bun: Bundle = payloads[0] as Bundle
-        bun.keySet().forEach{
-            if (it == EXTRA_NOTE_TITLE) {notes[position] = notes[position].copy(title = bun.getString(EXTRA_NOTE_TITLE)!!)}
-            if (it == EXTRA_NOTE_TEXT) {notes[position] = notes[position].copy(text = bun.getString(EXTRA_NOTE_TEXT)!!)}
-            if (it == EXTRA_NOTE_TAGS) {notes[position] = notes[position].copy(tags = bun.getString(EXTRA_NOTE_TAGS)!!)}
+        if (payloads.isEmpty()) { super.onBindViewHolder(holder, position, payloads) } else {
+            val bun: Bundle = payloads[0] as Bundle
+            bun.keySet().forEach{
+                if (it == EXTRA_NOTE_TITLE) {notes[position] = notes[position].copy(title = bun.getString(EXTRA_NOTE_TITLE)!!)}
+                if (it == EXTRA_NOTE_TEXT) {notes[position] = notes[position].copy(text = bun.getString(EXTRA_NOTE_TEXT)!!)}
+                if (it == EXTRA_NOTE_TAGS) {notes[position] = notes[position].copy(tags = bun.getString(EXTRA_NOTE_TAGS)!!)}
+            }
         }
-    }*/
+    }
 
     override fun getItemCount(): Int = notes.size
 

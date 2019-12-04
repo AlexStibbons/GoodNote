@@ -1,5 +1,6 @@
 package com.example.goodnote.ui.noteList
 
+import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -83,11 +84,6 @@ class NoteListFragment : Fragment() {
             }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RESULT_NOTE_SAVED ) noteViewModel.getAllNotes()
-    }
-
     // can be onItemClicked and extracted as an internal interface
     interface onNoteClick {
         fun onNoteClick(id: String)
@@ -106,6 +102,11 @@ class NoteListFragment : Fragment() {
         override fun onNoteLongPress(id: String) {
             showConfirmationDialog(id)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RESULT_NOTE_SAVED && resultCode == Activity.RESULT_OK) noteViewModel.getAllNotes()
     }
 
     private fun showConfirmationDialog(noteId: String) {

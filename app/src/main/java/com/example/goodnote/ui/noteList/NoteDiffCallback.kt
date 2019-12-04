@@ -22,7 +22,6 @@ class NoteDiffCallback(private val oldList: List<NoteModel>,
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
         return oldList[oldItemPosition] == newList[newItemPosition]
     }
-/*
     override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
 
         val oldNote = oldList[oldItemPosition]
@@ -38,5 +37,5 @@ class NoteDiffCallback(private val oldList: List<NoteModel>,
         if (diffBundle.size() == 0) return null
 
         return diffBundle
-    }*/
+    }
 }
