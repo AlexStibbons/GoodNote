@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteDetailsModel
@@ -76,13 +78,35 @@ class NoteDetails : AppCompatActivity() {
         // set adapter
         autocomplete.setAdapter(autoAdapter)
 
-        // select from auto complete
+        // select from auto complete; selecting existing tags
         autocomplete.setOnItemClickListener {adapterView, _, position, _  ->
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
-            val tagName = tag.name
-            addTag(tag)
+            addChip(tag)
         }
+
+        // space or comma is detected
+        autocomplete.addTextChangedListener {
+            if (it != null && it.isEmpty()) return@addTextChangedListener
+
+            if (it?.last() == ',') {
+                val name = it.substring(0, it.length - 1)
+                addNewTag(name)
+                autocomplete.text = null
+            }
+        }
+
+        // done button is pressed
+        autocomplete.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val name = v.text.toString()
+                v.text = null
+                addNewTag(name)
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+
     }
 
     override fun onBackPressed() {
@@ -132,7 +156,29 @@ class NoteDetails : AppCompatActivity() {
         }
     }
 
-    private fun addTag(tag: TagModel) {
+    private fun addNewTag(name: String) {
+        if (name.isNotBlank() && !existingTags.map { it.name }.contains(name)) {
+            val newTag = TagModel(name = name)
+            addChip(newTag)
+            tagViewModel.addTag(newTag)
+        }
 
+        if (name.isNotBlank() && existingTags.map { it.name }.contains(name)){
+            val tag = existingTags.filter { it.name == name }.first()
+            addChip(tag)
+        }
+    }
+
+    private fun addChip(tag: TagModel) {
+        val chip = Chip(this).apply {
+            text = tag.name
+            isCloseIconVisible = true
+            setOnCloseIconClickListener {
+                noteToEdit.tags.remove(tag)
+                noteViewModel.deleteTagForNote(noteToEdit.noteId, tag.tagId)
+                chipGroup.removeView(this)
+            }
+        }
+        chipGroup.addView(chip)
     }
 }
