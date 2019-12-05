@@ -34,7 +34,8 @@
             android:id="@+id/notes_details_autocomplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="testy"
+            android:text=""
+            android:hint="tags"
             android:inputType="textCapWords"
             android:completionThreshold="1"
             android:imeOptions="actionDone"/>
