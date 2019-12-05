@@ -82,6 +82,7 @@ class NoteDetails : AppCompatActivity() {
         autocomplete.setOnItemClickListener {adapterView, _, position, _  ->
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
+            noteToEdit.tags.add(tag)
             addChip(tag)
         }
 
@@ -91,7 +92,7 @@ class NoteDetails : AppCompatActivity() {
 
             if (it?.last() == ',') {
                 val name = it.substring(0, it.length - 1)
-                addNewTag(name)
+                addTag(name)
                 autocomplete.text = null
             }
         }
@@ -101,7 +102,7 @@ class NoteDetails : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val name = v.text.toString()
                 v.text = null
-                addNewTag(name)
+                addTag(name)
                 return@setOnEditorActionListener true
             }
             false
@@ -156,15 +157,17 @@ class NoteDetails : AppCompatActivity() {
         }
     }
 
-    private fun addNewTag(name: String) {
+    private fun addTag(name: String) {
         if (name.isNotBlank() && !existingTags.map { it.name }.contains(name)) {
             val newTag = TagModel(name = name)
+            noteToEdit.tags.add(newTag)
             addChip(newTag)
             tagViewModel.addTag(newTag)
         }
 
         if (name.isNotBlank() && existingTags.map { it.name }.contains(name)){
             val tag = existingTags.filter { it.name == name }.first()
+            noteToEdit.tags.add(tag)
             addChip(tag)
         }
     }
