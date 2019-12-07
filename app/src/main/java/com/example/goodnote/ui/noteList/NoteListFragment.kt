@@ -62,7 +62,6 @@ class NoteListFragment : Fragment() {
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
         fab.setOnClickListener {
-            // change to start activity for result
             startActivityForResult(Intent(activity, NoteDetails::class.java), RESULT_NOTE_SAVED)
         }
         return rootView
@@ -100,7 +99,6 @@ class NoteListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-// && resultCode == Activity.RESULT_OK
         if (requestCode == RESULT_NOTE_SAVED && resultCode == Activity.RESULT_OK) {
             noteViewModel.getAllNotes()
         }
