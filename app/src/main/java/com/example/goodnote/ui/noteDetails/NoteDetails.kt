@@ -107,11 +107,10 @@ class NoteDetails : AppCompatActivity() {
             }
             false
         }
-
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+
         Log.e("on back", "called")
         noteToEdit = noteToEdit.copy(noteId = noteToEdit.noteId,
             title = title.text.toString(),
@@ -123,13 +122,10 @@ class NoteDetails : AppCompatActivity() {
         if (text.text.isNotBlank() || title.text.isNotBlank() || noteToEdit.tags.isNotEmpty()) {
             noteViewModel.saveNote(noteToEdit)
         }
-
-        // should saving be done in list?
-        val returnIntent = Intent().also {
-            setResult(Activity.RESULT_OK, it)
-        }
-
-        finish()
+        noteViewModel.onNoteSaved.observe(this, Observer {
+            setResult(Activity.RESULT_OK, Intent())
+            finish()
+        })
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -140,7 +136,6 @@ class NoteDetails : AppCompatActivity() {
     private fun getForNote(note: NoteDetailsModel) {
         title.setText(note.title)
         text.setText(note.text)
-        if (note.tags.isNotEmpty()) {
             note.tags.forEach {
                 val tagM = it
                 val chip = Chip(this).apply {
@@ -154,19 +149,20 @@ class NoteDetails : AppCompatActivity() {
                 }
                 chipGroup.addView(chip)
             }
-        }
     }
 
     private fun addTag(name: String) {
-        if (name.isNotBlank() && !existingTags.map { it.name }.contains(name)) {
+        if (name.isBlank()) return
+
+        if (existingTags.none { it.name == name }) {
             val newTag = TagModel(name = name)
             noteToEdit.tags.add(newTag)
             addChip(newTag)
             tagViewModel.addTag(newTag)
         }
 
-        if (name.isNotBlank() && existingTags.map { it.name }.contains(name)){
-            val tag = existingTags.filter { it.name == name }.first()
+        if (existingTags.any { it.name == name }){
+            val tag = existingTags.first { it.name == name }
             noteToEdit.tags.add(tag)
             addChip(tag)
         }

@@ -16,8 +16,8 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
     val repoNotes: LiveData<List<NoteModel>>
         get() = _repoNotes
 
-//    private var _addedNote: MutableLiveData<NoteModel> = MutableLiveData()
-//    val addedNote: LiveData<NoteModel> = _addedNote
+    private var _onNoteSaved: MutableLiveData<Long> = MutableLiveData()
+    val onNoteSaved: LiveData<Long> = _onNoteSaved
 
     init {
         getAllNotes()
@@ -33,9 +33,10 @@ class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
         val noteSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
         _repoNotes.addOne(noteSave.toNoteModel())
 
-        withContext(Dispatchers.IO) {
+        val saved = withContext(Dispatchers.IO) {
             repository.saveNote(noteSave.toNoteDomainModel())
         }
+        _onNoteSaved.value = saved
     }
 
     fun deleteNote(id: String) = viewModelScope.launch {

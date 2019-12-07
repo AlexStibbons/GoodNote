@@ -21,11 +21,10 @@ import com.example.goodnote.ui.viewModels.NoteViewModel
 import com.example.goodnote.utils.EMPTY_NONTE_ID
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
-import com.example.goodnote.utils.RESULT_NOTE_SAVED
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NoteListFragment : Fragment() {
-
+    private val RESULT_NOTE_SAVED = 1331
     private val TAG = NoteListFragment::class.java.simpleName
 
     private lateinit var noteViewModel: NoteViewModel
@@ -45,11 +44,6 @@ class NoteListFragment : Fragment() {
             notesAdapter.setNotes(notes)
 
         })
-/*
-        noteViewModel.addedNote.observe(this, Observer { note ->
-            note ?: return@Observer
-            noteAdapter.insertNote(note)
-        })*/
     }
 
     override fun onCreateView(
@@ -106,11 +100,10 @@ class NoteListFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
- /*     doesn't update when `resultCode == ...` --> not the right result?
+// && resultCode == Activity.RESULT_OK
         if (requestCode == RESULT_NOTE_SAVED && resultCode == Activity.RESULT_OK) {
             noteViewModel.getAllNotes()
-        }*/
-        if (requestCode == RESULT_NOTE_SAVED) noteViewModel.getAllNotes()
+        }
     }
 
     private fun showConfirmationDialog(noteId: String) {

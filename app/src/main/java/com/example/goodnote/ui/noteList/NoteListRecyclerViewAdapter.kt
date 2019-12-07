@@ -1,4 +1,5 @@
 package com.example.goodnote.ui.noteList
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,14 +14,16 @@ import com.example.goodnote.utils.EXTRA_NOTE_TEXT
 import com.example.goodnote.utils.EXTRA_NOTE_TITLE
 import kotlinx.android.synthetic.main.note_item.view.*
 
-class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
+class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) :
+    RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>() {
 
-    private val notes : MutableList<NoteModel> = ArrayList()
+    private val notes: MutableList<NoteModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.note_item,
-            parent,false)
+            parent, false
+        )
 
         return ViewHolder(itemView, onNoteClicked)
     }
@@ -30,20 +33,26 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-
-        if (payloads.isEmpty()) { super.onBindViewHolder(holder, position, payloads) } else {
-            val bun: Bundle = payloads[0] as Bundle
-            bun.keySet().forEach{//notes[position] = notes[position].copy(title = bun.getString(EXTRA_NOTE_TITLE)!!)
-                if (it == EXTRA_NOTE_TITLE) {holder.setTitle(bun.getString(EXTRA_NOTE_TITLE)!!)}
-                if (it == EXTRA_NOTE_TEXT) {notes[position] = notes[position].copy(text = bun.getString(EXTRA_NOTE_TEXT)!!)}
-                if (it == EXTRA_NOTE_TAGS) {notes[position] = notes[position].copy(tags = bun.getString(EXTRA_NOTE_TAGS)!!)}
+        var noteModel = notes[position]
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val bun: Bundle = payloads.first() as Bundle
+            bun.keySet().forEach {
+                when (it) {
+                    EXTRA_NOTE_TITLE -> noteModel = noteModel.copy(title = bun.getString(EXTRA_NOTE_TITLE, ""))
+                    EXTRA_NOTE_TEXT -> noteModel = noteModel.copy(text = bun.getString(EXTRA_NOTE_TEXT, ""))
+                    EXTRA_NOTE_TAGS -> noteModel = noteModel.copy(tags = bun.getString(EXTRA_NOTE_TAGS, ""))
+                }
             }
         }
+        holder.bind(noteModel)
     }
 
     override fun getItemCount(): Int = notes.size
 
-    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) :
+        RecyclerView.ViewHolder(view) {
 
         private val title = view.item_note_title
         private val tags = view.item_tags
@@ -55,7 +64,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             tags.text = note.tags
             text.text = note.text
 
-            noteItem.setOnClickListener( View.OnClickListener {
+            noteItem.setOnClickListener(View.OnClickListener {
                 click.onNoteClick(note.noteId)
                 Log.e("REC VIEW", "note click: $adapterPosition & ${note.title}")
             })
@@ -65,11 +74,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 click.onNoteLongPress(note.noteId)
                 true
             }
-
-        }
-
-        fun setTitle(newTitle: String) {
-            this.title.text = newTitle
         }
     }
 
