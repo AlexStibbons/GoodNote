@@ -1,6 +1,7 @@
 package com.example.goodnote.utils
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.goodnote.database.LocalDb
@@ -11,10 +12,8 @@ import com.example.goodnote.repository.NoteRepo
 import com.example.goodnote.repository.NoteRepoImpl
 import com.example.goodnote.repository.TagRepo
 import com.example.goodnote.repository.TagRepoImpl
-import com.example.goodnote.ui.viewModels.NoteViewModel
-import com.example.goodnote.ui.viewModels.NoteViewModelFactory
-import com.example.goodnote.ui.viewModels.TagViewModel
-import com.example.goodnote.ui.viewModels.TagViewModelFactory
+import com.example.goodnote.ui.models.NoteDetailsModel
+import com.example.goodnote.ui.viewModels.*
 
 object Injectors {
 
@@ -50,6 +49,13 @@ object Injectors {
     fun getTagViewModel(parent: FragmentActivity): TagViewModel {
         val tagViewModelFactory = TagViewModelFactory(getTagRepository(parent))
         return ViewModelProviders.of(parent, tagViewModelFactory).get(TagViewModel::class.java)
+    }
+
+    fun getNoteDetailsViewModel(activity: AppCompatActivity): NoteDetailsViewModel {
+        val noteDetailsViewModelFactory = NoteDetailsViewModelFactory(getNoteRepository(activity),
+                                                                        getTagRepository(activity))
+
+        return ViewModelProviders.of(activity, noteDetailsViewModelFactory).get(NoteDetailsViewModel::class.java)
     }
 
 }

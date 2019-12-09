@@ -7,9 +7,6 @@ import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.*
 import kotlinx.coroutines.*
 
-/*it is better to do thread switching only once by switching to IO thread when it is needed.
-This way we are saving processor time, since there won't be 2 context switches
-where one would be sufficient.*/
 class NoteViewModel(private val repository: NoteRepo) : ViewModel() {
 
     private var _repoNotes: MutableLiveData<List<NoteModel>> = MutableLiveData()
