@@ -105,13 +105,13 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
 
     // junit5
-    //testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.2"
-    //testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.4.1"
-    //testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.1"
-    //testImplementation "junit:junit:4.12"
-    //testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.4.1"
-    //implementation 'org.mockito:mockito-junit-jupiter:3.1.0'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.4.2"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.4.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.4.1"
+    testImplementation "junit:junit:4.12"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.4.1"
+    implementation 'org.mockito:mockito-junit-jupiter:3.1.0'
 
     // mockK
-    //testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "io.mockk:mockk:1.9.3"
 }

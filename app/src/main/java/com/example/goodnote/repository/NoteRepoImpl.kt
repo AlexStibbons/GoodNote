@@ -45,12 +45,13 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
 
     override suspend fun saveNote(note: NoteDomanModel): Long {
 
-        if (note.tags.isNotEmpty()){
-            note.tags.forEach {
-                joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
-            }
+        val roomReturn = noteDao.addNote(note.toNoteEntity())
+
+        note.tags.forEach {
+          joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
         }
-        return noteDao.addNote(note.toNoteEntity())
+
+        return roomReturn
     }
 
     override suspend fun findNoteById(id: String): NoteDomanModel {
@@ -69,5 +70,9 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
         }
 
         return notesWithTags
+    }
+
+    override suspend fun deleteTagForNote(noteId: String, tagId: String) {
+        joinDao.deleteTagForNote(noteId, tagId)
     }
 }

@@ -6,5 +6,5 @@ data class NoteDetailsModel(
     val noteId: String = UUID.randomUUID().toString(),
     val title: String,
     val text: String,
-    val tags: List<TagModel> = emptyList()
+    val tags: MutableList<TagModel> = mutableListOf()
 )
