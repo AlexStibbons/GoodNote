@@ -23,6 +23,8 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     private var _onNoteSaved = MutableLiveData<Long>()
     val onNoteSaved: LiveData<Long> = _onNoteSaved
 
+    var noteToEdit = NoteDetailsModel(title = "", text = "", tags = mutableListOf())
+
     init {
         getAllTags()
     }
@@ -40,6 +42,14 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     fun getNoteById(id: String) = viewModelScope.async {
             val found = withContext(Dispatchers.IO) { noteRepo.findNoteById(id).toNoteDetailsModel() }
             return@async found
+    }
+
+    fun findNoteById(id: String) = viewModelScope.async {
+        if (id.isBlank()) return@async noteToEdit
+
+        val found = withContext(Dispatchers.IO) { noteRepo.findNoteById(id).toNoteDetailsModel() }
+        noteToEdit = found
+        return@async noteToEdit
     }
 
     fun saveNote(note: NoteDetailsModel)  = viewModelScope.launch {

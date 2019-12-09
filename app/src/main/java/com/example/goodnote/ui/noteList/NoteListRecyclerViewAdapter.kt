@@ -32,25 +32,25 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         holder.bind(notes[position])
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) =
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads)
         } else {
             val bun: Bundle = payloads.first() as Bundle
-            //var noteModel = notes[position]
+            var noteModel = notes[position]
             bun.keySet().forEach {
                 when (it) {
-                    EXTRA_NOTE_TITLE -> holder.setTitle(bun.getString(EXTRA_NOTE_TITLE, ""))
-                        //noteModel = noteModel.copy(title = bun.getString(EXTRA_NOTE_TITLE, ""))
-                    EXTRA_NOTE_TEXT -> holder.setText(bun.getString(EXTRA_NOTE_TEXT, ""))
-                        //noteModel = noteModel.copy(text = bun.getString(EXTRA_NOTE_TEXT, ""))
-
-                    EXTRA_NOTE_TAGS -> holder.setTags(bun.getString(EXTRA_NOTE_TAGS, ""))
-                        //noteModel = noteModel.copy(tags = bun.getString(EXTRA_NOTE_TAGS,""))
+                    EXTRA_NOTE_TITLE -> noteModel = noteModel.copy(title = bun.getString(EXTRA_NOTE_TITLE, ""))
+                    //holder.setTitle(bun.getString(EXTRA_NOTE_TITLE, ""))
+                    EXTRA_NOTE_TEXT -> noteModel = noteModel.copy(text = bun.getString(EXTRA_NOTE_TEXT, ""))
+                        //holder.setText(bun.getString(EXTRA_NOTE_TEXT, ""))
+                    EXTRA_NOTE_TAGS -> noteModel = noteModel.copy(tags = bun.getString(EXTRA_NOTE_TAGS,""))
+                    //holder.setTags(bun.getString(EXTRA_NOTE_TAGS, ""))
                 }
             }
-            //holder.bind(noteModel)
+            holder.bind(noteModel)
         }
+    }
 
     override fun getItemCount(): Int = notes.size
 
