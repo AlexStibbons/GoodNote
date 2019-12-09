@@ -6,7 +6,9 @@ import com.example.goodnote.repository.TagRepo
 import com.example.goodnote.ui.models.TagModel
 import androidx.lifecycle.Observer
 import com.example.goodnote.repository.domainModels.TagDomainModel
+import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.utils.toListTagModel
+import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toTagDomainModel
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,6 @@ class NoteDetailsViewModelUnit4mockK {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        //clearAllMocks()
         clearMocks(tagRepo, noteRepo, tagObserver, onSaveObserver)
         viewModel = NoteDetailsViewModel(noteRepo, tagRepo)
         viewModel.existingTags.observeForever(tagObserver)
@@ -55,6 +56,7 @@ class NoteDetailsViewModelUnit4mockK {
 
     @Test
     fun `Given there are 2 tags in the list, when fetching tags is called, it should return a list of 2 tags`() {
+        clearAllMocks()
         val tags = listOf(TagDomainModel("id1", "name1"), TagDomainModel("id2", "name2"))
         coEvery { tagRepo.getAllTags() }.returns(tags)
 
@@ -71,6 +73,7 @@ class NoteDetailsViewModelUnit4mockK {
 
     @Test
     fun `Given there are no tags, when we add a tag,then the list of tags increases to one` (){
+        clearAllMocks()
         //clearMocks(tagRepo, tagObserver)
         val addedTag = TagModel("2", "2")
         val tags = listOf(addedTag)
@@ -88,5 +91,20 @@ class NoteDetailsViewModelUnit4mockK {
         confirmVerified(tagRepo, tagObserver)
     }
 
-    
+    @Test
+    fun `When a note is saved successfully, the onSaveObserver changes value`() {
+
+        clearAllMocks()
+
+        val note = NoteDetailsModel("fake", "title", "text", mutableListOf())
+
+        coEvery{ noteRepo.saveNote(note.toNoteDomainModel()) }.returns(1)
+
+        viewModel.saveNote(note)
+
+        coVerify { noteRepo.saveNote(note.toNoteDomainModel()) }
+        verify { onSaveObserver.onChanged(1) }
+        confirmVerified(noteRepo, onSaveObserver)
+
+    }
 }
