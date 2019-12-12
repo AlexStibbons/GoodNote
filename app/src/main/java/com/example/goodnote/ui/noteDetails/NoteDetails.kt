@@ -93,6 +93,7 @@ class NoteDetails : AppCompatActivity() {
     private fun getForNote(note: NoteDetailsModel) {
         title.setText(note.title)
         text.setText(note.text)
+        chipGroup.removeAllViews()
         note.tags.forEach {
             addChip(it)
         }
@@ -122,7 +123,7 @@ class NoteDetails : AppCompatActivity() {
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
-                chipGroup.removeView(this)
+                //chipGroup.removeView(this)
             }
         }
         chipGroup.addView(chip)
