@@ -57,8 +57,9 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
-            val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
-            _onNoteSaved.value = updated.toLong()
+            //val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
+            withContext(Dispatchers.IO) { noteRepo.update(note.title, note.text, note.noteId) }
+            _onNoteSaved.value = 1
         }
     }
 
@@ -71,7 +72,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     }
 
     fun addTagForNote(noteId: String, tag: TagModel) = viewModelScope.launch {
-        val newTags = _noteToEdit.value.tags + listOf(tag)
+
         _noteToEdit.value?.tags?.add(tag)
         _noteToEdit.value = _noteToEdit.value?.copy()
 

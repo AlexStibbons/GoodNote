@@ -20,4 +20,6 @@ interface NoteRepo {
     suspend fun addTagForNote(noteId: String, tagId: String)
 
     suspend fun updateNote(note: NoteDomanModel): Int
+
+    suspend fun update(title: String, text: String, noteId: String) : Long
 }

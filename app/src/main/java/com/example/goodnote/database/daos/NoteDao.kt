@@ -13,10 +13,10 @@ interface NoteDao {
     suspend fun addNote(note: NoteEntity): Long
 
     @Update
-    suspend fun update(note: NoteEntity): Int
+    suspend fun update1(note: NoteEntity): Int
 
-   // @Query("UPDATE noteentity SET title = :note.title, text = :note.text WHERE noteId = :note.noteId")
-   // suspend fun update(note: NoteEntity)
+   @Query("UPDATE noteentity SET title = :title, text = :text WHERE noteId = :noteId")
+   suspend fun update(title: String, text: String, noteId: String)
 
     @Query("DELETE FROM noteentity where noteentity.noteId = :id")
     suspend fun deleteNote(id: String)

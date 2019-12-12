@@ -10,6 +10,8 @@ import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.utils.toListTagDomainModel
 import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val joinDao: JoinNoteTagDao) : NoteRepo {
 
@@ -80,6 +82,12 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
     }
 
     override suspend fun updateNote(note: NoteDomanModel): Int {
-        return noteDao.update(note.toNoteEntity())
+        TODO()
+       // return noteDao.update(note.toNoteEntity())
+    }
+
+    override suspend fun update(title: String, text: String, noteId: String): Long {
+        noteDao.update(title, text, noteId)
+        return 1
     }
 }
