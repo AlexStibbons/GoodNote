@@ -65,15 +65,15 @@ class TagViewModelUnitTest {
     }
 
     @Test
-    fun addTag() = testDispatcher.runBlockingTest {
+    fun saveTag() = testDispatcher.runBlockingTest {
         val tagOne = TagEntity("first", "fakeID1")
         val tagTwo = TagEntity("second", "fakeId2")
 
-        tagViewModel.addTag(tagOne)
-        tagViewModel.addTag(tagTwo)
+        tagViewModel.saveTag(tagOne)
+        tagViewModel.saveTag(tagTwo)
 
-        verify(repo).addTag(tagOne)
-        verify(repo).addTag(tagTwo)
+        verify(repo).saveTag(tagOne)
+        verify(repo).saveTag(tagTwo)
         assertEquals(2, tagViewModel.tags?.value?.size)
         assertEquals("first", tagViewModel.tags?.value?.get(0)?.name)
     }
@@ -82,8 +82,8 @@ class TagViewModelUnitTest {
     fun deleteTag() = testDispatcher.runBlockingTest {
         val tagOne = TagEntity("first", "fakeID1")
         val tagTwo = TagEntity("second", "fakeId2")
-        tagViewModel.addTag(tagOne)
-        tagViewModel.addTag(tagTwo)
+        tagViewModel.saveTag(tagOne)
+        tagViewModel.saveTag(tagTwo)
         val returned: List<TagEntity> = listOf(tagTwo)
 
         tagViewModel.deleteTag("fakeID1")
@@ -96,8 +96,8 @@ class TagViewModelUnitTest {
     fun findTagById() = testDispatcher.runBlockingTest {
         val tagOne = TagEntity("first", "fakeID1")
         val tagTwo = TagEntity("second", "fakeId2")
-        tagViewModel.addTag(tagOne)
-        tagViewModel.addTag(tagTwo)
+        tagViewModel.saveTag(tagOne)
+        tagViewModel.saveTag(tagTwo)
         `when`(repo.findTagById("fakeID1")).thenReturn(tagOne)
 
         tagViewModel.findTagById("fakeID1")
@@ -113,9 +113,9 @@ class TagViewModelUnitTest {
         val tagOne = TagEntity("first", "fakeID1")
         val tagTwo = TagEntity("second", "fakeId2")
         val tagThree = TagEntity("irs", "fakeId3")
-        tagViewModel.addTag(tagOne)
-        tagViewModel.addTag(tagTwo)
-        tagViewModel.addTag(tagThree)
+        tagViewModel.saveTag(tagOne)
+        tagViewModel.saveTag(tagTwo)
+        tagViewModel.saveTag(tagThree)
         val returned = listOf(tagOne, tagThree)
         `when`(repo.findTagsByName("irs")).thenReturn(returned)
 

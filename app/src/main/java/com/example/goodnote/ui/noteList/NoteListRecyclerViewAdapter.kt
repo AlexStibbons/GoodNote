@@ -41,11 +41,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             bun.keySet().forEach {
                 when (it) {
                     EXTRA_NOTE_TITLE -> noteModel = noteModel.copy(title = bun.getString(EXTRA_NOTE_TITLE, ""))
-                    //holder.setTitle(bun.getString(EXTRA_NOTE_TITLE, ""))
                     EXTRA_NOTE_TEXT -> noteModel = noteModel.copy(text = bun.getString(EXTRA_NOTE_TEXT, ""))
-                        //holder.setText(bun.getString(EXTRA_NOTE_TEXT, ""))
                     EXTRA_NOTE_TAGS -> noteModel = noteModel.copy(tags = bun.getString(EXTRA_NOTE_TAGS,""))
-                    //holder.setTags(bun.getString(EXTRA_NOTE_TAGS, ""))
                 }
             }
             holder.bind(noteModel)
@@ -77,18 +74,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 click.onNoteLongPress(note.noteId)
                 true
             }
-        }
-
-        fun setTitle(title: String) {
-            this.title.text = title
-        }
-
-        fun setText(text: String){
-            this.text.text = text
-        }
-
-        fun setTags(tags: String) {
-            this.tags.text = tags
         }
     }
 

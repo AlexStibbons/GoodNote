@@ -23,7 +23,10 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     private var _onNoteSaved = MutableLiveData<Long>()
     val onNoteSaved: LiveData<Long> = _onNoteSaved
 
-    var noteToEdit = NoteDetailsModel(title = "", text = "", tags = mutableListOf())
+    private var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
+    val noteToEdit: LiveData<NoteDetailsModel> = _noteToEdit
+
+    private var iddd = ""
 
     init {
         getAllTags()
@@ -34,34 +37,42 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _existingTags.value = tags.toListTagModel()
     }
 
-    fun addTag(tag: TagModel) = viewModelScope.launch {
+    fun saveTag(tag: TagModel) = viewModelScope.launch {
         _existingTags.addOne(tag)
+
         withContext(Dispatchers.IO) { tagRepo.addTag(tag.toTagDomainModel()) }
     }
 
-    fun getNoteById(id: String) = viewModelScope.async {
-            val found = withContext(Dispatchers.IO) { noteRepo.findNoteById(id).toNoteDetailsModel() }
-            return@async found
-    }
-
-    fun findNoteById(id: String) = viewModelScope.async {
-        if (id.isBlank()) return@async noteToEdit
+    fun getNoteById(id: String) = viewModelScope.launch {
+        iddd = id
+        if (id.isBlank()) return@launch
 
         val found = withContext(Dispatchers.IO) { noteRepo.findNoteById(id).toNoteDetailsModel() }
-        noteToEdit = found
-        return@async noteToEdit
+        _noteToEdit.value = found
     }
 
     fun saveNote(note: NoteDetailsModel)  = viewModelScope.launch {
-
         val noteToSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
-        val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
-
-        _onNoteSaved.value = saved
+        if (iddd.isBlank()) {
+            val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
+            _onNoteSaved.value = saved
+        } else {
+            val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
+            _onNoteSaved.value = updated.toLong()
+        }
     }
 
     fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {
-        noteRepo.deleteTagForNote(noteId, tagId)
+        val updateTags: MutableList<TagModel> = noteToEdit.value?.tags?.filter { it.tagId != tagId }?.toMutableList() ?: mutableListOf()
+        _noteToEdit.value = noteToEdit.value?.copy(tags=updateTags )
+
+        withContext(Dispatchers.IO) {noteRepo.deleteTagForNote(noteId, tagId)}
+    }
+
+    fun addTagForNote(noteId: String, tag: TagModel) = viewModelScope.launch {
+        _noteToEdit.value?.tags?.add(tag)
+
+        withContext(Dispatchers.IO) {noteRepo.addTagForNote(noteId, tag.tagId)}
     }
 
 }
