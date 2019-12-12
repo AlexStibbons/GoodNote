@@ -45,7 +45,12 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
 
     override suspend fun saveNote(note: NoteDomanModel): Long {
 
-        return noteDao.addNote(note.toNoteEntity())
+        val saved = noteDao.addNote(note.toNoteEntity())
+
+        note.tags.forEach {
+            joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
+        }
+        return saved
     }
 
     override suspend fun findNoteById(id: String): NoteDomanModel {
@@ -62,6 +67,7 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
             val tags = joinDao.getTagsForNote(it.noteId).toListTagDomainModel()
             notesWithTags.add(it.toNoteDomainModel(tags))
         }
+
         return notesWithTags
     }
 
