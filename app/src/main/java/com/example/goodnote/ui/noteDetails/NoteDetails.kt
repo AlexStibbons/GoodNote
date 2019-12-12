@@ -103,14 +103,14 @@ class NoteDetails : AppCompatActivity() {
 
         if (allTags.none { it.name == name }) {
             val newTag = TagModel(name = name)
-            addChip(newTag)
+            //addChip(newTag)
             noteDetailsViewModel.saveTag(newTag)
             noteDetailsViewModel.addTagForNote(note.noteId, newTag)
         }
 
         if (allTags.any { it.name == name }){
             val tag = allTags.first { it.name == name }
-            addChip(tag)
+            //addChip(tag)
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
             Log.e("ADD TAG", "${note.title} and id ${note.noteId}, ${tag.name}")
         }
@@ -122,7 +122,7 @@ class NoteDetails : AppCompatActivity() {
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
-                //chipGroup.removeView(this)
+                chipGroup.removeView(this)
             }
         }
         chipGroup.addView(chip)
@@ -134,7 +134,7 @@ class NoteDetails : AppCompatActivity() {
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
-            addChip(tag)
+            //addChip(tag)
         }
 
         autocomplete.addTextChangedListener {

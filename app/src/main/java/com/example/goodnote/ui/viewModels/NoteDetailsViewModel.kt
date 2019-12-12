@@ -64,14 +64,16 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
 
     fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {
         val updateTags: MutableList<TagModel> = noteToEdit.value?.tags?.filter { it.tagId != tagId }?.toMutableList() ?: mutableListOf()
-        _noteToEdit.value = noteToEdit.value?.copy(tags=updateTags)
+        //_noteToEdit.value = noteToEdit.value?.copy(tags=updateTags)
+        _noteToEdit.value?.tags?.clear()
+        _noteToEdit.value?.tags?.addAll(updateTags)
 
         withContext(Dispatchers.IO) {noteRepo.deleteTagForNote(noteId, tagId)}
     }
 
     fun addTagForNote(noteId: String, tag: TagModel) = viewModelScope.launch {
         _noteToEdit.value?.tags?.add(tag)
-
+        _noteToEdit.value = _noteToEdit.value?.copy()
         withContext(Dispatchers.IO) {noteRepo.addTagForNote(noteId, tag.tagId)}
     }
 
