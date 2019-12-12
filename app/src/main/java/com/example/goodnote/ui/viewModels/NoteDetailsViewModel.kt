@@ -64,7 +64,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
 
     fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {
         val updateTags: MutableList<TagModel> = noteToEdit.value?.tags?.filter { it.tagId != tagId }?.toMutableList() ?: mutableListOf()
-        _noteToEdit.value = noteToEdit.value?.copy(tags=updateTags )
+        _noteToEdit.value = noteToEdit.value?.copy(tags=updateTags)
 
         withContext(Dispatchers.IO) {noteRepo.deleteTagForNote(noteId, tagId)}
     }

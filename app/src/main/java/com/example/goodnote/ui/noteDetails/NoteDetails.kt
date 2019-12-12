@@ -122,7 +122,7 @@ class NoteDetails : AppCompatActivity() {
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
-                chipGroup.removeView(this)
+                //chipGroup.removeView(this)
             }
         }
         chipGroup.addView(chip)

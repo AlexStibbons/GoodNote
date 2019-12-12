@@ -13,7 +13,7 @@ interface NoteDao {
     suspend fun addNote(note: NoteEntity): Long
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(note: NoteEntity): Int
+    suspend fun update(vararg note: NoteEntity): Int
 
     @Query("DELETE FROM noteentity where noteentity.noteId = :id")
     suspend fun deleteNote(id: String)
