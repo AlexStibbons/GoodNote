@@ -23,7 +23,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     private var _onNoteSaved = MutableLiveData<Long>()
     val onNoteSaved: LiveData<Long> = _onNoteSaved
 
-    private var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
+   /* private*/ var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
     val noteToEdit: LiveData<NoteDetailsModel> = _noteToEdit
 
     private var iddd = ""

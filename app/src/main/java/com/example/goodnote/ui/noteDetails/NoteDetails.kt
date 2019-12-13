@@ -36,13 +36,15 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.notes_details_activity)
-       // val binding: NotesDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
-       // binding.setLifecycleOwner(this)
+        //setContentView(R.layout.notes_details_activity)
+       val binding: NotesDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
+       binding.setLifecycleOwner(this)
+
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
 
         noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this)
+        binding.viewModel = noteDetailsViewModel
 
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
             it ?: return@Observer

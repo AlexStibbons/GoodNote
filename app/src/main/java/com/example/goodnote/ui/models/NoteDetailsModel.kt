@@ -4,7 +4,7 @@ import java.util.*
 
 data class NoteDetailsModel(
     val noteId: String = UUID.randomUUID().toString(),
-    val title: String,
+    var title: String,
     val text: String,
     val tags: MutableList<TagModel> = mutableListOf()
 )
