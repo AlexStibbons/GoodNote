@@ -5,4 +5,6 @@ import java.util.*
 data class TagModel(
     val tagId: String = UUID.randomUUID().toString(),
     val name: String
-)
+) {
+    override fun toString(): String  = "$name"
+}

@@ -10,6 +10,8 @@ import com.example.goodnote.repository.domainModels.TagDomainModel
 import com.example.goodnote.utils.toListTagDomainModel
 import com.example.goodnote.utils.toNoteDomainModel
 import com.example.goodnote.utils.toNoteEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val joinDao: JoinNoteTagDao) : NoteRepo {
 
@@ -45,12 +47,12 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
 
     override suspend fun saveNote(note: NoteDomanModel): Long {
 
-        if (note.tags.isNotEmpty()){
-            note.tags.forEach {
-                joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
-            }
+        val saved = noteDao.addNote(note.toNoteEntity())
+
+        note.tags.forEach {
+            joinDao.addNoteTag(JoinNoteTagEntity(it.tagId, note.noteId))
         }
-        return noteDao.addNote(note.toNoteEntity())
+        return saved
     }
 
     override suspend fun findNoteById(id: String): NoteDomanModel {
@@ -69,5 +71,23 @@ class NoteRepoImpl private constructor(private val noteDao: NoteDao, private val
         }
 
         return notesWithTags
+    }
+
+    override suspend fun deleteTagForNote(noteId: String, tagId: String) {
+        joinDao.deleteTagForNote(noteId, tagId)
+    }
+
+    override suspend fun addTagForNote(noteId: String, tagId: String) {
+        joinDao.addNoteTag(JoinNoteTagEntity(tagId, noteId))
+    }
+
+    override suspend fun updateNote(note: NoteDomanModel): Int {
+        TODO()
+       // return noteDao.update(note.toNoteEntity())
+    }
+
+    override suspend fun update(title: String, text: String, noteId: String): Long {
+        noteDao.update(title, text, noteId)
+        return 1
     }
 }

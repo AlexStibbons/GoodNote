@@ -1,4 +1,6 @@
 package com.example.goodnote.ui.noteList
+
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,59 +9,78 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteModel
+import com.example.goodnote.utils.EXTRA_NOTE_TAGS
+import com.example.goodnote.utils.EXTRA_NOTE_TEXT
+import com.example.goodnote.utils.EXTRA_NOTE_TITLE
 import kotlinx.android.synthetic.main.note_item.view.*
 
-class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) : RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>(){
+class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) :
+    RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>() {
 
-    private val notes : MutableList<NoteModel> = ArrayList()
+    private val notes: MutableList<NoteModel> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.note_item,
-            parent,false)
+            parent, false
+        )
 
-        return ViewHolder(itemView)
+        return ViewHolder(itemView, onNoteClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-       holder.bind(position)
+        holder.bind(notes[position])
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val bun: Bundle = payloads.first() as Bundle
+            var noteModel = notes[position]
+            bun.keySet().forEach {
+                when (it) {
+                    EXTRA_NOTE_TITLE -> noteModel = noteModel.copy(title = bun.getString(EXTRA_NOTE_TITLE, ""))
+                    EXTRA_NOTE_TEXT -> noteModel = noteModel.copy(text = bun.getString(EXTRA_NOTE_TEXT, ""))
+                    EXTRA_NOTE_TAGS -> noteModel = noteModel.copy(tags = bun.getString(EXTRA_NOTE_TAGS,""))
+                }
+            }
+            holder.bind(noteModel)
+        }
     }
 
     override fun getItemCount(): Int = notes.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) :
+        RecyclerView.ViewHolder(view) {
 
-        val title = view.item_note_title
-        val tags = view.item_tags
-        val text = view.item_note_text
-        val noteItem = view.layout_note_item
+        private val title = view.item_note_title
+        private val tags = view.item_tags
+        private val text = view.item_note_text
+        private val noteItem = view.layout_note_item
 
-        fun bind(position: Int) {
-            title.text = notes[position].title
-            tags.text = notes[position].tags
-            text.text = notes[position].text
+        fun bind(note: NoteModel) {
+            title.text = note.title
+            tags.text = note.tags
+            text.text = note.text
 
-            noteItem.setOnClickListener( View.OnClickListener {
-                onNoteClicked.onNoteClick(notes[position].noteId)
-                Log.e("REC VIEW", "note click: $position & ${notes[position].title}")
+            noteItem.setOnClickListener(View.OnClickListener {
+                click.onNoteClick(note.noteId)
+                Log.e("REC VIEW", "note click: $adapterPosition & ${note.title}")
             })
 
             noteItem.setOnLongClickListener {
-                Log.e("REC VIEW LONG", "note click on pos: $position & ${notes[position].title}")
-                onNoteClicked.onNoteLongPress(notes[position].noteId)
+                Log.e("REC VIEW LONG", "note click on pos: $adapterPosition & ${note.title}")
+                click.onNoteLongPress(note.noteId)
                 true
             }
-
         }
     }
 
     internal fun setNotes(newNotes: List<NoteModel>) {
+        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes), true)
         this.notes.clear()
         this.notes.addAll(newNotes)
-        notifyDataSetChanged()
-/*        val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes))
         diffResult.dispatchUpdatesTo(this)
-        this.notes.clear()
-        this.notes.addAll(newNotes)*/
     }
 }

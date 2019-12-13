@@ -24,4 +24,6 @@ interface JoinNoteTagDao {
     @Query("DELETE FROM joinNoteTagEntity WHERE tagId = :tagId")
     suspend fun deleteJoinByTagId(tagId: String)
 
+    @Query("DELETE FROM joinNoteTagEntity WHERE noteId = :noteId AND tagId = :tagId")
+    suspend fun deleteTagForNote(noteId: String, tagId: String)
 }
