@@ -65,8 +65,7 @@
 
         </HorizontalScrollView>
     </LinearLayout>
-
-    <!-- should this be scrollable?-->
+    
     <EditText
         android:id="@+id/notes_details_text"
         android:layout_width="0dp"
