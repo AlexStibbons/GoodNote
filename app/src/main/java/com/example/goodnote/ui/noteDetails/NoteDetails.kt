@@ -10,8 +10,10 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
+import com.example.goodnote.databinding.NotesDetailsActivityBinding
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.ui.viewModels.NoteDetailsViewModel
@@ -33,7 +35,10 @@ class NoteDetails : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.notes_details_activity)
+       // val binding: NotesDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
+       // binding.setLifecycleOwner(this)
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
 
@@ -71,6 +76,7 @@ class NoteDetails : AppCompatActivity() {
 
     override fun onBackPressed() {
         // this note with note.copy() no longer necessary
+        // viewmodel.save() needs to get title and text
         note = note.copy(
             noteId = note.noteId,
             title = title.text.toString(),

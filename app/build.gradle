@@ -26,6 +26,10 @@ android {
         }
     }
 
+    dataBinding {
+        enabled true
+    }
+
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
@@ -116,4 +120,7 @@ dependencies {
     //testImplementation "io.mockk:mockk:1.9.3"
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
+
+    // for data binding
+    kapt "com.android.databinding:compiler:3.2.0-alpha10"
 }
