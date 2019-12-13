@@ -34,10 +34,8 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.notes_details_activity)
-        Log.e("onCreate", "DEFAULT NOTE: ${note.noteId}, ${note.title}")
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
-        Log.e("DETAILS EXTRA", "on create: $noteId")
 
         noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this)
 
@@ -45,7 +43,6 @@ class NoteDetails : AppCompatActivity() {
             it ?: return@Observer
             note = it
             getForNote(note)
-            Log.e("OBS", "NOTE IS: in note ${note.title}; in it: ${it.title}")
         })
 
         noteDetailsViewModel.existingTags.observe(this, Observer {
@@ -73,6 +70,7 @@ class NoteDetails : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        // this note with note.copy() no longer necessary
         note = note.copy(
             noteId = note.noteId,
             title = title.text.toString(),

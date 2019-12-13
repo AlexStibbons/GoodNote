@@ -59,7 +59,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         } else {
             //val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
             withContext(Dispatchers.IO) { noteRepo.update(note.title, note.text, note.noteId) }
-            _onNoteSaved.value = 1
+            _onNoteSaved.value = 1 // threading issue here; update has no return value, might not work all the time
         }
     }
 

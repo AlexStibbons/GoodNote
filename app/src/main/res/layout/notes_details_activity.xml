@@ -26,19 +26,25 @@
         android:id="@+id/notes_details_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@id/notes_details_text"
         app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
         <AutoCompleteTextView
             android:id="@+id/notes_details_autocomplete"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text=""
             android:hint="tags"
             android:inputType="textCapWords"
             android:completionThreshold="1"
-            android:imeOptions="actionDone"/>
+            android:imeOptions="actionDone"
+            android:dropDownWidth="match_parent"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"/>
 
         <HorizontalScrollView
             android:id="@+id/notes_details_tags_scroll"
@@ -54,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:singleLine="true">
+
             </com.google.android.material.chip.ChipGroup>
 
         </HorizontalScrollView>
