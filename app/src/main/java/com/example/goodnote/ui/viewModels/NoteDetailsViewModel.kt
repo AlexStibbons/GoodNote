@@ -20,7 +20,8 @@ import com.example.goodnote.utils.toTagDomainModel
 import kotlinx.coroutines.*
 
 class NoteDetailsViewModel(private val noteRepo: NoteRepo,
-                           private val tagRepo: TagRepo) : ViewModel() {
+                           private val tagRepo: TagRepo,
+                           private val iddd: String) : ViewModel() {
 
     private var _existingTags = MutableLiveData<List<TagModel>>()
     val existingTags: LiveData<List<TagModel>> = _existingTags
@@ -31,12 +32,10 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
    /* private*/ var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
     val noteToEdit: LiveData<NoteDetailsModel> = _noteToEdit
 
-    private var iddd = ""
-
     init {
         getAllTags()
+        getNoteById(iddd)
     }
-
 
     fun getAllTags() = viewModelScope.launch {
         val tags = withContext(Dispatchers.IO) { tagRepo.getAllTags() }
@@ -50,7 +49,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     }
 
     fun getNoteById(id: String) = viewModelScope.launch {
-        iddd = id
+
         if (id.isBlank()) return@launch
 
         val found = withContext(Dispatchers.IO) { noteRepo.findNoteById(id).toNoteDetailsModel() }

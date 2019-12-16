@@ -43,7 +43,7 @@ class NoteDetails : AppCompatActivity() {
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
 
-        noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this)
+        noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this, noteId)
         binding.viewModel = noteDetailsViewModel
 
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
@@ -63,7 +63,7 @@ class NoteDetails : AppCompatActivity() {
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
 
-        noteDetailsViewModel.getNoteById(noteId) // messes up orientation change
+       // noteDetailsViewModel.getNoteById(noteId)
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
