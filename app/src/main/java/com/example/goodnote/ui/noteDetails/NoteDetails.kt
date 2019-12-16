@@ -63,7 +63,7 @@ class NoteDetails : AppCompatActivity() {
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
 
-        noteDetailsViewModel.getNoteById(noteId)
+        noteDetailsViewModel.getNoteById(noteId) // messes up orientation change
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
@@ -87,7 +87,8 @@ class NoteDetails : AppCompatActivity() {
         )
 
         if (text.text.isNotBlank() || title.text.isNotBlank() || note.tags.isNotEmpty()) {
-            noteDetailsViewModel.saveNote(note)
+           // noteDetailsViewModel.saveNote(note)
+            noteDetailsViewModel.saveNote2()
         } else { super.onBackPressed() }
 
         noteDetailsViewModel.onNoteSaved.observe(this, Observer {

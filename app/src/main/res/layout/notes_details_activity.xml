@@ -7,7 +7,6 @@
         <variable
             name="viewModel"
             type="com.example.goodnote.ui.viewModels.NoteDetailsViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -85,7 +84,7 @@
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
             android:hint="text..."
-            android:text=""
+            android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout" />
