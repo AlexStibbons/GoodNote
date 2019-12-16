@@ -34,7 +34,7 @@
             android:id="@+id/notes_details_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/notes_details_text"
             app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
@@ -43,9 +43,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:background="#00000000"
                 android:hint="tags"
                 android:inputType="textCapWords"
-                android:completionThreshold="1"
+                android:completionThreshold="0"
                 android:imeOptions="actionDone"
                 android:dropDownWidth="match_parent"
                 android:layout_marginStart="7dp"
@@ -69,6 +70,7 @@
                     android:layout_height="wrap_content"
                     app:singleLine="true">
 
+
                 </com.google.android.material.chip.ChipGroup>
 
             </HorizontalScrollView>
@@ -83,6 +85,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
+            android:background="#00000000"
             android:hint="text..."
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
