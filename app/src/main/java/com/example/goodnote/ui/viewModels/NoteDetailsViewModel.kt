@@ -74,7 +74,6 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
-            //val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
             withContext(Dispatchers.IO) { noteRepo.update(noteToEdit.value?.title!!, noteToEdit.value?.text!!, noteToEdit.value?.noteId!!) }
             _onNoteSaved.value = 1 // threading issue here; update has no return value, might not work all the time
         }
