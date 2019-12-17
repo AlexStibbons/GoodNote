@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#384c67</color>
+    <color name="colorPrimaryDark">#384c67</color>
+    <color name="colorAccent">#67aee5</color>
+    <color name="windowBackground">#e2e6e9</color>
+    <color name="windowBackground2">#d0dee9</color>
+    <color name="windowBackground3">#b6bfd0</color>
+    <color name="windowBackground4">#d5dde2</color>
+</resources>
+<!--
+color palettes:
+https://www.color-hex.com/color-palette/86075
+https://www.color-hex.com/color-palette/81371
+https://www.color-hex.com/color-palette/84087
+https://www.color-hex.com/color-palette/29268
+
+DEFAULTS:
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-</resources>
+
+    light blue
+    <color name="colorPrimary">#b4d3f4</color>
+-->
