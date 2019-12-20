@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
@@ -66,8 +67,12 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         RecyclerView.ViewHolder(view) {
 
         // for note_item_alternate
-        val colours = listOf(R.color.colorAccent, R.color.colorPrimary, R.color.windowBackground3,
-                    R.color.tag1, R.color.tag2, R.color.tag3, R.color.tag4, R.color.tag5, R.color.tag6)
+        private val colours = listOf(
+            ContextCompat.getColor(context, R.color.colorAccent), ContextCompat.getColor(context, R.color.colorPrimary),
+            ContextCompat.getColor(context, R.color.windowBackground3), ContextCompat.getColor(context, R.color.tag1),
+            ContextCompat.getColor(context, R.color.tag2),ContextCompat.getColor(context, R.color.tag3),
+            ContextCompat.getColor(context, R.color.tag4), ContextCompat.getColor(context, R.color.tag5),
+            ContextCompat.getColor(context, R.color.tag6))
 
         private val title = view.item_note_title
         private val tags = view.item_tags
