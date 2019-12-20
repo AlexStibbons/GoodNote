@@ -1,6 +1,8 @@
 package com.example.goodnote.ui.noteList
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,6 +34,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             parent, false
         )
 
+        // remove context for note_item
+        // keep context for note_item_alternate
         return ViewHolder(itemView, onNoteClicked, parent.context)
     }
 
@@ -61,6 +65,9 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
     class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick, private val context: Context) :
         RecyclerView.ViewHolder(view) {
 
+        // for note_item_alternate
+        val colours = listOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.RED, Color.YELLOW)
+
         private val title = view.item_note_title
         private val tags = view.item_tags
         private val text = view.item_note_text
@@ -88,6 +95,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 val chip = Chip(context).apply {
                     text = tag
                     isCloseIconVisible = false
+                    chipBackgroundColor = ColorStateList.valueOf(colours.random())
                 }
                 chipGroup.addView(chip)
             }
