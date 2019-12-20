@@ -3,7 +3,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="150dp"
+    android:minHeight="100dp"
     android:layout_margin="6dp"
     android:padding="6dp">
 
@@ -70,13 +70,30 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:ellipsize="end"
-            android:maxLines="5"
+            android:maxLines="3"
             android:text="@string/dummy_text"
             android:textAppearance="@android:style/TextAppearance.Material.Body1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_tags" />
+
+        <HorizontalScrollView
+            android:id="@+id/note_item_tags_scroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/item_note_text"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/note_item_chipGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleLine="true">
+
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
