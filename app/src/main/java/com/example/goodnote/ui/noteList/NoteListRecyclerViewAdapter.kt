@@ -66,7 +66,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
         RecyclerView.ViewHolder(view) {
 
         // for note_item_alternate
-        val colours = listOf(Color.BLUE, Color.CYAN, Color.GREEN, Color.MAGENTA, Color.RED, Color.YELLOW)
+        val colours = listOf(R.color.colorAccent, R.color.colorPrimary, R.color.windowBackground3,
+                    R.color.tag1, R.color.tag2, R.color.tag3, R.color.tag4, R.color.tag5, R.color.tag6)
 
         private val title = view.item_note_title
         private val tags = view.item_tags

@@ -7,6 +7,12 @@
     <color name="windowBackground2">#d0dee9</color>
     <color name="windowBackground3">#b6bfd0</color>
     <color name="windowBackground4">#d5dde2</color>
+    <color name="tag1">#fac4cf</color>
+    <color name="tag2">#bcdebb</color>
+    <color name="tag3">#a4bfbe</color>
+    <color name="tag4">#a08aaa</color>
+    <color name="tag5">#f2b0bc</color>
+    <color name="tag6">#d7feff</color>
 </resources>
 <!--
 color palettes:
