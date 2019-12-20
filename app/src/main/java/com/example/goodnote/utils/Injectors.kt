@@ -51,9 +51,10 @@ object Injectors {
         return ViewModelProviders.of(parent, tagViewModelFactory).get(TagViewModel::class.java)
     }
 
-    fun getNoteDetailsViewModel(activity: AppCompatActivity): NoteDetailsViewModel {
+    fun getNoteDetailsViewModel(activity: AppCompatActivity, noteId: String): NoteDetailsViewModel {
         val noteDetailsViewModelFactory = NoteDetailsViewModelFactory(getNoteRepository(activity),
-                                                                        getTagRepository(activity))
+                                                                        getTagRepository(activity),
+                                                                        noteId)
 
         return ViewModelProviders.of(activity, noteDetailsViewModelFactory).get(NoteDetailsViewModel::class.java)
     }
