@@ -50,6 +50,7 @@ class NoteDetails : AppCompatActivity() {
             it ?: return@Observer
             note = it
             getForNote(note)
+            Log.e("DETAILS", "GET called")
         })
 
         noteDetailsViewModel.existingTags.observe(this, Observer {
