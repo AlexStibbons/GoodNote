@@ -97,6 +97,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             }
             // for note_item_alternate
             val newTags: List<String> = note.tags.split(", ") // each gets its own chip
+            Log.e("ADAPTER", "model: ${note.tags}; \n NEW TAGS: $newTags")
+            chipGroup.removeAllViews()
             newTags.forEach{tag ->
                 val chip = Chip(context).apply {
                     text = tag
