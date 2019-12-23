@@ -94,11 +94,16 @@
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/note_item_chipGroup"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:singleLine="true"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="7dp">
+
+                <!--<com.google.android.material.chip.Chip
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="test"/>-->
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>

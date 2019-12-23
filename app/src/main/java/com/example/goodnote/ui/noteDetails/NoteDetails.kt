@@ -37,9 +37,9 @@ class NoteDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //setContentView(R.layout.notes_details_activity)
-       val binding: NotesDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
-       binding.setLifecycleOwner(this)
-
+        val binding: NotesDetailsActivityBinding =
+            DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
+        binding.setLifecycleOwner(this)
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
 
@@ -64,7 +64,7 @@ class NoteDetails : AppCompatActivity() {
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
 
-       // noteDetailsViewModel.getNoteById(noteId)
+        // noteDetailsViewModel.getNoteById(noteId)
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
@@ -88,9 +88,11 @@ class NoteDetails : AppCompatActivity() {
         )
 
         if (text.text.isNotBlank() || title.text.isNotBlank() || note.tags.isNotEmpty()) {
-           // noteDetailsViewModel.saveNote(note)
+            // noteDetailsViewModel.saveNote(note)
             noteDetailsViewModel.saveNote2()
-        } else { super.onBackPressed() }
+        } else {
+            super.onBackPressed()
+        }
 
         noteDetailsViewModel.onNoteSaved.observe(this, Observer {
             setResult(Activity.RESULT_OK, Intent())
@@ -117,7 +119,7 @@ class NoteDetails : AppCompatActivity() {
             noteDetailsViewModel.addTagForNote(note.noteId, newTag)
         }
 
-        if (allTags.any { it.name == name }){
+        if (allTags.any { it.name == name }) {
             val tag = allTags.first { it.name == name }
             //addChip(tag)
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
@@ -139,7 +141,7 @@ class NoteDetails : AppCompatActivity() {
 
     private fun setupAutocomplete() {
 
-        autocomplete.setOnItemClickListener {adapterView, _, position, _  ->
+        autocomplete.setOnItemClickListener { adapterView, _, position, _ ->
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
