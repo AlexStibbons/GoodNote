@@ -24,10 +24,11 @@ import com.google.android.material.chip.ChipGroup
 
 class NoteDetails : AppCompatActivity() {
 
-    lateinit var title: EditText
+   // lateinit var title: EditText
     lateinit var text: EditText
     lateinit var chipGroup: ChipGroup
     lateinit var autocomplete: AutoCompleteTextView
+    lateinit var binding: NotesDetailsActivityBinding
 
     private lateinit var noteDetailsViewModel: NoteDetailsViewModel
     private var allTags: MutableList<TagModel> = ArrayList()
@@ -37,8 +38,7 @@ class NoteDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //setContentView(R.layout.notes_details_activity)
-        val binding: NotesDetailsActivityBinding =
-            DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
+        binding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
         binding.setLifecycleOwner(this)
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
@@ -59,7 +59,7 @@ class NoteDetails : AppCompatActivity() {
             allTags.addAll(it)
         })
 
-        title = findViewById(R.id.notes_details_title)
+       // title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
@@ -80,14 +80,14 @@ class NoteDetails : AppCompatActivity() {
     override fun onBackPressed() {
         // this note with note.copy() no longer necessary
         // viewmodel.save() needs to get title and text
-        note = note.copy(
+/*        note = note.copy(
             noteId = note.noteId,
             title = title.text.toString(),
             text = text.text.toString(),
             tags = note.tags
-        )
+        )*/
 
-        if (text.text.isNotBlank() || title.text.isNotBlank() || note.tags.isNotEmpty()) {
+        if (text.text.isNotBlank() || binding.notesDetailsTitle.text.isNotBlank() || note.tags.isNotEmpty()) {
             // noteDetailsViewModel.saveNote(note)
             noteDetailsViewModel.saveNote2()
         } else {
@@ -101,7 +101,8 @@ class NoteDetails : AppCompatActivity() {
     }
 
     private fun getForNote(note: NoteDetailsModel) {
-        title.setText(note.title)
+        //title.setText(note.title)
+        binding.notesDetailsTitle.setText(note.title)
         text.setText(note.text)
         chipGroup.removeAllViews()
         note.tags.forEach {
