@@ -123,4 +123,7 @@ dependencies {
 
     // for data binding
     kapt "com.android.databinding:compiler:3.2.0-alpha10"
+
+    // for filter tags
+    implementation 'com.github.Yalantis:SearchFilter:v1.0.4'
 }

@@ -21,6 +21,15 @@ import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.yalantis.filter.adapter.FilterAdapter
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
+import androidx.core.content.ContextCompat
+import com.yalantis.filter.widget.FilterItem
+import android.graphics.Color
+import android.widget.Toast
+import com.yalantis.filter.listener.FilterListener
+import com.yalantis.filter.widget.Filter
+
 
 class NoteDetails : AppCompatActivity() {
 
@@ -29,6 +38,7 @@ class NoteDetails : AppCompatActivity() {
     lateinit var chipGroup: ChipGroup
     lateinit var autocomplete: AutoCompleteTextView
     lateinit var binding: NotesDetailsActivityBinding
+    lateinit var filtertag: Filter<TagModel>
 
     private lateinit var noteDetailsViewModel: NoteDetailsViewModel
     private var allTags: MutableList<TagModel> = ArrayList()
@@ -62,6 +72,14 @@ class NoteDetails : AppCompatActivity() {
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
+        filtertag = findViewById(R.id.note_details_filter)
+
+        filtertag.apply {
+            adapter = TagAdapter(allTags)
+            listener = tagFilterListener
+            noSelectedItemText = "no tags yet"
+        }
+        filtertag.build()
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
@@ -131,7 +149,6 @@ class NoteDetails : AppCompatActivity() {
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
-            //addChip(tag)
         }
 
         autocomplete.addTextChangedListener {
@@ -153,5 +170,43 @@ class NoteDetails : AppCompatActivity() {
             }
             false
         }
+    }
+
+    // YALANTIS VERSION 1 //
+
+    inner class TagAdapter(items: List<TagModel>) : FilterAdapter<TagModel>(items) {
+
+        override fun createView(position: Int, item: TagModel): FilterItem {
+            val filterItem = FilterItem(this@NoteDetails)
+
+            filterItem.strokeColor = Color.BLACK
+            filterItem.textColor = Color.WHITE
+            filterItem.checkedTextColor =
+                ContextCompat.getColor(this@NoteDetails, android.R.color.white)
+            filterItem.color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground)
+            filterItem.checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorAccent)
+            filterItem.text = item.name
+            filterItem.deselect()
+
+            return filterItem
+        }
+
+    }
+
+    val tagFilterListener = object: FilterListener<TagModel> {
+        override fun onFilterDeselected(item: TagModel) {
+            Toast.makeText(this@NoteDetails, "Filter deselected", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onFilterSelected(item: TagModel) {
+            Toast.makeText(this@NoteDetails, "Filter selected", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onFiltersSelected(filters: java.util.ArrayList<TagModel>) {
+        }
+
+        override fun onNothingSelected() {
+        }
+
     }
 }
