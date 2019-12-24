@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/note_details_filter"
+            app:layout_constraintBottom_toTopOf="@id/frame"
             app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
             <AutoCompleteTextView
@@ -71,24 +71,58 @@
                     android:id="@+id/notes_details_tags_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"></com.google.android.material.chip.ChipGroup>
+                    app:singleLine="true">
+
+                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </LinearLayout>
 
-
-        <com.yalantis.filter.widget.Filter
-            android:id="@+id/note_details_filter"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:collapsedBackground="@color/windowBackground4"
-            app:expandedBackground="@color/windowBackground4"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        </com.yalantis.filter.widget.Filter>
+            <com.yalantis.filter.widget.Filter
+                android:id="@+id/note_details_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:collapsedBackground="@color/windowBackground4"
+                app:expandedBackground="@color/windowBackground4">
+            </com.yalantis.filter.widget.Filter>
+
+            <EditText
+                android:id="@+id/notes_details_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="7dp"
+                android:layout_marginRight="7dp"
+                android:background="@android:color/transparent"
+                android:hint="text..."
+                android:inputType="textMultiLine"
+                android:text="@={viewModel._noteToEdit.text}" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
-        <EditText
+        <!--        <com.yalantis.filter.widget.Filter
+                    android:id="@+id/note_details_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:collapsedBackground="@color/windowBackground4"
+                    app:expandedBackground="@color/windowBackground4"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout">
+
+                </com.yalantis.filter.widget.Filter>-->
+
+
+        <!--<EditText
             android:id="@+id/notes_details_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -103,7 +137,7 @@
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/note_details_filter" />
+            app:layout_constraintTop_toBottomOf="@id/note_details_filter" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,9 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -26,7 +23,7 @@ import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.core.content.ContextCompat
 import com.yalantis.filter.widget.FilterItem
 import android.graphics.Color
-import android.widget.Toast
+import android.widget.*
 import com.yalantis.filter.listener.FilterListener
 import com.yalantis.filter.widget.Filter
 

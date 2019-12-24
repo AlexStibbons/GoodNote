@@ -71,18 +71,19 @@
                     android:id="@+id/notes_details_tags_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleLine="true"></com.google.android.material.chip.ChipGroup>
+                    app:singleLine="true">
+
+                </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </LinearLayout>
 
-        <FrameLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout">
-
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <EditText
                 android:id="@+id/notes_details_text"
@@ -104,11 +105,9 @@
                 android:layout_height="wrap_content"
                 app:collapsedBackground="@color/windowBackground4"
                 app:expandedBackground="@color/windowBackground4">
-
             </com.yalantis.filter.widget.Filter>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-        </FrameLayout>
 
         <!--        <com.yalantis.filter.widget.Filter
                     android:id="@+id/note_details_filter"
