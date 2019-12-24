@@ -32,13 +32,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <LinearLayout
             android:id="@+id/notes_details_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_text"
+            app:layout_constraintBottom_toTopOf="@id/note_details_filter"
             app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
             <AutoCompleteTextView
@@ -84,6 +83,7 @@
             app:layout_constraintBottom_toTopOf="@id/notes_details_text">
         </com.yalantis.filter.widget.Filter>
 
+
         <EditText
             android:id="@+id/notes_details_text"
             android:layout_width="0dp"
@@ -99,7 +99,7 @@
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout" />
+            app:layout_constraintTop_toBottomOf="@id/note_details_filter" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
