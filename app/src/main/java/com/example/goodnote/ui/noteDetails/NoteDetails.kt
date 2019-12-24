@@ -55,6 +55,8 @@ class NoteDetails : AppCompatActivity() {
         noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this, noteId)
         binding.viewModel = noteDetailsViewModel
 
+        filtertag = findViewById(R.id.note_details_filter)
+
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
             it ?: return@Observer
             note = it
@@ -72,10 +74,10 @@ class NoteDetails : AppCompatActivity() {
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
-        filtertag = findViewById(R.id.note_details_filter)
 
         filtertag.apply {
-            adapter = TagAdapter(allTags)
+            val fake = listOf(TagModel("FAKE", "one"), TagModel("fake2", "two"), TagModel("fake3", "fake"))
+            adapter = TagAdapter(fake)
             listener = tagFilterListener
             noSelectedItemText = "no tags yet"
         }
