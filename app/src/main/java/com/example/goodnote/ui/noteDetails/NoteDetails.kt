@@ -37,7 +37,6 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setContentView(R.layout.notes_details_activity)
         binding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
         binding.setLifecycleOwner(this)
 
@@ -64,8 +63,6 @@ class NoteDetails : AppCompatActivity() {
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
 
-        // noteDetailsViewModel.getNoteById(noteId)
-
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
             R.layout.support_simple_spinner_dropdown_item,
@@ -78,18 +75,9 @@ class NoteDetails : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // this note with note.copy() no longer necessary
-        // viewmodel.save() needs to get title and text
-/*        note = note.copy(
-            noteId = note.noteId,
-            title = title.text.toString(),
-            text = text.text.toString(),
-            tags = note.tags
-        )*/
 
         if (text.text.isNotBlank() || binding.notesDetailsTitle.text.isNotBlank() || note.tags.isNotEmpty()) {
-            // noteDetailsViewModel.saveNote(note)
-            noteDetailsViewModel.saveNote2()
+            noteDetailsViewModel.saveNote()
         } else {
             super.onBackPressed()
         }
@@ -115,14 +103,12 @@ class NoteDetails : AppCompatActivity() {
 
         if (allTags.none { it.name == name }) {
             val newTag = TagModel(name = name)
-            //addChip(newTag)
             noteDetailsViewModel.saveTag(newTag)
             noteDetailsViewModel.addTagForNote(note.noteId, newTag)
         }
 
         if (allTags.any { it.name == name }) {
             val tag = allTags.first { it.name == name }
-            //addChip(tag)
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
             Log.e("ADD TAG", "${note.title} and id ${note.noteId}, ${tag.name}")
         }
@@ -134,7 +120,6 @@ class NoteDetails : AppCompatActivity() {
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
-                //chipGroup.removeView(this)
             }
         }
         chipGroup.addView(chip)
