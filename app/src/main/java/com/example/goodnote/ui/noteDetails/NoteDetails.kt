@@ -57,6 +57,13 @@ class NoteDetails : AppCompatActivity() {
 
         filtertag = findViewById(R.id.note_details_filter)
 
+        val tagAdapter = TagAdapter(allTags)
+        filtertag.apply {
+            adapter = tagAdapter
+            listener = tagFilterListener
+            noSelectedItemText = "no tags yet"
+        }
+
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
             it ?: return@Observer
             note = it
@@ -64,24 +71,19 @@ class NoteDetails : AppCompatActivity() {
             Log.e("DETAILS", "GET called")
         })
 
-        noteDetailsViewModel.existingTags.observe(this, Observer {
-            it ?: return@Observer
+        noteDetailsViewModel.existingTags.observe(this, Observer {tags ->
+            tags ?: return@Observer
             allTags.clear()
-            allTags.addAll(it)
+            allTags.addAll(tags)
+            //tagAdapter.setTags(tags)
+            filtertag.adapter = TagAdapter(tags.toMutableList())
+            filtertag.build()
         })
 
        // title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
-
-        filtertag.apply {
-            val fake = listOf(TagModel("FAKE", "one"), TagModel("fake2", "two"), TagModel("fake3", "fake"))
-            adapter = TagAdapter(fake)
-            listener = tagFilterListener
-            noSelectedItemText = "no tags yet"
-        }
-        filtertag.build()
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
@@ -176,23 +178,26 @@ class NoteDetails : AppCompatActivity() {
 
     // YALANTIS VERSION 1 //
 
-    inner class TagAdapter(items: List<TagModel>) : FilterAdapter<TagModel>(items) {
+    inner class TagAdapter(override var items: MutableList<TagModel>) : FilterAdapter<TagModel>(items) {
 
         override fun createView(position: Int, item: TagModel): FilterItem {
             val filterItem = FilterItem(this@NoteDetails)
 
-            filterItem.strokeColor = Color.BLACK
+            filterItem.strokeColor = android.R.color.transparent
             filterItem.textColor = Color.WHITE
             filterItem.checkedTextColor =
                 ContextCompat.getColor(this@NoteDetails, android.R.color.white)
-            filterItem.color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground)
-            filterItem.checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorAccent)
+            filterItem.color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground3)
+            filterItem.checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorPrimary)
             filterItem.text = item.name
             filterItem.deselect()
 
             return filterItem
         }
-
+        fun setTags(tags: List<TagModel>){
+            items.clear()
+            items.addAll(tags)
+        }
     }
 
     val tagFilterListener = object: FilterListener<TagModel> {

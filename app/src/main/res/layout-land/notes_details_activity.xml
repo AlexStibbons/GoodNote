@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.goodnote.ui.viewModels.NoteDetailsViewModel" />
@@ -70,17 +71,20 @@
                     android:id="@+id/notes_details_tags_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleLine="true">
-                </com.google.android.material.chip.ChipGroup>
+                    app:singleLine="true"></com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </LinearLayout>
+
 
         <com.yalantis.filter.widget.Filter
             android:id="@+id/note_details_filter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_text">
+            app:collapsedBackground="@color/windowBackground4"
+            app:expandedBackground="@color/windowBackground4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout">
+
         </com.yalantis.filter.widget.Filter>
 
 
