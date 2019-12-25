@@ -171,6 +171,13 @@ class NoteDetails : AppCompatActivity() {
             }
             false
         }
+
+        // ???
+        autocomplete.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                autocomplete.showDropDown()
+            }
+        }
     }
 
     // YALANTIS VERSION 1 //
