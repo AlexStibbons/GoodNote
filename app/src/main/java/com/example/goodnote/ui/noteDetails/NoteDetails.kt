@@ -72,9 +72,9 @@ class NoteDetails : AppCompatActivity() {
             tags ?: return@Observer
             allTags.clear()
             allTags.addAll(tags)
-            //tagAdapter.setTags(tags)
-            filtertag.adapter = TagAdapter(tags.toMutableList())
-            filtertag.build()
+            tagAdapter.setTags(tags) // still not working
+           // filtertag.adapter = TagAdapter(tags.toMutableList())
+           // filtertag.build()
         })
 
        // title = findViewById(R.id.notes_details_title)
@@ -201,6 +201,10 @@ class NoteDetails : AppCompatActivity() {
         fun setTags(tags: List<TagModel>){
             items.clear()
             items.addAll(tags)
+            // reset adapter? notify cahnge? ??
+            filtertag.adapter = null
+            filtertag.adapter = TagAdapter(items)
+            filtertag.build()
         }
     }
 
