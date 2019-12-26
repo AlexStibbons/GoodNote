@@ -31,13 +31,10 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
-            R.layout.note_item_alternate,
+            R.layout.note_item,
             parent, false
         )
-
-        // remove context for note_item
-        // keep context for note_item_alternate
-        return ViewHolder(itemView, onNoteClicked, parent.context)
+        return ViewHolder(itemView, onNoteClicked)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -63,22 +60,12 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
     override fun getItemCount(): Int = notes.size
 
-    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick, private val context: Context) :
+    class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) :
         RecyclerView.ViewHolder(view) {
-
-        // for note_item_alternate
-        private val colours = listOf(
-            ContextCompat.getColor(context, R.color.colorAccent), ContextCompat.getColor(context, R.color.colorPrimary),
-            ContextCompat.getColor(context, R.color.windowBackground3), ContextCompat.getColor(context, R.color.tag1),
-            ContextCompat.getColor(context, R.color.tag2),ContextCompat.getColor(context, R.color.tag3),
-            ContextCompat.getColor(context, R.color.tag4), ContextCompat.getColor(context, R.color.tag5),
-            ContextCompat.getColor(context, R.color.tag6))
-
         private val title = view.item_note_title
         private val tags = view.item_tags
         private val text = view.item_note_text
         private val noteItem = view.layout_note_item
-        private val chipGroup = view.note_item_chipGroup
 
         fun bind(note: NoteModel) {
             title.text = note.title
@@ -94,18 +81,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 Log.e("REC VIEW LONG", "note click on pos: $adapterPosition & ${note.title}")
                 click.onNoteLongPress(note.noteId)
                 true
-            }
-            // for note_item_alternate
-            val newTags: List<String> = note.tags.split(", ") // each gets its own chip
-            Log.e("ADAPTER", "model: ${note.tags}; \n NEW TAGS: $newTags")
-            chipGroup.removeAllViews()
-            newTags.forEach{tag ->
-                val chip = Chip(context).apply {
-                    text = tag
-                    isCloseIconVisible = false
-                    chipBackgroundColor = ColorStateList.valueOf(colours.random())
-                }
-                chipGroup.addView(chip)
             }
         }
     }

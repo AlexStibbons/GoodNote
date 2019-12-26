@@ -52,19 +52,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _noteToEdit.value = found
     }
 
-    fun saveNote(note: NoteDetailsModel)  = viewModelScope.launch {
-        val noteToSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
-        if (noteIdFromIntent.isBlank()) {
-            val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
-            _onNoteSaved.value = saved
-        } else {
-            //val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
-            withContext(Dispatchers.IO) { noteRepo.update(note.title, note.text, note.noteId) }
-            _onNoteSaved.value = 1 // threading issue here; update has no return value, might not work all the time
-        }
-    }
-
-    fun saveNote2()  = viewModelScope.launch {
+    fun saveNote()  = viewModelScope.launch {
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
         if (noteIdFromIntent.isBlank()) {
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
