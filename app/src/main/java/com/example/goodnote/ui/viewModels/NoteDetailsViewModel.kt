@@ -1,10 +1,5 @@
 package com.example.goodnote.ui.viewModels
 
-import android.widget.EditText
-import androidx.databinding.Bindable
-import androidx.databinding.BindingAdapter
-import androidx.databinding.BindingMethod
-import androidx.databinding.InverseBindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,7 +16,7 @@ import kotlinx.coroutines.*
 
 class NoteDetailsViewModel(private val noteRepo: NoteRepo,
                            private val tagRepo: TagRepo,
-                           private val iddd: String) : ViewModel() {
+                           private val noteIdFromIntent: String) : ViewModel() {
 
     private var _existingTags = MutableLiveData<List<TagModel>>()
     val existingTags: LiveData<List<TagModel>> = _existingTags
@@ -29,12 +24,13 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     private var _onNoteSaved = MutableLiveData<Long>()
     val onNoteSaved: LiveData<Long> = _onNoteSaved
 
+    /* data binding: https://developer.android.com/topic/libraries/data-binding/two-way  */
    /* private*/ var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
     val noteToEdit: LiveData<NoteDetailsModel> = _noteToEdit
 
     init {
         getAllTags()
-        getNoteById(iddd)
+        getNoteById(noteIdFromIntent)
     }
 
     fun getAllTags() = viewModelScope.launch {
@@ -56,21 +52,9 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _noteToEdit.value = found
     }
 
-    fun saveNote(note: NoteDetailsModel)  = viewModelScope.launch {
-        val noteToSave = if (note.title.isNullOrEmpty()) note.copy(title = DEFAULT_TITLE) else note
-        if (iddd.isBlank()) {
-            val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
-            _onNoteSaved.value = saved
-        } else {
-            //val updated = withContext(Dispatchers.IO) { noteRepo.updateNote(noteToSave.toNoteDomainModel()) }
-            withContext(Dispatchers.IO) { noteRepo.update(note.title, note.text, note.noteId) }
-            _onNoteSaved.value = 1 // threading issue here; update has no return value, might not work all the time
-        }
-    }
-
-    fun saveNote2()  = viewModelScope.launch {
+    fun saveNote()  = viewModelScope.launch {
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
-        if (iddd.isBlank()) {
+        if (noteIdFromIntent.isBlank()) {
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -82,7 +66,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     fun deleteTagForNote(noteId: String, tagId: String) = viewModelScope.launch {
         val updateTags: MutableList<TagModel> = noteToEdit.value?.tags?.filter { it.tagId != tagId }?.toMutableList() ?: mutableListOf()
         _noteToEdit.value = noteToEdit.value?.copy(tags=updateTags)
-        if (iddd.isNotBlank()) {
+        if (noteIdFromIntent.isNotBlank()) {
             withContext(Dispatchers.IO) {noteRepo.deleteTagForNote(noteId, tagId)}
         }
     }
@@ -92,7 +76,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _noteToEdit.value?.tags?.add(tag)
         _noteToEdit.value = _noteToEdit.value?.copy()
 
-        if (iddd.isNotBlank()) {
+        if (noteIdFromIntent.isNotBlank()) {
             withContext(Dispatchers.IO) {noteRepo.addTagForNote(noteId, tag.tagId)}
         }
     }

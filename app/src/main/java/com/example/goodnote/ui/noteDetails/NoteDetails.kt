@@ -5,9 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -21,13 +18,24 @@ import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.yalantis.filter.adapter.FilterAdapter
+import androidx.databinding.adapters.TextViewBindingAdapter.setText
+import androidx.core.content.ContextCompat
+import com.yalantis.filter.widget.FilterItem
+import android.graphics.Color
+import android.widget.*
+import com.yalantis.filter.listener.FilterListener
+import com.yalantis.filter.widget.Filter
+
 
 class NoteDetails : AppCompatActivity() {
 
-    lateinit var title: EditText
+   // lateinit var title: EditText
     lateinit var text: EditText
     lateinit var chipGroup: ChipGroup
     lateinit var autocomplete: AutoCompleteTextView
+    lateinit var binding: NotesDetailsActivityBinding
+    lateinit var filtertag: Filter<TagModel>
 
     private lateinit var noteDetailsViewModel: NoteDetailsViewModel
     private var allTags: MutableList<TagModel> = ArrayList()
@@ -36,34 +44,43 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setContentView(R.layout.notes_details_activity)
-       val binding: NotesDetailsActivityBinding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
-       binding.setLifecycleOwner(this)
-
+        binding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
+        binding.setLifecycleOwner(this)
 
         val noteId = intent.getStringExtra(EXTRA_NOTE_ID) ?: ""
 
         noteDetailsViewModel = Injectors.getNoteDetailsViewModel(this, noteId)
         binding.viewModel = noteDetailsViewModel
 
+        filtertag = findViewById(R.id.note_details_filter)
+
+        val tagAdapter = TagAdapter(allTags)
+        filtertag.apply {
+            adapter = tagAdapter
+            listener = tagFilterListener
+            noSelectedItemText = "no tags yet"
+        }
+
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
             it ?: return@Observer
             note = it
             getForNote(note)
+            Log.e("DETAILS", "GET called")
         })
 
-        noteDetailsViewModel.existingTags.observe(this, Observer {
-            it ?: return@Observer
+        noteDetailsViewModel.existingTags.observe(this, Observer {tags ->
+            tags ?: return@Observer
             allTags.clear()
-            allTags.addAll(it)
+            allTags.addAll(tags)
+            tagAdapter.setTags(tags) // still not working
+           // filtertag.adapter = TagAdapter(tags.toMutableList())
+           // filtertag.build()
         })
 
-        title = findViewById(R.id.notes_details_title)
+       // title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
-
-       // noteDetailsViewModel.getNoteById(noteId)
 
         val autoAdapter = ArrayAdapter<TagModel>(
             this,
@@ -77,19 +94,12 @@ class NoteDetails : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        // this note with note.copy() no longer necessary
-        // viewmodel.save() needs to get title and text
-        note = note.copy(
-            noteId = note.noteId,
-            title = title.text.toString(),
-            text = text.text.toString(),
-            tags = note.tags
-        )
 
-        if (text.text.isNotBlank() || title.text.isNotBlank() || note.tags.isNotEmpty()) {
-           // noteDetailsViewModel.saveNote(note)
-            noteDetailsViewModel.saveNote2()
-        } else { super.onBackPressed() }
+        if (text.text.isNotBlank() || binding.notesDetailsTitle.text.isNotBlank() || note.tags.isNotEmpty()) {
+            noteDetailsViewModel.saveNote()
+        } else {
+            super.onBackPressed()
+        }
 
         noteDetailsViewModel.onNoteSaved.observe(this, Observer {
             setResult(Activity.RESULT_OK, Intent())
@@ -98,7 +108,8 @@ class NoteDetails : AppCompatActivity() {
     }
 
     private fun getForNote(note: NoteDetailsModel) {
-        title.setText(note.title)
+        //title.setText(note.title)
+        binding.notesDetailsTitle.setText(note.title)
         text.setText(note.text)
         chipGroup.removeAllViews()
         note.tags.forEach {
@@ -111,14 +122,12 @@ class NoteDetails : AppCompatActivity() {
 
         if (allTags.none { it.name == name }) {
             val newTag = TagModel(name = name)
-            //addChip(newTag)
             noteDetailsViewModel.saveTag(newTag)
             noteDetailsViewModel.addTagForNote(note.noteId, newTag)
         }
 
-        if (allTags.any { it.name == name }){
+        if (allTags.any { it.name == name }) {
             val tag = allTags.first { it.name == name }
-            //addChip(tag)
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
             Log.e("ADD TAG", "${note.title} and id ${note.noteId}, ${tag.name}")
         }
@@ -130,7 +139,6 @@ class NoteDetails : AppCompatActivity() {
             isCloseIconVisible = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
-                //chipGroup.removeView(this)
             }
         }
         chipGroup.addView(chip)
@@ -138,11 +146,10 @@ class NoteDetails : AppCompatActivity() {
 
     private fun setupAutocomplete() {
 
-        autocomplete.setOnItemClickListener {adapterView, _, position, _  ->
+        autocomplete.setOnItemClickListener { adapterView, _, position, _ ->
             autocomplete.text = null
             val tag: TagModel = adapterView.getItemAtPosition(position) as TagModel
             noteDetailsViewModel.addTagForNote(note.noteId, tag)
-            //addChip(tag)
         }
 
         autocomplete.addTextChangedListener {
@@ -164,5 +171,59 @@ class NoteDetails : AppCompatActivity() {
             }
             false
         }
+
+        // ???
+        autocomplete.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                autocomplete.showDropDown()
+            }
+        }
+    }
+
+    // YALANTIS VERSION 1 //
+
+    inner class TagAdapter(override var items: MutableList<TagModel>) : FilterAdapter<TagModel>(items) {
+
+        override fun createView(position: Int, item: TagModel): FilterItem {
+            val filterItem = FilterItem(this@NoteDetails)
+
+            filterItem.apply {
+                collapsedSize = 1
+                strokeColor = android.R.color.transparent
+                textColor = Color.WHITE
+                checkedTextColor = ContextCompat.getColor(this@NoteDetails, android.R.color.white)
+                color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground3)
+                checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorPrimary)
+                text = item.name
+                deselect()
+            }
+
+            return filterItem
+        }
+        fun setTags(tags: List<TagModel>){
+            items.clear()
+            items.addAll(tags)
+            // reset adapter? notify cahnge? ??
+            filtertag.adapter = null
+            filtertag.adapter = TagAdapter(items)
+            filtertag.build()
+        }
+    }
+
+    val tagFilterListener = object: FilterListener<TagModel> {
+        override fun onFilterDeselected(item: TagModel) {
+            Toast.makeText(this@NoteDetails, "Filter deselected", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onFilterSelected(item: TagModel) {
+            Toast.makeText(this@NoteDetails, "Filter selected", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onFiltersSelected(filters: java.util.ArrayList<TagModel>) {
+        }
+
+        override fun onNothingSelected() {
+        }
+
     }
 }

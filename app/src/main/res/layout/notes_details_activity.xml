@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.example.goodnote.ui.viewModels.NoteDetailsViewModel" />
@@ -13,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/notes_details_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +23,9 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
+            android:background="@android:color/transparent"
             android:hint="Title..."
+            android:inputType="textMultiLine"
             android:text="@={viewModel._noteToEdit.title}"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/notes_details_linear_layout"
@@ -35,25 +38,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_text"
+            app:layout_constraintBottom_toTopOf="@id/frame"
             app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
             <AutoCompleteTextView
                 android:id="@+id/notes_details_autocomplete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:background="#00000000"
-                android:hint="tags"
-                android:inputType="textCapWords"
-                android:completionThreshold="0"
-                android:imeOptions="actionDone"
-                android:dropDownWidth="match_parent"
                 android:layout_marginStart="7dp"
                 android:layout_marginLeft="7dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp" />
+                android:layout_marginRight="7dp"
+                android:background="@android:color/transparent"
+                android:completionThreshold="1"
+                android:dropDownWidth="match_parent"
+                android:hint="tags"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:text="" />
 
             <HorizontalScrollView
                 android:id="@+id/notes_details_tags_scroll"
@@ -70,28 +73,44 @@
                     android:layout_height="wrap_content"
                     app:singleLine="true">
 
-
                 </com.google.android.material.chip.ChipGroup>
-
             </HorizontalScrollView>
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/frame"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"
+            android:isScrollContainer="true">
+
+            <com.yalantis.filter.widget.Filter
+                android:id="@+id/note_details_filter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:collapsedBackground="@color/windowBackground4"
+                app:expandedBackground="@color/windowBackground4">
+
+            </com.yalantis.filter.widget.Filter>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+        <EditText
             android:id="@+id/notes_details_text"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:background="#00000000"
+            android:background="@android:color/transparent"
             android:hint="text..."
+            android:inputType="textMultiLine"
             android:text="@={viewModel._noteToEdit.text}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout" />
-
+            app:layout_constraintTop_toBottomOf="@id/frame"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
