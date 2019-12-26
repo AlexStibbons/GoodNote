@@ -91,7 +91,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:collapsedBackground="@color/windowBackground4"
-                app:expandedBackground="@color/windowBackground4"/>
+                app:expandedBackground="@color/windowBackground4">
+
+            </com.yalantis.filter.widget.Filter>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
         <EditText
