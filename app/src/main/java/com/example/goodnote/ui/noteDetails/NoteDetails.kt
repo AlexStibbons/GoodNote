@@ -187,14 +187,16 @@ class NoteDetails : AppCompatActivity() {
         override fun createView(position: Int, item: TagModel): FilterItem {
             val filterItem = FilterItem(this@NoteDetails)
 
-            filterItem.strokeColor = android.R.color.transparent
-            filterItem.textColor = Color.WHITE
-            filterItem.checkedTextColor =
-                ContextCompat.getColor(this@NoteDetails, android.R.color.white)
-            filterItem.color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground3)
-            filterItem.checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorPrimary)
-            filterItem.text = item.name
-            filterItem.deselect()
+            filterItem.apply {
+                collapsedSize = 1
+                strokeColor = android.R.color.transparent
+                textColor = Color.WHITE
+                checkedTextColor = ContextCompat.getColor(this@NoteDetails, android.R.color.white)
+                color = ContextCompat.getColor(this@NoteDetails, R.color.windowBackground3)
+                checkedColor = ContextCompat.getColor(this@NoteDetails, R.color.colorPrimary)
+                text = item.name
+                deselect()
+            }
 
             return filterItem
         }
