@@ -9,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
+import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.ui.viewModels.NoteDetailsViewModel
 import com.example.goodnote.utils.EXTRA_NOTE_ID
@@ -31,6 +33,7 @@ class AddTagsDialogFragment : DialogFragment() {
     private lateinit var noTagsText: TextView
 
     private var allTags: MutableList<TagModel> = ArrayList()
+    private var noteToEdit: NoteDetailsModel = NoteDetailsModel("", "", "")
 
     companion object {
         fun getInstance(noteVM: NoteDetailsViewModel, noteId: String) =
@@ -42,18 +45,24 @@ class AddTagsDialogFragment : DialogFragment() {
             }
     }
 
+    // leakage?
+    // when dialog is dismissed, does it go to onDestroy?
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { noteId = it.getString(EXTRA_NOTE_ID, "") }
         parent = requireActivity()
 
-        noteViewModel.existingTags.observe(this, Observer {
+        noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             allTags.clear()
             allTags.addAll(it)
         })
 
-        // also observe noteToEdit and you won't need noteId as a paramenter
+        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            noteToEdit = it
+            setUpTags()
+        })
     }
 
     override fun onCreateView(
@@ -71,8 +80,6 @@ class AddTagsDialogFragment : DialogFragment() {
         doneBtn = rootView.findViewById(R.id.add_tags_dialog_doneBtn)
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
-
-        setUpTags()
 
         return rootView
     }
@@ -109,6 +116,9 @@ class AddTagsDialogFragment : DialogFragment() {
         val chip = Chip(parent).apply {
             text = tag.name
             isClickable = true
+            setOnClickListener {
+                Toast.makeText(requireActivity(), "clicked $text!", Toast.LENGTH_SHORT).show()
+            }
         }
         chipGroup.addView(chip)
     }
