@@ -29,7 +29,6 @@ class AddTagsDialogFragment : DialogFragment() {
     private lateinit var addBtn: Button
     private lateinit var doneBtn: Button
     private lateinit var noTagsText: TextView
-    private lateinit var noteTags: TextView
 
     private var allTags: MutableList<TagModel> = ArrayList()
 
@@ -70,7 +69,6 @@ class AddTagsDialogFragment : DialogFragment() {
         chipGroup = rootView.findViewById(R.id.add_tags_dialog_chip_group)
         addBtn = rootView.findViewById(R.id.add_tags_dialog_add_btn)
         doneBtn = rootView.findViewById(R.id.add_tags_dialog_doneBtn)
-        noteTags = rootView.findViewById(R.id.add_tags_dialog_note_tags)
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
 
