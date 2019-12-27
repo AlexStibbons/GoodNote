@@ -61,7 +61,7 @@ class AddTagsDialogFragment : DialogFragment() {
         noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             noteToEdit = it
-            setUpTags()
+            setUpTags() // but will all existing tags be loaded too? no?
         })
     }
 
@@ -84,7 +84,7 @@ class AddTagsDialogFragment : DialogFragment() {
         return rootView
     }
 
-    fun setUpTags() {
+    private fun setUpTags() {
         if (allTags.isNullOrEmpty()) {
             noTagsText.visibility = View.VISIBLE
         }
@@ -92,15 +92,15 @@ class AddTagsDialogFragment : DialogFragment() {
         allTags.forEach {addChipToGroup(it)}
     }
 
-    fun onTagSelected(tag: TagModel) {
+    private fun onTagSelected(tag: TagModel) {
         noteViewModel.addTagForNote(noteId, tag)
     }
 
-    fun onTagDiselected(tag: TagModel) {
+    private fun onTagDiselected(tag: TagModel) {
         noteViewModel.deleteTagForNote(noteId, tag.tagId)
     }
 
-    fun onTagAdded(name: String) {
+    private fun onTagAdded(name: String) {
         if (allTags.none { it.name == name } || allTags.isNullOrEmpty()) {
             val newTag = TagModel(name = name)
             addChipToGroup(newTag)
@@ -109,8 +109,8 @@ class AddTagsDialogFragment : DialogFragment() {
         }
     }
 
-    fun addChipToGroup(tag: TagModel) {
-        // if noteToeEdit.tags contains tag -> chip is coloured/chosed
+    private fun addChipToGroup(tag: TagModel) {
+        // if noteToeEdit.tags contains tag -> chip is coloured/chosen
         // else it is not
         // chips are CHOICE chips, NOT filter chips
         val chip = Chip(parent).apply {
