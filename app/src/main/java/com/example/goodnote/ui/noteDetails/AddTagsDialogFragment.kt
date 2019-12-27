@@ -2,6 +2,7 @@ package com.example.goodnote.ui.noteDetails
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.media.RatingCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -104,8 +105,12 @@ class AddTagsDialogFragment : DialogFragment() {
     }
 
     fun addChipToGroup(tag: TagModel) {
+        // if noteToeEdit.tags contains tag -> chip is coloured/chosed
+        // else it is not
+        // chips are CHOICE chips, NOT filter chips
         val chip = Chip(parent).apply {
             text = tag.name
+            isClickable = true
         }
         chipGroup.addView(chip)
     }
