@@ -11,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/no_tags_yet"
-        android:textSize="20sp"
         android:textAlignment="center"
+        android:textSize="20sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/add_tags_dialog_doneBtn"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,10 +24,10 @@
         android:id="@+id/add_tags_dialog_scroll_view"
         android:layout_width="0dp"
         android:layout_height="120dp"
-        app:layout_constraintRight_toRightOf="@id/guideline_vert_r"
+        android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vert_l"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="10dp">
+        app:layout_constraintRight_toRightOf="@id/guideline_vert_r"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/add_tags_dialog_chip_group"
@@ -42,9 +42,9 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="16dp"
         app:layout_constraintEnd_toStartOf="@+id/add_tags_dialog_add_btn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -64,8 +64,8 @@
         android:id="@+id/add_tags_dialog_add_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
         android:layout_marginEnd="16dp"
+        android:text="Add"
         app:layout_constraintBaseline_toBaselineOf="@+id/add_tags_dialog_new_tag_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -76,11 +76,24 @@
         android:id="@+id/add_tags_dialog_doneBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:text="done"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/add_tags_dialog_cancelBtn"
+        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_new_tag_layout" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/add_tags_dialog_cancelBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="cancel"
+        app:layout_constraintBaseline_toBaselineOf="@id/add_tags_dialog_doneBtn"
+        app:layout_constraintEnd_toStartOf="@+id/add_tags_dialog_doneBtn"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_add_btn" />
+        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_new_tag_layout" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_vert_l"
