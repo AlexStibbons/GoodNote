@@ -35,6 +35,8 @@ class AddTagsDialogFragment : DialogFragment() {
     private var allTags: MutableList<TagModel> = ArrayList()
     private var noteToEdit: NoteDetailsModel = NoteDetailsModel("", "", "")
 
+    // https://developer.android.com/topic/libraries/architecture/viewmodel#implement
+    // see section on fragments sharing a view model
     companion object {
         fun getInstance(noteVM: NoteDetailsViewModel, noteId: String) =
             AddTagsDialogFragment().apply {
