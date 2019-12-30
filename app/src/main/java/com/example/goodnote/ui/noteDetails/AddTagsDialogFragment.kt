@@ -1,5 +1,6 @@
 package com.example.goodnote.ui.noteDetails
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.media.RatingCompat
@@ -86,7 +87,17 @@ class AddTagsDialogFragment : DialogFragment() {
             setUpTags() // but will all existing tags be loaded too? no?
         })
 
+        addBtn.setOnClickListener {
+            if (newTagName.text.isNotBlank()) {
+                onTagAdded(newTagName.text.toString())
+                newTagName.text.clear()
+            }
+        }
         return rootView
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState)
     }
 
     private fun setUpTags() {
@@ -110,7 +121,7 @@ class AddTagsDialogFragment : DialogFragment() {
             val newTag = TagModel(name = name)
             addChipToGroup(newTag)
             noteViewModel.saveTag(newTag)
-            noteViewModel.addTagForNote("id", newTag)
+            noteViewModel.addTagForNote(noteId, newTag)
         }
     }
 
