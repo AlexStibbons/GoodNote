@@ -18,6 +18,7 @@ import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.ui.viewModels.NoteDetailsViewModel
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.example.goodnote.utils.Injectors
+import com.example.goodnote.utils.toTagsString
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
@@ -68,6 +69,7 @@ class NoteDetails : AppCompatActivity() {
         addTagsBtn = findViewById(R.id.add_tags_button)
         tagsText = findViewById(R.id.tags_text)
 
+
         addTagsBtn.setOnClickListener {
             val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteDetailsViewModel, noteId)
             dialog.show(supportFragmentManager, "")
@@ -91,6 +93,7 @@ class NoteDetails : AppCompatActivity() {
     private fun getForNote(note: NoteDetailsModel) {
         //title.setText(note.title)
         binding.notesDetailsTitle.setText(note.title)
+        tagsText.text =  note.tags.toTagsString().ifBlank { "No tags yet!" }
         text.setText(note.text)
         chipGroup.removeAllViews()
         note.tags.forEach {

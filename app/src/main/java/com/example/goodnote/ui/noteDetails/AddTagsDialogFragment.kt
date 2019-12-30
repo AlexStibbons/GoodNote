@@ -55,7 +55,6 @@ class AddTagsDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let { noteId = it.getString(EXTRA_NOTE_ID, "") }
         parent = requireActivity()
-
     }
 
     override fun onCreateView(
@@ -83,7 +82,7 @@ class AddTagsDialogFragment : DialogFragment() {
         noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             noteToEdit = it
-            setUpTags() // but will all existing tags be loaded too? no?
+            setUpTags()
         })
 
         addBtn.setOnClickListener {

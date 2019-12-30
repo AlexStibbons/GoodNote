@@ -99,6 +99,8 @@
             android:text="No tags yet!"
             android:textAppearance="@android:style/TextAppearance.Small"
             android:textStyle="italic"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
             android:layout_marginTop="3dp"
