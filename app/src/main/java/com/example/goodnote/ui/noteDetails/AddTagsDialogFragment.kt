@@ -119,6 +119,7 @@ class AddTagsDialogFragment : DialogFragment() {
         noteViewModel.deleteTagForNote(noteId, tag.tagId)
     }
 
+    // works okay, but invisible atm
     private fun onTagAdded(name: String) {
         if (allTags.none { it.name == name } || allTags.isNullOrEmpty()) {
             val newTag = TagModel(name = name)
