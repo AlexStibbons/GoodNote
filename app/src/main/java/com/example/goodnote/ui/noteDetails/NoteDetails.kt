@@ -5,12 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.EditText
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
 import com.example.goodnote.databinding.NotesDetailsActivityBinding
@@ -27,6 +26,8 @@ class NoteDetails : AppCompatActivity() {
    // lateinit var title: EditText
     lateinit var text: EditText
     lateinit var chipGroup: ChipGroup
+    lateinit var addTagsBtn: Button
+    lateinit var tagsText: TextView
     lateinit var autocomplete: AutoCompleteTextView
     lateinit var binding: NotesDetailsActivityBinding
 
@@ -64,7 +65,16 @@ class NoteDetails : AppCompatActivity() {
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
-        
+        addTagsBtn = findViewById(R.id.add_tags_button)
+        tagsText = findViewById(R.id.tags_text)
+
+        addTagsBtn.setOnClickListener {
+            // show popup
+            val ft: FragmentManager = supportFragmentManager
+            val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteDetailsViewModel, noteId)
+            dialog.show(ft, "")
+        }
+
     }
 
     override fun onBackPressed() {

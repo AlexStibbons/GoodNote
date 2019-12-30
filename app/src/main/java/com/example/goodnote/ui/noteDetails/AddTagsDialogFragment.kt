@@ -55,17 +55,6 @@ class AddTagsDialogFragment : DialogFragment() {
         arguments?.let { noteId = it.getString(EXTRA_NOTE_ID, "") }
         parent = requireActivity()
 
-        noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            allTags.clear()
-            allTags.addAll(it)
-        })
-
-        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            noteToEdit = it
-            setUpTags() // but will all existing tags be loaded too? no?
-        })
     }
 
     override fun onCreateView(
@@ -84,6 +73,18 @@ class AddTagsDialogFragment : DialogFragment() {
         cancelBtn = rootView.findViewById(R.id.add_tags_dialog_cancelBtn)
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
+
+        noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            allTags.clear()
+            allTags.addAll(it)
+        })
+
+        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
+            it ?: return@Observer
+            noteToEdit = it
+            setUpTags() // but will all existing tags be loaded too? no?
+        })
 
         return rootView
     }
