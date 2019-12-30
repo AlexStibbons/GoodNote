@@ -77,24 +77,14 @@
         android:id="@+id/add_tags_dialog_doneBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:text="done"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/add_tags_dialog_cancelBtn"
-        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_new_tag_layout" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/add_tags_dialog_cancelBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="cancel"
-        app:layout_constraintBaseline_toBaselineOf="@id/add_tags_dialog_doneBtn"
-        app:layout_constraintEnd_toStartOf="@+id/add_tags_dialog_doneBtn"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_new_tag_layout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/add_tags_dialog_new_tag_layout" />
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_vert_l"

@@ -69,10 +69,8 @@ class NoteDetails : AppCompatActivity() {
         tagsText = findViewById(R.id.tags_text)
 
         addTagsBtn.setOnClickListener {
-            // show popup
-            val ft: FragmentManager = supportFragmentManager
             val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteDetailsViewModel, noteId)
-            dialog.show(ft, "")
+            dialog.show(supportFragmentManager, "")
         }
 
     }
