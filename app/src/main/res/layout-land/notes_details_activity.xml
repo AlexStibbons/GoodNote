@@ -13,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <EditText
             android:id="@+id/notes_details_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
             android:background="@android:color/transparent"
             android:hint="Title..."
             android:inputType="textMultiLine"
@@ -29,16 +28,16 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/notes_details_linear_layout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.714"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <LinearLayout
             android:id="@+id/notes_details_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_text"
+            app:layout_constraintBottom_toTopOf="@id/tags_text"
             app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
             <AutoCompleteTextView
@@ -71,8 +70,7 @@
                     android:id="@+id/notes_details_tags_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:singleLine="true">
-                </com.google.android.material.chip.ChipGroup>
+                    app:singleLine="true"></com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
         </LinearLayout>
 
@@ -82,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
             android:background="@android:color/transparent"
@@ -91,8 +89,38 @@
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout" />
+            app:layout_constraintTop_toBottomOf="@id/add_tags_button" />
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tags_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="No tags yet!"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textStyle="italic"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/add_tags_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/add_tags_button"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_tags_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="add"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
