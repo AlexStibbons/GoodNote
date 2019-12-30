@@ -3,24 +3,25 @@ package com.example.goodnote.ui.noteDetails
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.media.RatingCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import com.example.goodnote.R
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.ui.viewModels.NoteDetailsViewModel
 import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.example.goodnote.R
+
+
 
 class AddTagsDialogFragment : DialogFragment() {
 
@@ -101,6 +102,13 @@ class AddTagsDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return super.onCreateDialog(savedInstanceState)
+    }
+
+    override fun onResume() {
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog!!.window!!.setLayout(width, height)
+        super.onResume()
     }
 
     private fun setUpTags() {
