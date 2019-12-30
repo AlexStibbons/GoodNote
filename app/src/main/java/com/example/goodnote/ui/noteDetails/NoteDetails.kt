@@ -57,24 +57,14 @@ class NoteDetails : AppCompatActivity() {
             it ?: return@Observer
             allTags.clear()
             allTags.addAll(it)
+            setupAutocomplete()
         })
 
        // title = findViewById(R.id.notes_details_title)
         text = findViewById(R.id.notes_details_text)
         chipGroup = findViewById(R.id.notes_details_tags_group)
         autocomplete = findViewById(R.id.notes_details_autocomplete)
-
-        // noteDetailsViewModel.getNoteById(noteId)
-
-        val autoAdapter = ArrayAdapter<TagModel>(
-            this,
-            R.layout.support_simple_spinner_dropdown_item,
-            allTags
-        )
-
-        autocomplete.setAdapter(autoAdapter)
-
-        setupAutocomplete()
+        
     }
 
     override fun onBackPressed() {
@@ -128,6 +118,14 @@ class NoteDetails : AppCompatActivity() {
     }
 
     private fun setupAutocomplete() {
+
+        val autoAdapter = ArrayAdapter<TagModel>(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            allTags
+        )
+
+        autocomplete.setAdapter(autoAdapter)
 
         autocomplete.setOnItemClickListener { adapterView, _, position, _ ->
             autocomplete.text = null
