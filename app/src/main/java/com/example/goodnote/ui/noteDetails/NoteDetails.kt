@@ -9,7 +9,6 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import com.example.goodnote.R
 import com.example.goodnote.databinding.NotesDetailsActivityBinding
@@ -39,7 +38,6 @@ class NoteDetails : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setContentView(R.layout.notes_details_activity)
         binding = DataBindingUtil.setContentView(this, R.layout.notes_details_activity)
         binding.setLifecycleOwner(this)
 
@@ -125,7 +123,7 @@ class NoteDetails : AppCompatActivity() {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
             }
         }
-        chipGroup.addView(chip)
+        binding.notesDetailsTagsGroup.addView(chip)
     }
 
     private fun setupAutocomplete() {
