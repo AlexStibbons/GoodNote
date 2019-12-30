@@ -1,5 +1,7 @@
 package com.example.goodnote.ui.viewModels
 
+import android.widget.EditText
+import androidx.databinding.BaseObservable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

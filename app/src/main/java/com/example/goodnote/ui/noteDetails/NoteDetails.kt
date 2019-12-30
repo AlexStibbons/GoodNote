@@ -49,7 +49,7 @@ class NoteDetails : AppCompatActivity() {
         noteDetailsViewModel.noteToEdit.observe(this, Observer {
             it ?: return@Observer
             note = it
-            getForNote(note)
+            populateNoteDetails(note)
             Log.e("DETAILS", "GET called")
         })
 
@@ -88,7 +88,7 @@ class NoteDetails : AppCompatActivity() {
         })
     }
 
-    private fun getForNote(note: NoteDetailsModel) {
+    private fun populateNoteDetails(note: NoteDetailsModel) {
         //title.setText(note.title)
         binding.notesDetailsTitle.setText(note.title)
         tagsText.text =  note.tags.toTagsString().ifBlank { "No tags yet!" }
