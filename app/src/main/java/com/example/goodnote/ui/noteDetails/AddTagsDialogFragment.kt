@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -147,16 +148,6 @@ class AddTagsDialogFragment : DialogFragment() {
             isCheckedIconVisible = false
             setTextColor(ColorStateList.valueOf(Color.WHITE))
             setChipNotChecked(this)
-            setOnClickListener {
-                if (this.isChecked) {
-                    onTagDiselected(tag)
-                    setChipNotChecked(this)
-                }
-                if (!this.isChecked) {
-                    onTagSelected(tag)
-                    setChipChecked(this)
-                }
-            }
         }
         if (tag in noteToEdit.tags) {
             setChipChecked(chip)
