@@ -2,6 +2,8 @@ package com.example.goodnote.ui.noteDetails
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +12,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import com.example.goodnote.ui.models.NoteDetailsModel
@@ -138,17 +140,42 @@ class AddTagsDialogFragment : DialogFragment() {
     }
 
     private fun addChipToGroup(tag: TagModel) {
-        // if noteToeEdit.tags contains tag -> chip is coloured/chosen
-        // else it is not
-        // chips are CHOICE chips, NOT filter chips
         val chip = Chip(parent).apply {
             text = tag.name
             isClickable = true
+            isCheckable = true
+            isCheckedIconVisible = false
+            setTextColor(ColorStateList.valueOf(Color.WHITE))
+            setChipNotChecked(this)
             setOnClickListener {
-                Toast.makeText(requireActivity(), "clicked $text!", Toast.LENGTH_SHORT).show()
+                if (this.isChecked) {
+                    onTagDiselected(tag)
+                    setChipNotChecked(this)
+                }
+                if (!this.isChecked) {
+                    onTagSelected(tag)
+                    setChipChecked(this)
+                }
             }
         }
+        if (tag in noteToEdit.tags) {
+            setChipChecked(chip)
+        }
         chipGroup.addView(chip)
+    }
+
+    private fun setChipChecked(chip: Chip) {
+        chip.apply {
+            isChecked = true
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireActivity(), R.color.colorPrimary))
+        }
+    }
+
+    private fun setChipNotChecked(chip: Chip) {
+        chip.apply {
+            isChecked = false
+            chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireActivity(),R.color.windowBackground3))
+        }
     }
 
 }
