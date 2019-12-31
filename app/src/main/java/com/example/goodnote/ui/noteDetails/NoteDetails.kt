@@ -119,6 +119,8 @@ class NoteDetails : AppCompatActivity() {
         val chip = Chip(this).apply {
             text = tag.name
             isCloseIconVisible = true
+            isCheckable = true
+            isChecked = true
             setOnCloseIconClickListener {
                 noteDetailsViewModel.deleteTagForNote(note.noteId, tag.tagId)
             }
