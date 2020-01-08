@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +85,7 @@ class AddTagsDialogFragment : DialogFragment() {
         noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             noteToEdit = it
+            chipGroup.removeAllViews()
             setUpTags()
         })
 
@@ -147,7 +147,18 @@ class AddTagsDialogFragment : DialogFragment() {
             isCheckable = true
             isCheckedIconVisible = false
             setTextColor(ColorStateList.valueOf(Color.WHITE))
-            setChipNotChecked(this)
+            setChipUnchecked(this)
+            setOnClickListener {
+                if (this.isChecked) {
+                    onTagSelected(tag)
+                    setChipChecked(this)
+                }
+
+                if (!this.isChecked) {
+                    onTagDiselected(tag)
+                    setChipUnchecked(this)
+                }
+            }
         }
         if (tag in noteToEdit.tags) {
             setChipChecked(chip)
@@ -162,7 +173,7 @@ class AddTagsDialogFragment : DialogFragment() {
         }
     }
 
-    private fun setChipNotChecked(chip: Chip) {
+    private fun setChipUnchecked(chip: Chip) {
         chip.apply {
             isChecked = false
             chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(requireActivity(),R.color.windowBackground3))
