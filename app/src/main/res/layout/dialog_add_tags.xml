@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="400dp"
     android:background="@color/windowBackground4">
 
     <com.google.android.material.textview.MaterialTextView
@@ -24,7 +25,7 @@
     <ScrollView
         android:id="@+id/add_tags_dialog_scroll_view"
         android:layout_width="0dp"
-        android:layout_height="120dp"
+        android:layout_height="250dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="@id/guideline_vert_l"
         app:layout_constraintRight_toRightOf="@id/guideline_vert_r"
@@ -55,7 +56,9 @@
             android:id="@+id/add_tags_dialog_new_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_add_a_new_tag">
+            android:hint="@string/hint_add_a_new_tag"
+            android:singleLine="true"
+            android:imeOptions="actionDone">
 
         </com.google.android.material.textfield.TextInputEditText>
 
