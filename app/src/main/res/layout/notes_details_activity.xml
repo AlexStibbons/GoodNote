@@ -67,8 +67,8 @@
             android:layout_marginRight="7dp"
             app:layout_constraintBaseline_toBaselineOf="@id/add_tags_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/add_tags_button"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_title"/>
+            app:layout_constraintTop_toBottomOf="@id/notes_details_title"
+            app:layout_constraintEnd_toStartOf="@id/add_tags_button"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_tags_button"
