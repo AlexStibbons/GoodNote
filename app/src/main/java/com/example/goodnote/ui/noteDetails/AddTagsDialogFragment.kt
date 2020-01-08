@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -23,7 +24,7 @@ import com.example.goodnote.utils.EXTRA_NOTE_ID
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.example.goodnote.R
-
+import com.example.goodnote.utils.Injectors
 
 
 class AddTagsDialogFragment : DialogFragment() {
@@ -58,6 +59,10 @@ class AddTagsDialogFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
         arguments?.let { noteId = it.getString(EXTRA_NOTE_ID, "") }
         parent = requireActivity()
+
+        noteViewModel = activity?.run {
+            Injectors.getNoteDetailsViewModel(this as AppCompatActivity, noteId)
+        }!!
     }
 
     override fun onCreateView(

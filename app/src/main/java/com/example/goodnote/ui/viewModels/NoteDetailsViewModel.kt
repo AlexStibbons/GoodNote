@@ -30,12 +30,6 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
    /* private*/ var _noteToEdit = MutableLiveData(NoteDetailsModel(title = "", text = "", tags = mutableListOf()))
     val noteToEdit: LiveData<NoteDetailsModel> = _noteToEdit
 
-    var title2 = MutableLiveData<String>(_noteToEdit.value?.title)
-        set(value) {
-            _noteToEdit.value?.title = value.toString()
-            title2.value = value.toString()
-        }
-
     init {
         getAllTags()
         getNoteById(noteIdFromIntent)
