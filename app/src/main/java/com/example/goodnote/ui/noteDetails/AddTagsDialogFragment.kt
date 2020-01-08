@@ -42,6 +42,7 @@ class AddTagsDialogFragment : DialogFragment() {
 
     // https://developer.android.com/topic/libraries/architecture/viewmodel#implement
     // see section on fragments sharing a view model
+    // refactor
     companion object {
         fun getInstance(noteVM: NoteDetailsViewModel, noteId: String) =
             AddTagsDialogFragment().apply {
@@ -52,8 +53,6 @@ class AddTagsDialogFragment : DialogFragment() {
             }
     }
 
-    // leakage?
-    // when dialog is dismissed, does it go to onDestroy?
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { noteId = it.getString(EXTRA_NOTE_ID, "") }
@@ -76,6 +75,7 @@ class AddTagsDialogFragment : DialogFragment() {
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
 
+        // is live data at all necessary here? seems like it might not be
         noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             allTags.clear()
@@ -130,7 +130,6 @@ class AddTagsDialogFragment : DialogFragment() {
         noteViewModel.deleteTagForNote(noteId, tag.tagId)
     }
 
-    // works okay, but invisible atm
     private fun onTagAdded(name: String) {
         if (allTags.none { it.name == name } || allTags.isNullOrEmpty()) {
             val newTag = TagModel(name = name)
