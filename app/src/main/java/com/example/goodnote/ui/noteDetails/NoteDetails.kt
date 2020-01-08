@@ -57,7 +57,7 @@ class NoteDetails : AppCompatActivity() {
 
 
         addTagsBtn.setOnClickListener {
-            val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteDetailsViewModel, noteId)
+            val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteId)
             dialog.show(supportFragmentManager, "")
         }
     }

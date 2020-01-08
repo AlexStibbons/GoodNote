@@ -42,13 +42,9 @@ class AddTagsDialogFragment : DialogFragment() {
     private var allTags: MutableList<TagModel> = ArrayList()
     private var noteToEdit: NoteDetailsModel = NoteDetailsModel("", "", "")
 
-    // https://developer.android.com/topic/libraries/architecture/viewmodel#implement
-    // see section on fragments sharing a view model
-    // refactor
     companion object {
-        fun getInstance(noteVM: NoteDetailsViewModel, noteId: String) =
+        fun getInstance(noteId: String) =
             AddTagsDialogFragment().apply {
-                this.noteViewModel = noteVM
                 arguments = Bundle().apply {
                     putString(EXTRA_NOTE_ID, noteId)
                 }
@@ -81,12 +77,6 @@ class AddTagsDialogFragment : DialogFragment() {
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
 
-        chipGroup.apply {
-            setChipSpacing(3)
-            //chipSpacingHorizontal = 3
-            //chipSpacingVertical = 3
-        }
-
         // is live data at all necessary here? seems like it might not be
         noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
@@ -113,10 +103,6 @@ class AddTagsDialogFragment : DialogFragment() {
         }
 
         return rootView
-    }
-
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return super.onCreateDialog(savedInstanceState)
     }
 
     override fun onResume() {
