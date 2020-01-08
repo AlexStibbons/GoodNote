@@ -74,7 +74,7 @@
             android:id="@+id/add_tags_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
             android:text="tags"
             app:iconGravity="textEnd"
             app:icon="@drawable/ic_add_black_24dp"
