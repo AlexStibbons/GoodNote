@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.CompoundButton
 import android.widget.EditText
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -74,6 +75,12 @@ class AddTagsDialogFragment : DialogFragment() {
         doneBtn = rootView.findViewById(R.id.add_tags_dialog_doneBtn)
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
+
+        chipGroup.apply {
+            setChipSpacing(3)
+            //chipSpacingHorizontal = 3
+            //chipSpacingVertical = 3
+        }
 
         // is live data at all necessary here? seems like it might not be
         noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
