@@ -1,14 +1,10 @@
 package com.example.goodnote.ui.noteList
 
-import android.content.Context
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.goodnote.R
@@ -16,13 +12,10 @@ import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.EXTRA_NOTE_TAGS
 import com.example.goodnote.utils.EXTRA_NOTE_TEXT
 import com.example.goodnote.utils.EXTRA_NOTE_TITLE
-import com.google.android.material.chip.Chip
-import kotlinx.android.synthetic.main.note_item.view.*
 import kotlinx.android.synthetic.main.note_item.view.item_note_text
 import kotlinx.android.synthetic.main.note_item.view.item_note_title
 import kotlinx.android.synthetic.main.note_item.view.item_tags
 import kotlinx.android.synthetic.main.note_item.view.layout_note_item
-import kotlinx.android.synthetic.main.note_item_alternate.view.*
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) :
     RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>() {

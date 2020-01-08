@@ -44,6 +44,8 @@
             android:layout_marginRight="7dp"
             android:background="@android:color/transparent"
             android:hint="text..."
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
             android:inputType="textMultiLine"
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
