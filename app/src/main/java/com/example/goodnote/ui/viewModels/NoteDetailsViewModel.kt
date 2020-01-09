@@ -59,7 +59,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
 
         if (noteIdFromIntent.isBlank()) {
-           saveToInternal(noteToSave.toNoteDomainModel(), context)
+           //saveToInternal(noteToSave.toNoteDomainModel(), context)
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -91,11 +91,10 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         if (!directory.exists()) directory.mkdir()
 
         val fileName: String = "${note.title}.txt"
-        val title = note.title
         val body = StringBuilder().apply {
             append("\n")
             append(note.tags.toTagsString())
-            append("\n")
+            append("\n\n")
             append(note.text)
         }.toString()
 
