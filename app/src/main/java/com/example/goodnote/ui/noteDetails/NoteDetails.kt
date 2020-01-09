@@ -3,6 +3,7 @@ package com.example.goodnote.ui.noteDetails
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.*
@@ -20,6 +21,7 @@ import com.example.goodnote.utils.Injectors
 import com.example.goodnote.utils.toTagsString
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import java.io.File
 
 class NoteDetails : AppCompatActivity() {
 

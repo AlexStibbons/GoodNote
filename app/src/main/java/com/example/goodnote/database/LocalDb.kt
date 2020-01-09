@@ -9,7 +9,6 @@ import com.example.goodnote.database.daos.*
 import com.example.goodnote.database.entityModels.*
 import com.example.goodnote.utils.DB_NAME
 import com.example.goodnote.utils.DEFAULT_TITLE
-import com.example.goodnote.utils.DUMMY_TEXT
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 

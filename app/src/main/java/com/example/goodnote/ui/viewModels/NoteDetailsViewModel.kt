@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.goodnote.repository.NoteRepo
 import com.example.goodnote.repository.TagRepo
+import com.example.goodnote.repository.domainModels.NoteDomanModel
 import com.example.goodnote.ui.models.NoteDetailsModel
 import com.example.goodnote.ui.models.TagModel
 import com.example.goodnote.utils.*
@@ -13,6 +14,9 @@ import com.example.goodnote.utils.addOne
 import com.example.goodnote.utils.toListTagModel
 import com.example.goodnote.utils.toTagDomainModel
 import kotlinx.coroutines.*
+import java.io.File
+import java.io.FileWriter
+import java.io.IOException
 
 class NoteDetailsViewModel(private val noteRepo: NoteRepo,
                            private val tagRepo: TagRepo,
@@ -56,6 +60,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
 
         if (noteIdFromIntent.isBlank()) {
+           // saveToInternal(noteToSave.toNoteDomainModel())
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -80,5 +85,33 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         if (noteIdFromIntent.isNotBlank()) {
             withContext(Dispatchers.IO) {noteRepo.addTagForNote(noteId, tag.tagId)}
         }
+    }
+
+    fun saveToInternal(note: NoteDomanModel) {
+        val directory: File = File(STORAGE_DIRECTORY_PATH)
+        if (!directory.exists()) directory.mkdir()
+
+        val title = note.title
+        val body = StringBuilder().apply {
+            append("\n")
+            append(note.tags.toTagsString())
+            append("\n")
+            append(note.text)
+        }.toString()
+
+        try {
+            val noteFile: File = File(directory, title)
+
+            val writer: FileWriter = FileWriter(noteFile, true)
+            writer.apply {
+                append(body)
+                flush()
+                close()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+
     }
 }
