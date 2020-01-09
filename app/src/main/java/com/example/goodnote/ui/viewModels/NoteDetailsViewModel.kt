@@ -1,5 +1,6 @@
 package com.example.goodnote.ui.viewModels
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,9 +15,7 @@ import com.example.goodnote.utils.addOne
 import com.example.goodnote.utils.toListTagModel
 import com.example.goodnote.utils.toTagDomainModel
 import kotlinx.coroutines.*
-import java.io.File
-import java.io.FileWriter
-import java.io.IOException
+import java.io.*
 
 class NoteDetailsViewModel(private val noteRepo: NoteRepo,
                            private val tagRepo: TagRepo,
@@ -56,11 +55,11 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _noteToEdit.value = found
     }
 
-    fun saveNote()  = viewModelScope.launch {
+    fun saveNote(context: Context)  = viewModelScope.launch {
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
 
         if (noteIdFromIntent.isBlank()) {
-           // saveToInternal(noteToSave.toNoteDomainModel())
+           saveToInternal(noteToSave.toNoteDomainModel(), context)
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -87,10 +86,11 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         }
     }
 
-    fun saveToInternal(note: NoteDomanModel) {
+    fun saveToInternal(note: NoteDomanModel, context: Context) {
         val directory: File = File(STORAGE_DIRECTORY_PATH)
         if (!directory.exists()) directory.mkdir()
 
+        val fileName: String = "${note.title}.txt"
         val title = note.title
         val body = StringBuilder().apply {
             append("\n")
@@ -100,7 +100,18 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         }.toString()
 
         try {
-            val noteFile: File = File(directory, title)
+            val output: FileOutputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE)
+            val outputWriter = OutputStreamWriter(output).apply {
+                write(body)
+                close()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+
+        /*try {
+            val noteFile: File = File(directory, path)
 
             val writer: FileWriter = FileWriter(noteFile, true)
             writer.apply {
@@ -110,8 +121,6 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
             }
         } catch (e: IOException) {
             e.printStackTrace()
-        }
-
-
+        }*/
     }
 }

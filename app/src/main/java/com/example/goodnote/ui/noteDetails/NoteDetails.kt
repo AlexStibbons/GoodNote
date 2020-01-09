@@ -65,7 +65,7 @@ class NoteDetails : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (text.text.isNotBlank() || binding.notesDetailsTitle.text.isNotBlank() || note.tags.isNotEmpty()) {
-            noteDetailsViewModel.saveNote()
+            noteDetailsViewModel.saveNote(this)
         } else {
             super.onBackPressed()
         }
