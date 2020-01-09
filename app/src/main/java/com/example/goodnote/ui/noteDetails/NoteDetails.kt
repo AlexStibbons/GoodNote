@@ -55,7 +55,6 @@ class NoteDetails : AppCompatActivity() {
         addTagsBtn = findViewById(R.id.add_tags_button)
         tagsText = findViewById(R.id.tags_text)
 
-
         addTagsBtn.setOnClickListener {
             val dialog: AddTagsDialogFragment = AddTagsDialogFragment.getInstance(noteId)
             dialog.show(supportFragmentManager, "")
@@ -81,5 +80,4 @@ class NoteDetails : AppCompatActivity() {
         tagsText.text =  note.tags.toTagsString().ifBlank { "No tags yet!" }
         text.setText(note.text)
     }
-
 }

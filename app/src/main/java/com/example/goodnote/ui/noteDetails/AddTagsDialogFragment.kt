@@ -84,7 +84,7 @@ class AddTagsDialogFragment : DialogFragment() {
             allTags.addAll(it)
         })
 
-        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
+       noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             noteToEdit = it
             chipGroup.removeAllViews()

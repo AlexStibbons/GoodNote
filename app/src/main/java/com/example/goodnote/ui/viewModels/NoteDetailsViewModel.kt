@@ -1,7 +1,5 @@
 package com.example.goodnote.ui.viewModels
 
-import android.widget.EditText
-import androidx.databinding.BaseObservable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -56,6 +54,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
 
     fun saveNote()  = viewModelScope.launch {
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
+
         if (noteIdFromIntent.isBlank()) {
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
