@@ -49,7 +49,6 @@ class NoteDetails : AppCompatActivity() {
             it ?: return@Observer
             note = it
             populateNoteDetails(note)
-            Log.e("DETAILS", "GET called")
         })
 
        // title = findViewById(R.id.notes_details_title)
@@ -65,7 +64,7 @@ class NoteDetails : AppCompatActivity() {
 
     override fun onBackPressed() {
         if (text.text.isNotBlank() || binding.notesDetailsTitle.text.isNotBlank() || note.tags.isNotEmpty()) {
-            noteDetailsViewModel.saveNote(this)
+            noteDetailsViewModel.saveNote()
         } else {
             super.onBackPressed()
         }

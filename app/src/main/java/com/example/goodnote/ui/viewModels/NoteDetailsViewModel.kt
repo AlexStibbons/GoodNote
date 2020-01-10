@@ -57,11 +57,11 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         _noteToEdit.value = found
     }
 
-    fun saveNote(context: Context)  = viewModelScope.launch {
+    fun saveNote()  = viewModelScope.launch {
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
 
         if (noteIdFromIntent.isBlank()) {
-            saveToInternal(noteToSave.toNoteDomainModel(), context)
+            //saveToInternal(noteToSave.toNoteDomainModel(), context)
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -90,17 +90,22 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
 
     fun saveToInternal(note: NoteDomanModel, context: Context) {
 
+        // CASES
+        // if TITLE is edited, RENAME the existing note somehow
+        // if BODY is edited, output does that automatically
+
+        // maybe a separate method for title change / update existing
+
         // file should be in device storage/GoodNote/something.txt
-        //val currentFolder: File = context.filesDir
-        //val directory: File = File(currentFolder, "GoodNote")
+        val currentFolder: File = context.filesDir
+        val directory: File = File(currentFolder, "GoodNote")
         //val directory = context.getDir("GoodNote", Context.MODE_PRIVATE)
         //val directory = File(Environment.getRootDirectory(), "GoodNote")
-        val path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/GoodNote"
-        Log.e("saving", "dataDir.absolutePath = $path")
-        val directory = File("/storage/emulated/0/Goodnote")
+       // val path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/GoodNote"
+      //  val directory = File("/storage/emulated/0/Goodnote")
         if (!directory.exists()) {
             directory.mkdir()
-            Log.e("created", "$directory")
+            Log.e("created", "$directory") // except it's not creating it at all
         }
 
         val fileName: String = "${note.title}.txt"
