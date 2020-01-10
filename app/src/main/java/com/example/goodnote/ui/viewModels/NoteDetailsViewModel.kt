@@ -1,6 +1,8 @@
 package com.example.goodnote.ui.viewModels
 
 import android.content.Context
+import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -59,7 +61,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         val noteToSave: NoteDetailsModel = if (noteToEdit.value?.title.isNullOrEmpty()) noteToEdit.value?.copy(title = DEFAULT_TITLE)!! else noteToEdit.value!!
 
         if (noteIdFromIntent.isBlank()) {
-           //saveToInternal(noteToSave.toNoteDomainModel(), context)
+            saveToInternal(noteToSave.toNoteDomainModel(), context)
             val saved = withContext(Dispatchers.IO) { noteRepo.saveNote(noteToSave.toNoteDomainModel())}
             _onNoteSaved.value = saved
         } else {
@@ -87,12 +89,25 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
     }
 
     fun saveToInternal(note: NoteDomanModel, context: Context) {
-        val directory: File = File(STORAGE_DIRECTORY_PATH)
-        if (!directory.exists()) directory.mkdir()
+
+        // file should be in device storage/GoodNote/something.txt
+        //val currentFolder: File = context.filesDir
+        //val directory: File = File(currentFolder, "GoodNote")
+        //val directory = context.getDir("GoodNote", Context.MODE_PRIVATE)
+        //val directory = File(Environment.getRootDirectory(), "GoodNote")
+        val path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/GoodNote"
+        Log.e("saving", "dataDir.absolutePath = $path")
+        val directory = File("/storage/emulated/0/Goodnote")
+        if (!directory.exists()) {
+            directory.mkdir()
+            Log.e("created", "$directory")
+        }
 
         val fileName: String = "${note.title}.txt"
         val body = StringBuilder().apply {
             append("\n")
+            append("${note.title.toUpperCase()}")
+            append("\n\n")
             append(note.tags.toTagsString())
             append("\n\n")
             append(note.text)
@@ -107,19 +122,5 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         } catch (e: IOException) {
             e.printStackTrace()
         }
-
-
-        /*try {
-            val noteFile: File = File(directory, path)
-
-            val writer: FileWriter = FileWriter(noteFile, true)
-            writer.apply {
-                append(body)
-                flush()
-                close()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }*/
     }
 }

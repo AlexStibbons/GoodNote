@@ -82,6 +82,7 @@ class AddTagsDialogFragment : DialogFragment() {
             it ?: return@Observer
             allTags.clear()
             allTags.addAll(it)
+            if (allTags.isNotEmpty()) noTagsText.visibility = View.GONE
         })
 
        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {

@@ -34,8 +34,8 @@ abstract class LocalDb : RoomDatabase() {
         }
 
         private fun buildDb(context: Context): LocalDb {
-            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME)
-                .addCallback(LocalDbCallback()).build()
+            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).build()
+                 //.addCallback(LocalDbCallback())
         }
 
     }
