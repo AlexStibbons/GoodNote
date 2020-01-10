@@ -77,7 +77,6 @@ class AddTagsDialogFragment : DialogFragment() {
         noTagsText = rootView.findViewById(R.id.add_tags_dialog_no_tags)
         noTagsText.visibility = View.GONE
 
-        // is live data at all necessary here? seems like it might not be
         noteViewModel.existingTags.observe(viewLifecycleOwner, Observer {
             it ?: return@Observer
             allTags.clear()
@@ -86,10 +85,10 @@ class AddTagsDialogFragment : DialogFragment() {
         })
 
        noteViewModel.noteToEdit.observe(viewLifecycleOwner, Observer {
-            it ?: return@Observer
-            noteToEdit = it
-            chipGroup.removeAllViews()
-            setUpTags()
+           it ?: return@Observer
+           noteToEdit = it
+           chipGroup.removeAllViews()
+           setUpTags()
         })
 
         addBtn.setOnClickListener {
