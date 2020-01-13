@@ -13,85 +13,80 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
+
+        <EditText
             android:id="@+id/notes_details_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
+            android:background="@android:color/transparent"
             android:hint="Title..."
+            android:inputType="textMultiLine"
             android:text="@={viewModel._noteToEdit.title}"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_linear_layout"
+            app:layout_constraintBottom_toTopOf="@id/tags_text"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.714"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/notes_details_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@id/notes_details_text"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_title">
 
-            <AutoCompleteTextView
-                android:id="@+id/notes_details_autocomplete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:background="#00000000"
-                android:hint="tags"
-                android:inputType="textCapWords"
-                android:completionThreshold="1"
-                android:imeOptions="actionDone"
-                android:dropDownWidth="match_parent"
-                android:layout_marginStart="7dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginRight="7dp" />
-
-            <HorizontalScrollView
-                android:id="@+id/notes_details_tags_scroll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/notes_details_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/notes_details_autocomplete">
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/notes_details_tags_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:singleLine="true">
-
-
-                </com.google.android.material.chip.ChipGroup>
-
-            </HorizontalScrollView>
-        </LinearLayout>
-
-        <com.google.android.material.textfield.TextInputEditText
+        <EditText
             android:id="@+id/notes_details_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
             android:layout_marginLeft="7dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="7dp"
             android:layout_marginRight="7dp"
-            android:background="#00000000"
+            android:background="@android:color/transparent"
             android:hint="text..."
+            android:overScrollMode="always"
+            android:scrollbarStyle="insideInset"
+            android:inputType="textMultiLine"
             android:text="@={viewModel._noteToEdit.text}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/notes_details_linear_layout" />
+            app:layout_constraintTop_toBottomOf="@id/add_tags_button" />
 
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tags_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="No tags yet!"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textStyle="italic"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/add_tags_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_title"
+            app:layout_constraintEnd_toStartOf="@id/add_tags_button"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_tags_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:text="tags"
+            app:iconGravity="textEnd"
+            app:icon="@drawable/ic_add_black_24dp"
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/notes_details_title"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

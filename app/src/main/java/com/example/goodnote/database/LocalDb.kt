@@ -9,7 +9,6 @@ import com.example.goodnote.database.daos.*
 import com.example.goodnote.database.entityModels.*
 import com.example.goodnote.utils.DB_NAME
 import com.example.goodnote.utils.DEFAULT_TITLE
-import com.example.goodnote.utils.DUMMY_TEXT
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -35,8 +34,8 @@ abstract class LocalDb : RoomDatabase() {
         }
 
         private fun buildDb(context: Context): LocalDb {
-            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME)
-                .addCallback(LocalDbCallback()).build()
+            return Room.databaseBuilder(context, LocalDb::class.java, DB_NAME).build()
+                 //.addCallback(LocalDbCallback())
         }
 
     }
@@ -52,7 +51,7 @@ abstract class LocalDb : RoomDatabase() {
                     val tagDao = database.tagDao()
                     val joinDao = database.joinNoteTagDao()
 
-                    noteDao.addNote(NoteEntity("research", DUMMY_TEXT, "fake1"))
+                    /*noteDao.addNote(NoteEntity("research", DUMMY_TEXT, "fake1"))
                     noteDao.addNote(NoteEntity("Higher, my gallows", DUMMY_TEXT, "fake2"))
                     noteDao.addNote(NoteEntity(DEFAULT_TITLE, "etc", "fake3"))
                     noteDao.addNote(NoteEntity("Beckoning the heart", DUMMY_TEXT, "fake4"))
@@ -60,7 +59,7 @@ abstract class LocalDb : RoomDatabase() {
                     noteDao.addNote(NoteEntity("Our good and proper shoes", DUMMY_TEXT, "fake6"))
                     noteDao.addNote(NoteEntity("Hatchling", DUMMY_TEXT, "fake7"))
                     noteDao.addNote(NoteEntity("Quiet life of Galeb Rekah", DUMMY_TEXT, "fake8"))
-                    noteDao.addNote(NoteEntity("the kinda summer","that sucks the life out of you","fake9"))
+                    noteDao.addNote(NoteEntity("the kinda summer","that sucks the life out of you","fake9"))*/
 
                     tagDao.addTag(TagEntity("people", "fake1"))
                     tagDao.addTag(TagEntity("world", "fake2"))
@@ -73,7 +72,7 @@ abstract class LocalDb : RoomDatabase() {
                     tagDao.addTag(TagEntity("isms", "fake9"))
                     tagDao.addTag(TagEntity("ancients", "fake10"))
 
-                    joinDao.addNoteTag(JoinNoteTagEntity("fake1", "fake1"))
+                  /*  joinDao.addNoteTag(JoinNoteTagEntity("fake1", "fake1"))
                     joinDao.addNoteTag(JoinNoteTagEntity("fake2", "fake1"))
                     joinDao.addNoteTag(JoinNoteTagEntity("fake3", "fake1"))
                     joinDao.addNoteTag(JoinNoteTagEntity("fake8", "fake1"))
@@ -102,7 +101,7 @@ abstract class LocalDb : RoomDatabase() {
                     joinDao.addNoteTag(JoinNoteTagEntity("fake7", "fake9"))
                     joinDao.addNoteTag(JoinNoteTagEntity("fake8", "fake9"))
                     joinDao.addNoteTag(JoinNoteTagEntity("fake9", "fake9"))
-                    joinDao.addNoteTag(JoinNoteTagEntity("fake10", "fake9"))
+                    joinDao.addNoteTag(JoinNoteTagEntity("fake10", "fake9"))*/
                 }
             }
         }

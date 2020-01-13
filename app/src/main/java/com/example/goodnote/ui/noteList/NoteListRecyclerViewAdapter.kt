@@ -12,7 +12,10 @@ import com.example.goodnote.ui.models.NoteModel
 import com.example.goodnote.utils.EXTRA_NOTE_TAGS
 import com.example.goodnote.utils.EXTRA_NOTE_TEXT
 import com.example.goodnote.utils.EXTRA_NOTE_TITLE
-import kotlinx.android.synthetic.main.note_item.view.*
+import kotlinx.android.synthetic.main.note_item.view.item_note_text
+import kotlinx.android.synthetic.main.note_item.view.item_note_title
+import kotlinx.android.synthetic.main.note_item.view.item_tags
+import kotlinx.android.synthetic.main.note_item.view.layout_note_item
 
 class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.onNoteClick) :
     RecyclerView.Adapter<NoteListRecyclerViewAdapter.ViewHolder>() {
@@ -24,7 +27,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             R.layout.note_item,
             parent, false
         )
-
         return ViewHolder(itemView, onNoteClicked)
     }
 
@@ -53,7 +55,6 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
 
     class ViewHolder(view: View, private val click: NoteListFragment.onNoteClick) :
         RecyclerView.ViewHolder(view) {
-
         private val title = view.item_note_title
         private val tags = view.item_tags
         private val text = view.item_note_text
@@ -76,6 +77,7 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
             }
         }
     }
+
 
     internal fun setNotes(newNotes: List<NoteModel>) {
         val diffResult = DiffUtil.calculateDiff(NoteDiffCallback(this.notes, newNotes), true)
