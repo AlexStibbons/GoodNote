@@ -19,11 +19,7 @@ class CustomMatcher {
                     val noteTitle: TextView? = item?.findViewById(R.id.item_note_title)
                     return noteTitle!!.text!!.equals(expected)
                 }
-
-                override fun describeMismatch(item: Any?, description: Description?) {
-                    super.describeMismatch(item, description)
-                }
-
+                
                 override fun describeTo(description: Description?) {
                     description?.appendText("No such thing as $expected found")
                 }
