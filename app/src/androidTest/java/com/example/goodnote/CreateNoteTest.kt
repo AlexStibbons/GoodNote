@@ -25,6 +25,8 @@ import org.junit.Rule
 @LargeTest
 class CreateNoteTest {
 
+    private val SOME_TEXT = "some text"
+
     @get:Rule
     var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
@@ -38,17 +40,29 @@ class CreateNoteTest {
         onView(withId(R.id.fabAdd)).perform(click())
         onView(withId(R.id.notes_details_title))
             .perform(click()) // editText field must first be clicked then type in text
-            .perform(typeText("hey test 10"))
+            .perform(typeText(SOME_TEXT))
         // check they match unnecessarily
         // note that nothing else happened; we are staying on note details screen
         onView(withId(R.id.notes_details_title))
-            .check(matches(withText("hey test 10")))
+            .check(matches(withText(SOME_TEXT)))
 
         pressBack() // --> to remove keyboard
         pressBack() // --> to go back to recycler view
 
+        // we go back to recycler view;
         onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnItem<NoteListRecyclerViewAdapter.ViewHolder>(withText("hey test 10"), click()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(1, click()))
+        // item with text didn't really work
 
+        // now we're in note details screen again
+        onView(withId(R.id.notes_details_title))
+            .check(matches(withText("note two")))
+        // still inside the details of note 2
+        onView(withId(R.id.notes_details_text))
+            .perform(click())
+            .perform(typeText(SOME_TEXT))
+
+        pressBack()
+        pressBack()
     }
 }
