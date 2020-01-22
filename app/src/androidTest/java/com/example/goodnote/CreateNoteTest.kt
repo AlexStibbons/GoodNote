@@ -26,7 +26,7 @@ class CreateNoteTest {
 
     private val SOME_TEXT = "some text"
 
-    @get:Rule
+    @get:Rule // or use ActivityScenario, which is apparently standard for Espresso 3 [?]
     var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
@@ -90,5 +90,15 @@ class CreateNoteTest {
 
         // scroll down to new item
         // scrollToHolder apparently needs a custom matcher? or not??
+    }
+
+    @Test
+    fun recyclerView() {
+        // clicks using position
+        onView(withId(R.id.notes_list_recycler_view))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(7, click()))
+        pressBack()
+
+        // scrollTo
     }
 }
