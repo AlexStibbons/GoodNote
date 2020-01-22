@@ -2,16 +2,20 @@ package com.example.goodnote
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.view.TextureView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
-import com.example.goodnote.ui.noteList.NoteListRecyclerViewAdapter
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.Bitmap
+import android.R.drawable
+import android.graphics.drawable.AdaptiveIconDrawable
+import android.graphics.drawable.StateListDrawable
+import androidx.core.view.drawToBitmap
+
 
 // this whole things is suspicious
 class CustomMatcher {
@@ -24,11 +28,14 @@ class CustomMatcher {
             return object : TypeSafeMatcher<View>() {
 
                 override fun describeTo(description: Description?) {
-                    description?.appendText("expted to have title: $expected")
+                    description?.appendText("expected to have title: $expected")
                 }
 
                 override fun matchesSafely(item: View?): Boolean {
-                    if (item != null && item.findViewById<TextView>(R.id.item_note_title) != null) {
+                    // the view here is the entire note item, material card + constraint + elements
+                    // if the view itself is not null and the note_title can be found
+                    // then find the text view
+                    if (item?.findViewById<TextView>(R.id.item_note_title) != null) {
                         val noteTitleView: TextView = item.findViewById(R.id.item_note_title)
                         return noteTitleView.text == expected
                     }
@@ -49,8 +56,35 @@ class CustomMatcher {
         }
 
         private fun sameBitmap(context: Context, drawable: Drawable, resourceId: Int): Boolean {
-            return true
-        }
 
+            var otherDrawable = context.resources.getDrawable(resourceId)
+
+            if (drawable == null || otherDrawable == null) {
+                return false
+            }
+            when (drawable) {
+                is AdaptiveIconDrawable -> true
+                is ImageView -> drawable == otherDrawable
+            }
+
+            return false
+        }
     }
 }
+
+/*        private fun sameBitmap(context: Context, drawable: Drawable, resourceId: Int): Boolean {
+            var otherDrawable = context.resources.getDrawable(resourceId)
+            var drawable2 = drawable
+            if (drawable2 == null || otherDrawable == null) {
+                return false
+            }
+            if (drawable2 is StateListDrawable && otherDrawable is StateListDrawable) {
+                drawable2 = drawable.getCurrent()
+                otherDrawable = otherDrawable.current
+            }
+            if (drawable2 is BitmapDrawable) {
+                val bitmap = drawable2.bitmap
+                val otherBitmap = (otherDrawable as BitmapDrawable).bitmap
+                return bitmap.sameAs(otherBitmap)
+            }
+            return false*/
