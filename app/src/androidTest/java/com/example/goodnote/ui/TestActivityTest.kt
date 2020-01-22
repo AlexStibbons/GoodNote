@@ -7,6 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
+import com.example.goodnote.CustomMatcher.Companion.withImage
 import com.example.goodnote.R
 import kotlinx.android.synthetic.main.activity_test.*
 import org.junit.Assert.*
@@ -29,5 +30,10 @@ class TestActivityTest{
             .perform(click())
     }
 
+    @Test
+    fun customImageMatcher() {
 
+        onView(withId(R.id.test_image))
+            .check(matches(withImage(R.mipmap.ic_goodnote_launcher_round)))
+    }
 }

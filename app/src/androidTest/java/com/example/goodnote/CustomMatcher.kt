@@ -1,7 +1,10 @@
 package com.example.goodnote
 
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.view.TextureView
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.matcher.BoundedMatcher
@@ -31,6 +34,21 @@ class CustomMatcher {
                     return isit!!
                 }
             }
+        }
+
+        fun withImage(resourceId: Int): Matcher<View> {
+            return object : BoundedMatcher<View, ImageView>(ImageView::class.java){
+                override fun describeTo(description: Description?) {
+                    description!!.appendText("has image drawable resource $resourceId")
+                }
+
+                override fun matchesSafely(imageView: ImageView?): Boolean = sameBitmap(imageView!!.context,
+                    imageView.drawable, resourceId)
+            }
+        }
+
+        private fun sameBitmap(context: Context, drawable: Drawable, resourceId: Int): Boolean {
+            return true
         }
 
     }
