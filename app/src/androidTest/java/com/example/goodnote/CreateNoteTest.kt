@@ -26,7 +26,9 @@ class CreateNoteTest {
 
     private val SOME_TEXT = "some text"
 
-    @get:Rule // or use ActivityScenario, which is apparently standard for Espresso 3 [?]
+    // more on ActivityScenario and why to use it:
+    // https://medium.com/stepstone-tech/better-tests-with-androidxs-activityscenario-in-kotlin-part-1-6a6376b713ea
+    @get:Rule
     var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
@@ -81,15 +83,11 @@ class CreateNoteTest {
             .perform(typeText(TEXT_AGAIN))
         //  .perform(closeSoftKeyboard()) --> this won't work even though it's in docs??
 
-        // check they match unnecessarily
         // note that nothing else happened; we are staying on note details screen
         onView(withId(R.id.notes_details_title))
             .check(matches(withText(TEXT_AGAIN)))
         pressBack() // --> close keyboard
         pressBack() // --> to go back to recycler view
-
-        // scroll down to new item
-        // scrollToHolder apparently needs a custom matcher? or not??
     }
 
     @Test

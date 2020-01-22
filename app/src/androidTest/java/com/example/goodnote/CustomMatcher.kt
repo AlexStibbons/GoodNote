@@ -16,8 +16,11 @@ import org.hamcrest.TypeSafeMatcher
 // this whole things is incorrect
 class CustomMatcher {
 
+    // SEE TypeSafe VS Bounded here: https://riptutorial.com/android/example/15712/espresso-custom-matchers
+
     companion object {
 
+        // this one is suspicious
         fun withNoteTitle(expected: String): Matcher<NoteListRecyclerViewAdapter.ViewHolder> {
             return object : TypeSafeMatcher<NoteListRecyclerViewAdapter.ViewHolder>() {
 
