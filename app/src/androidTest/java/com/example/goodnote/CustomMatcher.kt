@@ -13,28 +13,26 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
-// this whole things is incorrect
+// this whole things is suspicious
 class CustomMatcher {
 
     // SEE TypeSafe VS Bounded here: https://riptutorial.com/android/example/15712/espresso-custom-matchers
 
     companion object {
 
-        // this one is suspicious
-        fun withNoteTitle(expected: String): Matcher<NoteListRecyclerViewAdapter.ViewHolder> {
-            return object : TypeSafeMatcher<NoteListRecyclerViewAdapter.ViewHolder>() {
+        fun withNoteTitle(expected: String): Matcher<View> {
+            return object : TypeSafeMatcher<View>() {
 
                 override fun describeTo(description: Description?) {
-                    description?.appendText("No such thing as $expected found")
+                    description?.appendText("expted to have title: $expected")
                 }
 
-                override fun matchesSafely(item: NoteListRecyclerViewAdapter.ViewHolder?): Boolean {
-
-                   val isit =  item?.let {
-                        it.getTitle().equals(expected)
+                override fun matchesSafely(item: View?): Boolean {
+                    if (item != null && item.findViewById<TextView>(R.id.item_note_title) != null) {
+                        val noteTitleView: TextView = item.findViewById(R.id.item_note_title)
+                        return noteTitleView.text == expected
                     }
-
-                    return isit!!
+                    return false
                 }
             }
         }

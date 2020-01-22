@@ -104,10 +104,12 @@ class CreateNoteTest {
             .perform(click()) // does NOT click on scroll 5
         pressBack()
 
-/*     custom matcher issue
-       onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnHolderItem<NoteListRecyclerViewAdapter.ViewHolder>(
-                withNoteTitle("scroll 5"), click()))
-        pressBack()*/
+        // scroll to with custom matcher
+        onView(withId(R.id.notes_list_recycler_view))
+            .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(withNoteTitle("scroll 5")))
+
+        // click with custom matcher
+        onView(withId(R.id.notes_list_recycler_view))
+            .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(withNoteTitle("scroll 5"), click()))
     }
 }
