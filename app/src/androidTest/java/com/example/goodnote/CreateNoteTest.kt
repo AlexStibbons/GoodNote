@@ -1,17 +1,20 @@
 package com.example.goodnote
 
+import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
+import com.example.goodnote.CustomMatcher.Companion.withNoteTitle
 import com.example.goodnote.ui.MainActivity
 import com.example.goodnote.ui.noteList.NoteListRecyclerViewAdapter
+import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -70,7 +73,7 @@ class CreateNoteTest {
 
     @Test
     fun herpDerp2() {
-        val TEXT_AGAIN = "text again"
+        val TEXT_AGAIN = "this that and"
         // click the button
         onView(withId(R.id.fabAdd)).perform(click())
         onView(withId(R.id.notes_details_title))
@@ -86,8 +89,6 @@ class CreateNoteTest {
         pressBack() // --> to go back to recycler view
 
         // scroll down to new item
-        // scrollToHolder apparently needs a custom matcher?
-        // explore more: https://developer.android.com/training/testing/espresso/lists
-
+        // scrollToHolder apparently needs a custom matcher? or not??
     }
 }
