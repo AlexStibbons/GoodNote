@@ -14,6 +14,10 @@ import android.graphics.Bitmap
 import android.R.drawable
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.StateListDrawable
+import android.renderscript.Allocation
+import android.util.Log
+import androidx.core.graphics.drawable.toAdaptiveIcon
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.drawToBitmap
 
 
@@ -62,10 +66,12 @@ class CustomMatcher {
             if (drawable == null || otherDrawable == null) {
                 return false
             }
-            when (drawable) {
-                is AdaptiveIconDrawable -> true
-                is ImageView -> drawable == otherDrawable
-            }
+
+            when {
+                (drawable is Drawable) &&
+                        (otherDrawable is Drawable) -> true
+                }
+
 
             return false
         }
