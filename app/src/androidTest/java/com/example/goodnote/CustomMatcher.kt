@@ -62,35 +62,17 @@ class CustomMatcher {
         private fun sameBitmap(context: Context, drawable: Drawable, resourceId: Int): Boolean {
 
             var otherDrawable = context.resources.getDrawable(resourceId)
-
             if (drawable == null || otherDrawable == null) {
                 return false
             }
 
-            when {
+    /*        when {
                 (drawable is Drawable) &&
                         (otherDrawable is Drawable) -> true
-                }
+                }*/
 
 
-            return false
+            return drawable.toBitmap().sameAs(otherDrawable.toBitmap())
         }
     }
 }
-
-/*        private fun sameBitmap(context: Context, drawable: Drawable, resourceId: Int): Boolean {
-            var otherDrawable = context.resources.getDrawable(resourceId)
-            var drawable2 = drawable
-            if (drawable2 == null || otherDrawable == null) {
-                return false
-            }
-            if (drawable2 is StateListDrawable && otherDrawable is StateListDrawable) {
-                drawable2 = drawable.getCurrent()
-                otherDrawable = otherDrawable.current
-            }
-            if (drawable2 is BitmapDrawable) {
-                val bitmap = drawable2.bitmap
-                val otherBitmap = (otherDrawable as BitmapDrawable).bitmap
-                return bitmap.sameAs(otherBitmap)
-            }
-            return false*/
