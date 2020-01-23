@@ -9,16 +9,7 @@ import androidx.test.espresso.matcher.BoundedMatcher
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.Bitmap
-import android.R.drawable
-import android.graphics.drawable.AdaptiveIconDrawable
-import android.graphics.drawable.StateListDrawable
-import android.renderscript.Allocation
-import android.util.Log
-import androidx.core.graphics.drawable.toAdaptiveIcon
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.view.drawToBitmap
 
 
 // this whole things is suspicious
@@ -56,6 +47,23 @@ class CustomMatcher {
 
                 override fun matchesSafely(imageView: ImageView?): Boolean = sameBitmap(imageView!!.context,
                     imageView.drawable, resourceId)
+            }
+        }
+
+        fun withBackgroundAndForeground(backgroundResource: Int, foregroundResource: Int): Matcher<View> {
+            return object : BoundedMatcher<View, View>(View::class.java){
+                override fun describeTo(description: Description?) {
+                    description!!.appendText("has image drawable resource")
+                }
+
+                override fun matchesSafely(view: View?): Boolean {
+                    val backgroundOnView = view?.background // drawable
+                    val foregroundOnView = view?.foreground // drawable
+                    val boolBkg = sameBitmap(view!!.context, backgroundOnView!!, backgroundResource)
+                    val boolForeg = sameBitmap(view.context, foregroundOnView!!, foregroundResource)
+
+                    return boolBkg && boolForeg
+                }
             }
         }
 

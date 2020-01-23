@@ -34,6 +34,7 @@ class TestActivityTest{
             .check(matches(isDisplayed()))
             .perform(click())
 
+
         onView(withId(R.id.test_image_hidden))
             .check(matches(withEffectiveVisibility(Visibility.INVISIBLE)))
     }
