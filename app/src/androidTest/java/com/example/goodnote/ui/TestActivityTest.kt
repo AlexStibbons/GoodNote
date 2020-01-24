@@ -9,6 +9,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.example.goodnote.CustomMatcher.Companion.withImage
 import com.example.goodnote.R
+import com.example.goodnote.isDoing
+import com.example.goodnote.isScreen
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,30 +22,29 @@ class TestActivityTest{
     @get:Rule
     var activityRule: ActivityTestRule<TestActivity> = ActivityTestRule(TestActivity::class.java)
 
+    val isScreenRobot = isScreen()
+
+    val isDoingRobot = isDoing()
+
+    @Test
+    fun isScreen_Correct() {
+
+        isScreenRobot.testScreen()
+
+    }
     @Test
     fun shouldShowImage_WhenButtonIsClicked_ThenHideImage_WhenButtonIsClickedAgain() {
 
-        onView(withId(R.id.test_btn))
-            .check(matches(isDisplayed()))
-            .perform(click())
+        isScreenRobot.testScreen()
 
-        onView(withId(R.id.test_image_hidden))
-            .check(matches(withEffectiveVisibility(Visibility.VISIBLE))) // alternative to isDisplayed()
+        isDoingRobot.testScreen_clickBtn_Image()
 
-        onView(withId(R.id.test_btn))
-            .check(matches(isDisplayed()))
-            .perform(click())
+        isDoingRobot.testScreen_Image_isVisible()
 
+        isDoingRobot.testScreen_clickBtn_Image()
 
-        onView(withId(R.id.test_image_hidden))
-            .check(matches(withEffectiveVisibility(Visibility.INVISIBLE)))
+        isDoingRobot.testScreen_Image_isHidden()
     }
 
-    @Test
-    fun customImageMatcher() {
 
-        onView(withId(R.id.test_image))
-            .check(matches(withImage(R.mipmap.ic_goodnote_launcher_round)))
-
-    }
 }

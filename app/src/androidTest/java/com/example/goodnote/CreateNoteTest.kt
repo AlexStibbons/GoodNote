@@ -100,16 +100,16 @@ class CreateNoteTest {
         // scrollTo using descendants works, without descendants doesn't work
         onView(withId(R.id.notes_list_recycler_view))
             .perform(RecyclerViewActions.scrollTo<NoteListRecyclerViewAdapter.ViewHolder>
-                (hasDescendant(withText("scroll 5"))))
+                (hasDescendant(withText(SOME_TEXT))))
             .perform(click()) // does NOT click on scroll 5
         pressBack()
 
         // scroll to with custom matcher
         onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(withNoteTitle("scroll 5")))
+            .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(withNoteTitle(SOME_TEXT)))
 
         // click with custom matcher
         onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(withNoteTitle("scroll 5"), click()))
+            .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(withNoteTitle(SOME_TEXT), click()))
     }
 }
