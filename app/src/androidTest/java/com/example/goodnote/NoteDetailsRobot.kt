@@ -5,7 +5,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 
-fun noteDetailsScreen(func: NoteDetailsRobot.() -> Unit) = NoteDetailsRobot().apply {func}
+fun noteDetailsScreen(func: NoteDetailsRobot.() -> Unit) = NoteDetailsRobot().apply {func()}
 
 class NoteDetailsRobot {
 
@@ -13,7 +13,7 @@ class NoteDetailsRobot {
         Espresso.onView(ViewMatchers.withId(R.id.notes_details_title))
             .perform(ViewActions.click())
             .perform(ViewActions.typeText(title))
-        ViewActions.pressBack()
+        ViewActions.pressBack() // to remove keyboard
     }
 
     fun checkTitleMatches(title: String) {

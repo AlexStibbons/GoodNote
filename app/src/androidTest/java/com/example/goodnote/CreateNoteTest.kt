@@ -45,21 +45,9 @@ class CreateNoteTest {
         }
     }
 
-    @Test
-    fun createNote_OLD() {
-        onView(withId(R.id.fabAdd)).perform(click())
-
-        onView(withId(R.id.notes_details_title))
-            .perform(click())
-            .perform(typeText("text text text"))
-        pressBack()
-        pressBack()
-    }
 
     @Test
     fun herpDerp2() {
-        val TEXT_AGAIN = "this that and"
-        // click the button
         noteListScreen {
             clickNewNote()
         }
@@ -73,24 +61,22 @@ class CreateNoteTest {
 
     @Test
     fun recyclerView() {
-        // clicks using position
-        onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(1, click()))
-        pressBack()
 
-        // scrollTo using descendants works, without descendants doesn't work
-        onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.scrollTo<NoteListRecyclerViewAdapter.ViewHolder>
-                (hasDescendant(withText(SOME_TEXT))))
-            .perform(click()) // does NOT click on scroll 5
-        pressBack()
+       noteListScreen {
+           clickOnItemOnPosition(1)
+       }
 
-        // scroll to with custom matcher
-        onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(withNoteTitle(SOME_TEXT)))
+        noteDetailsScreen {
+            pressBack2()
+        }
 
-        // click with custom matcher
-        onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(withNoteTitle(SOME_TEXT), click()))
+        noteListScreen {
+            scrollToItemWithTitle("title")
+            clickOnItemWithTitle("title")
+        }
+
+        noteDetailsScreen {
+            pressBack2()
+        }
     }
 }
