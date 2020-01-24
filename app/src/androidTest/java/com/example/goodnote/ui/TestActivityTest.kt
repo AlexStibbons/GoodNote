@@ -27,23 +27,24 @@ class TestActivityTest{
     val isDoingRobot = isDoing()
 
     @Test
-    fun isScreen_Correct() {
+    fun isScreen_Correct() = isScreenRobot.testScreen()
 
-        isScreenRobot.testScreen()
-
-    }
     @Test
     fun shouldShowImage_WhenButtonIsClicked_ThenHideImage_WhenButtonIsClickedAgain() {
 
-        isScreenRobot.testScreen()
+        // needs to be kotlinized properly :)
 
-        isDoingRobot.testScreen_clickBtn_Image()
+        isScreenRobot.run {
+            testScreen()
+        }
 
-        isDoingRobot.testScreen_Image_isVisible()
+        isDoingRobot.run {
+            testScreen_clickBtn_Image()
+            testScreen_Image_isVisible()
+            testScreen_clickBtn_Image()
+            testScreen_Image_isHidden()
+        }
 
-        isDoingRobot.testScreen_clickBtn_Image()
-
-        isDoingRobot.testScreen_Image_isHidden()
     }
 
 
