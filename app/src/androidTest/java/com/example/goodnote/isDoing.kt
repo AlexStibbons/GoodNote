@@ -13,13 +13,25 @@ class isDoing {
             .perform(ViewActions.click())
     }
 
-    fun testScreen_Image_isHidden() {
+    fun testScreen_ImageHidden_isHidden() {
         Espresso.onView(ViewMatchers.withId(R.id.test_image_hidden))
             .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
+            .check(ViewAssertions.matches(CustomMatcher.withImage(R.mipmap.ic_goodnote_launcher_round)))
     }
 
-    fun testScreen_Image_isVisible() {
+    fun testScreen_ImageHidden_isVisible() {
         Espresso.onView(ViewMatchers.withId(R.id.test_image_hidden))
             .check(ViewAssertions.matches(ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+            .check(ViewAssertions.matches(CustomMatcher.withImage(R.mipmap.ic_goodnote_launcher_round)))
+
     }
+
+    fun lil(smt: () -> Unit) {
+        smt()
+    }
+
+}
+
+fun testScreen(smt: isDoing. () -> Unit) {
+    isDoing().apply { smt() }
 }

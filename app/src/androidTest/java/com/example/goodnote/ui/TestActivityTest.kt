@@ -1,14 +1,9 @@
 package com.example.goodnote.ui
 
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
-import com.example.goodnote.CustomMatcher.Companion.withImage
-import com.example.goodnote.R
+import com.example.goodnote.testScreen
 import com.example.goodnote.isDoing
 import com.example.goodnote.isScreen
 import org.junit.Rule
@@ -18,6 +13,10 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4ClassRunner::class)
 @LargeTest
 class TestActivityTest{
+    /**
+     * Robot classes shouldn't be god classes (like isDoing is)
+     * "Each screen has its own robot. We can use multiple robots in a test scenario."
+     */
 
     @get:Rule
     var activityRule: ActivityTestRule<TestActivity> = ActivityTestRule(TestActivity::class.java)
@@ -37,15 +36,12 @@ class TestActivityTest{
         isScreenRobot.run {
             testScreen() // verify all is visible and correct
         }
-
-        isDoingRobot.run {
-            testScreen_clickBtn_Image() // do
-            testScreen_Image_isVisible() // verify
-            testScreen_clickBtn_Image() // do
-            testScreen_Image_isHidden() // verify
+        
+        testScreen {
+            testScreen_clickBtn_Image()
+            testScreen_ImageHidden_isVisible()
+            testScreen_clickBtn_Image()
+            testScreen_ImageHidden_isHidden()
         }
-
     }
-
-
 }
