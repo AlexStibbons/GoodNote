@@ -35,14 +35,14 @@ class TestActivityTest{
         // needs to be kotlinized properly :)
 
         isScreenRobot.run {
-            testScreen()
+            testScreen() // verify all is visible and correct
         }
 
         isDoingRobot.run {
-            testScreen_clickBtn_Image()
-            testScreen_Image_isVisible()
-            testScreen_clickBtn_Image()
-            testScreen_Image_isHidden()
+            testScreen_clickBtn_Image() // do
+            testScreen_Image_isVisible() // verify
+            testScreen_clickBtn_Image() // do
+            testScreen_Image_isHidden() // verify
         }
 
     }
