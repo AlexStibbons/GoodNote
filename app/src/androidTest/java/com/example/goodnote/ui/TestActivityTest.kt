@@ -4,7 +4,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.rule.ActivityTestRule
 import com.example.goodnote.testScreen
-import com.example.goodnote.isDoing
+import com.example.goodnote.TestScreenRobot
 import com.example.goodnote.isScreen
 import org.junit.Rule
 import org.junit.Test
@@ -14,8 +14,10 @@ import org.junit.runner.RunWith
 @LargeTest
 class TestActivityTest{
     /**
-     * Robot classes shouldn't be god classes (like isDoing is)
+     * Robot classes shouldn't be god classes (like TestScreenRobot is)
      * "Each screen has its own robot. We can use multiple robots in a test scenario."
+     * example: testScreen {...}
+     *
      */
 
     @get:Rule
@@ -23,7 +25,7 @@ class TestActivityTest{
 
     val isScreenRobot = isScreen()
 
-    val isDoingRobot = isDoing()
+    val isDoingRobot = TestScreenRobot()
 
     @Test
     fun isScreen_Correct() = isScreenRobot.testScreen()
@@ -36,12 +38,12 @@ class TestActivityTest{
         isScreenRobot.run {
             testScreen() // verify all is visible and correct
         }
-        
+
         testScreen {
-            testScreen_clickBtn_Image()
-            testScreen_ImageHidden_isVisible()
-            testScreen_clickBtn_Image()
-            testScreen_ImageHidden_isHidden()
+            clickBtn_Image() // do
+            imageHidden_isVisible() // verify
+            clickBtn_Image() // do
+            imageHidden_isHidden() // verify
         }
     }
 }
