@@ -1,6 +1,5 @@
 package com.example.goodnote
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
@@ -14,7 +13,6 @@ import androidx.test.rule.ActivityTestRule
 import com.example.goodnote.CustomMatcher.Companion.withNoteTitle
 import com.example.goodnote.ui.MainActivity
 import com.example.goodnote.ui.noteList.NoteListRecyclerViewAdapter
-import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,43 +30,28 @@ class CreateNoteTest {
     var activityRule: ActivityTestRule<MainActivity> = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun herpDerp() {
+    fun createNote() {
 
-        // is button displayed?
-        onView(withId(R.id.fabAdd)).check(matches(isClickable())).check(matches(isDisplayed()))
+        noteListScreen {
+            isCorrect()
+            clickNewNote()
+        }
 
-        // click the button
+        noteDetailsScreen {
+            changeNoteTitle(SOME_TEXT)
+            checkTitleMatches(SOME_TEXT)
+            chageNoteText(SOME_TEXT)
+            pressBack2() // goto list
+        }
+    }
+
+    @Test
+    fun createNote_OLD() {
         onView(withId(R.id.fabAdd)).perform(click())
-        onView(withId(R.id.notes_details_title))
-            .perform(click()) // should be just .perform(type(), closeSoftKeyboard()) but that's not working
-            .perform(typeText(SOME_TEXT))
-        // check they match unnecessarily
-        // note that nothing else happened; we are staying on note details screen
-        onView(withId(R.id.notes_details_title))
-            .check(matches(withText(SOME_TEXT)))
 
-        pressBack() // --> to remove keyboard
-        pressBack() // --> to go back to recycler view
-
-        // we go back to recycler view;
-        onView(withId(R.id.notes_list_recycler_view))
-            .perform(
-                RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(
-                    1,
-                    click()
-                )
-            )
-        // item with text didn't really work
-
-        // now we're in note details screen again
         onView(withId(R.id.notes_details_title))
-            .check(matches(withText("note two")))
-        // still inside the details of note 2
-        onView(withId(R.id.notes_details_text))
             .perform(click())
-            .perform(typeText(SOME_TEXT))
-
-        // going back to recycler view
+            .perform(typeText("text text text"))
         pressBack()
         pressBack()
     }
@@ -77,24 +60,22 @@ class CreateNoteTest {
     fun herpDerp2() {
         val TEXT_AGAIN = "this that and"
         // click the button
-        onView(withId(R.id.fabAdd)).perform(click())
-        onView(withId(R.id.notes_details_title))
-            .perform(click())
-            .perform(typeText(TEXT_AGAIN))
-        //  .perform(closeSoftKeyboard()) --> this won't work even though it's in docs??
+        noteListScreen {
+            clickNewNote()
+        }
 
-        // note that nothing else happened; we are staying on note details screen
-        onView(withId(R.id.notes_details_title))
-            .check(matches(withText(TEXT_AGAIN)))
-        pressBack() // --> close keyboard
-        pressBack() // --> to go back to recycler view
+        noteDetailsScreen {
+            changeNoteTitle("title")
+        }
     }
+
+
 
     @Test
     fun recyclerView() {
         // clicks using position
         onView(withId(R.id.notes_list_recycler_view))
-            .perform(RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(7, click()))
+            .perform(RecyclerViewActions.actionOnItemAtPosition<NoteListRecyclerViewAdapter.ViewHolder>(1, click()))
         pressBack()
 
         // scrollTo using descendants works, without descendants doesn't work
