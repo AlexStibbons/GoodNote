@@ -3,6 +3,7 @@ package com.example.goodnote.ui.noteList
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
+import android.icu.lang.UCharacter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +12,10 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.goodnote.R
 import com.example.goodnote.ui.noteDetails.NoteDetails
 import com.example.goodnote.ui.viewModels.NoteViewModel
@@ -55,6 +58,8 @@ class NoteListFragment : Fragment() {
         recyclerView.apply {
             this.adapter = notesAdapter
             layoutManager = LinearLayoutManager(requireActivity())
+           /* layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            addItemDecoration(ItemDecoration(16))*/
         }
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
