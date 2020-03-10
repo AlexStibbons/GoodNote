@@ -58,8 +58,6 @@ class NoteListFragment : Fragment() {
         recyclerView.apply {
             this.adapter = notesAdapter
             layoutManager = LinearLayoutManager(requireActivity())
-           /* layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-            addItemDecoration(ItemDecoration(16))*/
         }
 
         val fab: FloatingActionButton = rootView.findViewById(R.id.fabAdd)
