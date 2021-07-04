@@ -76,6 +76,8 @@ class NoteListRecyclerViewAdapter(private val onNoteClicked: NoteListFragment.on
                 true
             }
         }
+
+        fun getTitle() = title
     }
 
 

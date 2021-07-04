@@ -101,8 +101,8 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
         val directory: File = File(currentFolder, "GoodNote")
         //val directory = context.getDir("GoodNote", Context.MODE_PRIVATE)
         //val directory = File(Environment.getRootDirectory(), "GoodNote")
-       // val path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/GoodNote"
-      //  val directory = File("/storage/emulated/0/Goodnote")
+        //val path = Environment.getDataDirectory().getAbsolutePath().toString() + "/storage/emulated/0/GoodNote"
+        //val directory = File("/storage/emulated/0/Goodnote")
         if (!directory.exists()) {
             directory.mkdir()
             Log.e("created", "$directory") // except it's not creating it at all
@@ -113,7 +113,7 @@ class NoteDetailsViewModel(private val noteRepo: NoteRepo,
             append("\n")
             append("${note.title.toUpperCase()}")
             append("\n\n")
-            append(note.tags.toTagsString())
+            append("TAGS: ${note.tags.toTagsString()}")
             append("\n\n")
             append(note.text)
         }.toString()
